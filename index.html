@@ -1055,7 +1055,7 @@ html { scroll-padding-top: 80px; } /* agar anchor/scroll tidak tertutup header *
         document.addEventListener('DOMContentLoaded', function() {
             
             // ===== KONFIGURASI GOOGLE APPS SCRIPT =====
-            const GAS_WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbwSwoi1g6ySRD-coz7qZFHSgb4CQIr_51IBvOW5g37fqpgPg4rNZq-7xWKA7lnUJwR0ow/exec';
+            const GAS_WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbxR3W9MHwQbWnCqWKnrVvKolDd2LyRJmGdEImtKjlidP7mQKvQObEXtha_5vlqvxro2hg/exec';
             
             // ===== DATA MASTER =====
             const KATEGORI_LIST = [
@@ -1077,6 +1077,54 @@ html { scroll-padding-top: 80px; } /* agar anchor/scroll tidak tertutup header *
                 { id: 4, nama: 'Dewi Lestari, S.Pd.', kategori: 'Guru Kreatif', unitKerja: 'TK Pertiwi Pandeglang', tgl: '2025-10-27', videoUrl: 'https://example.com/video4.mp4' },
                 { id: 5, nama: 'Ahmad Zaelani, S.Kom.', kategori: 'Guru Inovatif', unitKerja: 'SMKN 1 Pandeglang', tgl: '2025-10-26', videoUrl: 'https://example.com/video5.mp4' },
             ];
+
+
+// --- Live submissions loader (added by patch) ---
+let SUBMISSIONS = []; // will hold live data or fallback to mock
+
+function useGoogleScriptRun() {
+  return (typeof google !== 'undefined' && google.script && google.script.run);
+}
+
+function fetchSubmissions(cb) {
+  // cb = function(err, data)
+  if (useGoogleScriptRun()) {
+    try {
+      google.script.run.withSuccessHandler(function(data){
+        SUBMISSIONS = Array.isArray(data) ? data : (data && data.data) ? data.data : [];
+        cb && cb(null, SUBMISSIONS);
+      }).withFailureHandler(function(err){
+        console.error('GAS fetchSubmissions error', err);
+        // fallback to mock
+        SUBMISSIONS = Array.isArray(MOCK_SUBMISI) ? MOCK_SUBMISI.slice() : [];
+        cb && cb(err, SUBMISSIONS);
+      }).getFormSubmissions();
+    } catch (e) {
+      console.error('google.script.run call failed', e);
+      SUBMISSIONS = Array.isArray(MOCK_SUBMISI) ? MOCK_SUBMISI.slice() : [];
+      cb && cb(e, SUBMISSIONS);
+    }
+  } else if (typeof GAS_WEB_APP_URL !== 'undefined' && GAS_WEB_APP_URL) {
+    fetch(GAS_WEB_APP_URL + '?action=getSubmissions')
+      .then(r => r.json())
+      .then(result => {
+        SUBMISSIONS = Array.isArray(result) ? result : (result && result.data) ? result.data : [];
+        cb && cb(null, SUBMISSIONS);
+      })
+      .catch(err => {
+        console.error('fetchSubmissions error', err);
+        SUBMISSIONS = Array.isArray(MOCK_SUBMISI) ? MOCK_SUBMISI.slice() : [];
+        cb && cb(err, SUBMISSIONS);
+      });
+  } else {
+    // No backend available — use mock
+    console.warn('No GAS integration available, using MOCK_SUBMISI fallback.');
+    SUBMISSIONS = Array.isArray(MOCK_SUBMISI) ? MOCK_SUBMISI.slice() : [];
+    cb && cb(null, SUBMISSIONS);
+  }
+}
+// --- end fetchSubmissions ---
+
 
             // ===== STATE APLIKASI =====
             let currentRole = 'pendaftar';
@@ -1219,7 +1267,14 @@ function showVideoAccessAlert() {
                 populateKategoriDropdowns();
                 setupEventListeners();
                 switchMainTab('dashboard'); // Tampilkan tab dashboard publik
-                renderPublicDashboardStats();
+                fetchSubmissions(function(err, data){
+                    if (err) {
+                        console.warn('Using fallback/mock submissions due to fetch error.');
+                    }
+                    renderPublicDashboardStats();
+                    if (typeof renderJuriSubmisiTable === 'function') renderJuriSubmisiTable();
+                    if (typeof renderAdminSubmisiTable === 'function') renderAdminSubmisiTable();
+                });
             }
 
             function populateKategoriDropdowns() {
@@ -1881,214 +1936,9 @@ function showVideoAccessAlert() {
 </script>
 
 
-<!-- START: GAS Integration & Role-based UI Script -->
-<script>
-/*
-  Integration behavior:
-  - If served by Google Apps Script (google.script is available), use google.script.run for:
-      - submitForm (submit registration)
-      - login(role, username, password)
-      - getStats()
-      - getAccounts(role) [if needed]
-      - getFormSubmissions(limit)
-  - Otherwise, if GAS_WEB_APP_URL is defined, uses fetch() to call endpoints.
-  - On successful login, stores role & profile in localStorage and updates UI (shows/hides tabs).
-*/
 
-/* Configuration: set GAS_WEB_APP_URL if using fetch() fallback */
-const GAS_WEB_APP_URL = typeof GAS_WEB_APP_URL !== 'undefined' ? GAS_WEB_APP_URL : null;
+<!-- Obsolete GAS integration block removed during patch -->
 
-function useGoogleScriptRun() {
-  return (typeof google !== 'undefined' && google.script && google.script.run);
-}
-
-/* Helpers to call server */
-function callSubmitForm(formData, cb) {
-  if (useGoogleScriptRun()) {
-    google.script.run.withSuccessHandler(cb).submitForm(formData);
-  } else if (GAS_WEB_APP_URL) {
-    fetch(GAS_WEB_APP_URL, {
-      method: 'POST',
-      headers: {'Content-Type':'application/json'},
-      body: JSON.stringify({action:'submitForm', data: formData})
-    }).then(r=>r.json()).then(cb).catch(err=>{console.error(err); cb({success:false, error:err.message});});
-  } else {
-    console.error('No GAS integration available.');
-    cb({success:false, error:'No GAS integration available.'});
-  }
-}
-
-function callLogin(role, username, password, cb) {
-  if (useGoogleScriptRun()) {
-    google.script.run.withSuccessHandler(cb).login(role, username, password);
-  } else if (GAS_WEB_APP_URL) {
-    fetch(GAS_WEB_APP_URL, {
-      method:'POST',
-      headers:{'Content-Type':'application/json'},
-      body: JSON.stringify({action:'login', role: role, username: username, password: password})
-    }).then(r=>r.json()).then(cb).catch(err=>{console.error(err); cb({success:false, error:err.message});});
-  } else {
-    console.error('No GAS integration available.');
-    cb({success:false, error:'No GAS integration available.'});
-  }
-}
-
-function callGetStats(cb) {
-  if (useGoogleScriptRun()) {
-    google.script.run.withSuccessHandler(cb).getStats();
-  } else if (GAS_WEB_APP_URL) {
-    fetch(GAS_WEB_APP_URL + '?action=getStats').then(r=>r.json()).then(cb).catch(err=>{console.error(err); cb({total:0, perKategori:{}});});
-  } else {
-    cb({total:0, perKategori:{}});
-  }
-}
-
-/* Role-based UI control */
-function setLoggedIn(role, profile) {
-  localStorage.setItem('ag_logged_in', '1');
-  localStorage.setItem('ag_role', role);
-  localStorage.setItem('ag_profile', JSON.stringify(profile || {}));
-  applyRoleToUI(role, profile);
-}
-
-function logout() {
-  localStorage.removeItem('ag_logged_in');
-  localStorage.removeItem('ag_role');
-  localStorage.removeItem('ag_profile');
-  location.reload();
-}
-
-function applyRoleToUI(role, profile) {
-  // hide all protected sections by default
-  document.querySelectorAll('#main-content-juri, #main-content-admin, #admin-content-wrapper, #juri-content-wrapper, #admin-users').forEach(el=>{
-    if(el) el.classList.add('hidden');
-  });
-  // update login status text
-  const loginStatusText = document.getElementById('login-status-text');
-  if (loginStatusText) {
-    if (role) {
-      loginStatusText.innerHTML = 'Anda masuk sebagai: <strong class="font-medium text-indigo-600">' + role.toUpperCase() + '</strong>';
-      const logoutBtn = document.getElementById('logout-btn');
-      if (logoutBtn) logoutBtn.classList.remove('hidden');
-    } else {
-      loginStatusText.innerHTML = 'Anda masuk sebagai: <strong class="font-medium text-indigo-600">Pendaftar</strong>';
-      const logoutBtn = document.getElementById('logout-btn');
-      if (logoutBtn) logoutBtn.classList.add('hidden');
-    }
-  }
-
-  if (role === 'juri') {
-    const juriContent = document.getElementById('juri-content-wrapper');
-    if (juriContent) juriContent.classList.remove('hidden');
-    const juriPrompt = document.getElementById('juri-login-prompt');
-    if (juriPrompt) juriPrompt.classList.add('hidden');
-  } else if (role === 'admin') {
-    const adminContent = document.getElementById('admin-content-wrapper');
-    if (adminContent) adminContent.classList.remove('hidden');
-    const adminPrompt = document.getElementById('admin-login-prompt');
-    if (adminPrompt) adminPrompt.classList.add('hidden');
-    // show admin internal tabs
-    const adminUsersTab = document.getElementById('admin-users');
-    if (adminUsersTab && profile && profile.username === profile.username) {
-      // show management tab button if exists
-      const adminTabOption = document.getElementById('admin-tabs-mobile-option-users');
-      if (adminTabOption) adminTabOption.classList.remove('hidden');
-    }
-  } else if (role === 'superadmin') {
-    // super admin: show admin content and management
-    const adminContent = document.getElementById('admin-content-wrapper');
-    if (adminContent) adminContent.classList.remove('hidden');
-    const adminUsers = document.getElementById('admin-users');
-    if (adminUsers) adminUsers.classList.remove('hidden');
-    const adminPrompt = document.getElementById('admin-login-prompt');
-    if (adminPrompt) adminPrompt.classList.add('hidden');
-  }
-}
-
-/* Init: apply stored session */
-document.addEventListener('DOMContentLoaded', function(){
-  try {
-    const logged = localStorage.getItem('ag_logged_in');
-    const role = localStorage.getItem('ag_role');
-    const profile = JSON.parse(localStorage.getItem('ag_profile') || '{}');
-    if (logged && role) applyRoleToUI(role, profile);
-    // bind login modal buttons if present
-    const loginBtn = document.getElementById('login-btn');
-    if (loginBtn) {
-      loginBtn.addEventListener('click', function(e){
-        e.preventDefault();
-        const username = document.getElementById('login-username').value.trim();
-        const password = document.getElementById('login-password').value;
-        const selectedRole = (document.getElementById('login-role') && document.getElementById('login-role').value) || 'juri';
-        if (!username || !password) {
-          alert('Masukkan username dan password.');
-          return;
-        }
-        callLogin(selectedRole, username, password, function(res){
-          if (res && res.success) {
-            setLoggedIn(selectedRole, res.profile || {});
-            // close modal if exists
-            const loginModal = document.getElementById('login-modal');
-            if (loginModal) loginModal.classList.add('hidden');
-          } else {
-            const loginError = document.getElementById('login-error');
-            if (loginError) loginError.textContent = res.error || 'Login gagal';
-            else alert('Login gagal: ' + (res.error || 'unknown'));
-          }
-        });
-      });
-    }
-
-    // Bind juri login button(s) - they call the modal or directly prompt
-    const juriLoginBtn = document.getElementById('juri-login-btn');
-    if (juriLoginBtn) {
-      juriLoginBtn.addEventListener('click', function(){
-        // open modal if exists
-        const loginModal = document.getElementById('login-modal');
-        if (loginModal) loginModal.classList.remove('hidden');
-        // preselect role = juri if login-role selector exists
-        const sel = document.getElementById('login-role');
-        if (sel) sel.value = 'juri';
-      });
-    }
-    const adminLoginBtn = document.getElementById('admin-login-btn');
-    if (adminLoginBtn) {
-      adminLoginBtn.addEventListener('click', function(){
-        const loginModal = document.getElementById('login-modal');
-        if (loginModal) loginModal.classList.remove('hidden');
-        const sel = document.getElementById('login-role');
-        if (sel) sel.value = 'admin';
-      });
-    }
-    // Logout button
-    const logoutBtn = document.getElementById('logout-btn');
-    if (logoutBtn) {
-      logoutBtn.addEventListener('click', function(){ logout(); });
-    }
-
-    // Auto-refresh stats on load
-    callGetStats(function(stats){
-      try {
-        if (stats && typeof stats.total !== 'undefined') {
-          const el = document.getElementById('stat-total');
-          if (el) el.textContent = stats.total;
-          const ael = document.getElementById('admin-stat-total');
-          if (ael) ael.textContent = stats.total;
-          // per-kategori numbers (if ids exist)
-          if (stats.perKategori) {
-            // map category keys to elements if you have fixed ids, else skip
-            console.log('perKategori', stats.perKategori);
-          }
-        }
-      } catch(e){ console.error(e); }
-    });
-
-  } catch (err) {
-    console.error('Init error', err);
-  }
-});
-</script>
-<!-- END: GAS Integration & Role-based UI Script -->
 
 
 <script>
