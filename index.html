@@ -29,33 +29,26 @@
         .table-container thead th{position:sticky;top:0;background-color:#f9fafb;z-index:10;box-shadow:0 1px 2px rgba(0,0,0,.05)}
         .video-container { position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; max-width: 100%; background: #000; border-radius: 0.5rem; }
         .video-container iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; }
-        /* Animasi Elegan */
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
         .fade-in-up { animation: fadeIn 0.5s ease-out forwards; }
         @media(max-width:640px){.stepper-line,.stepper-label{display:none}.stepper-circle{width:2rem;height:2rem;font-size:.8rem;border-width:2px}#stepper-container ol{gap:.25rem}}
-        /* Error State - Professional */
         .input-error { border-color: #ef4444 !important; background-color: #fef2f2 !important; box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.1) !important; }
         .error-msg { font-size: 0.75rem; color: #ef4444; margin-top: 0.25rem; font-weight: 500; display: none; }
         .input-error + .error-msg { display: block; }
-        
-        /* Toast Notification */
         #toast-container { position: fixed; top: 1rem; right: 1rem; z-index: 100; display: flex; flex-direction: column; gap: 0.5rem; pointer-events: none; }
         .toast { pointer-events: auto; padding: 1rem 1.5rem; border-radius: 0.5rem; color: white; font-weight: 500; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1); opacity: 0; transform: translateX(20px); transition: all 0.3s ease; display: flex; items-center; gap: 0.75rem; max-width: 24rem; }
         .toast.show { opacity: 1; transform: translateX(0); }
         .toast-error { background-color: #dc2626; }
         .toast-warning { background-color: #d97706; }
         .toast-success { background-color: #16a34a; }
+        #custom-tooltip { position: fixed; background: rgba(17, 24, 39, 0.95); color: #fff; padding: 6px 10px; border-radius: 6px; font-size: 12px; pointer-events: none; z-index: 10000; display: none; backdrop-filter: blur(4px); box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1); white-space: nowrap; border: 1px solid rgba(255, 255, 255, 0.1); transition: opacity 0.15s ease; }
     </style>
 </head>
 <body class="text-gray-800 antialiased text-sm">
-
-<!-- TOAST CONTAINER -->
 <div id="toast-container"></div>
-
 <header class="bg-white shadow-sm sticky top-0 z-40 border-b border-gray-200"><div class="container mx-auto px-4 lg:px-6"><div class="flex justify-between items-center h-20">
 <div class="flex items-center space-x-4 overflow-hidden"><div class="w-14 h-14 rounded-full overflow-hidden flex-shrink-0 bg-white cursor-help" title="Logo Resmi PGRI Pandeglang"><img class="w-full h-full object-contain" src="https://raw.githubusercontent.com/edibrata/image/main/Logo%20PGRI%20Official.png" alt="Logo"></div><div class="min-w-0 flex-1 flex flex-col justify-center"><h1 class="text-xl sm:text-2xl font-bold text-gray-900 leading-tight truncate">PGRI PANDEGLANG AWARD 2025</h1><p class="text-sm font-semibold text-indigo-600 truncate">Anugerah Guru BerAKHLAK</p><p class="text-xs text-gray-500 truncate mt-0.5">Dalam Rangka Memperingati Hari Guru Nasional dan HUT Ke-80 PGRI Tahun 2025</p></div></div>
 <div id="login-status" class="flex items-center gap-2 flex-shrink-0 ml-4"><div class="text-right hidden sm:block"><p class="text-xs text-gray-500">Anda masuk sebagai:</p><p id="login-role-display" class="text-sm font-bold text-indigo-600" title="Status Peran Akun Anda Saat Ini">Pendaftar</p></div><button id="logout-btn" title="Klik untuk keluar dari akun sistem" class="hidden text-xs font-medium text-white bg-red-600 hover:bg-red-700 px-3 py-1.5 rounded transition-colors flex items-center"><svg class="w-3 h-3 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/></svg> Keluar</button></div></div></div></header>
-
 <main class="container mx-auto p-3 sm:p-4 lg:p-6 max-w-7xl">
 <div class="mb-4"><div class="sm:hidden"><select id="main-tabs-mobile" class="block w-full text-sm rounded-md border-gray-300 focus:border-indigo-500 focus:ring-indigo-500" title="Navigasi Menu Utama"><option value="dashboard" selected>Dashboard Publik</option><option value="form">Formulir Pendaftaran</option><option value="juri">Juri</option><option value="admin">Admin</option><option value="superadmin">Super Admin</option></select></div><div class="hidden sm:block"><div id="main-tab-nav" class="border-b border-gray-200"><nav class="-mb-px flex space-x-4 lg:space-x-8" aria-label="Tabs">
 <button class="main-tab-btn active whitespace-nowrap py-2 px-3 border-b-2 font-medium text-sm flex items-center" data-tab="dashboard" title="Lihat statistik dan grafik pendaftar"><svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/></svg>Dashboard Publik</button>
@@ -63,14 +56,11 @@
 <button class="main-tab-btn whitespace-nowrap py-2 px-3 border-b-2 font-medium text-sm hover:text-gray-700 flex items-center" data-tab="juri" title="Area khusus Juri untuk menilai"><svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 15l-2 5L9 9l11 4-5 2zm0 0l5 5M7.188 2.239l.777 2.897M5.136 7.965l-2.898-.777M13.95 4.05l-2.122 2.122m-5.657 5.656l-2.12 2.122"/></svg>Juri</button>
 <button class="main-tab-btn whitespace-nowrap py-2 px-3 border-b-2 font-medium text-sm hover:text-gray-700 flex items-center" data-tab="admin" title="Area khusus Admin untuk mengelola data"><svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>Admin</button>
 <button class="main-tab-btn whitespace-nowrap py-2 px-3 border-b-2 font-medium text-sm text-red-500 hover:text-red-700 flex items-center" data-tab="superadmin" title="Area Super Admin untuk konfigurasi sistem"><svg class="w-4 h-4 mr-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 7a2 2 0 012 2m4 0a6 6 0 01-7.743 5.743L11 17H9v2H7v2H4a1 1 0 01-1-1v-2.586a1 1 0 01.293-.707l5.964-5.964A6 6 0 1121 9z"/></svg>Super Admin</button></nav></div></div></div>
-
 <div id="main-content-dashboard" class="main-content-div"><div id="public-registration-status" class="hidden mb-4 p-4 rounded-lg border shadow-sm transition-all" title="Status Pendaftaran Saat Ini"></div><div class="bg-white rounded-lg shadow-sm border border-gray-200 p-4 mb-4" title="Grafik Statistik Pendaftar"><div class="flex justify-between items-center mb-2"><h3 class="text-sm font-semibold text-gray-800">Statistik Sebaran</h3><div class="text-xs bg-indigo-50 text-indigo-700 px-2 py-1 rounded-md font-bold" title="Total Seluruh Pendaftar">Total: <span id="stat-total">0</span></div></div><div class="relative h-40 w-full"><canvas id="submissionChart"></canvas></div></div><h3 class="text-sm font-bold text-gray-900 mb-3 uppercase tracking-wide">Rincian Per Kategori</h3><div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3" id="dashboard-cards-container"></div></div>
-
 <div id="main-content-form" class="main-content-div hidden">
 <div id="registration-status-message" class="hidden max-w-4xl mx-auto"><div class="bg-gradient-to-r from-blue-600 to-indigo-700 rounded-xl shadow-lg overflow-hidden text-white mb-8 fade-in-up"><div class="px-6 py-10 text-center"><div class="mx-auto flex items-center justify-center h-16 w-16 rounded-full bg-white bg-opacity-20 mb-6 backdrop-blur-sm"><svg class="h-8 w-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg></div><h2 id="reg-status-title" class="text-2xl md:text-3xl font-extrabold tracking-tight mb-2">Pendaftaran Belum Dibuka</h2><p id="reg-status-desc" class="text-blue-100 text-lg md:text-xl font-medium mx-auto leading-relaxed mb-6">Mohon bersabar, formulir akan dibuka pada 1 Desember 2025 pukul 00:01 WIB.</p><div id="reg-status-period" class="inline-flex items-center px-4 py-2 rounded-full bg-white bg-opacity-10 border border-white border-opacity-20 backdrop-filter backdrop-blur-sm"><svg class="w-4 h-4 mr-2 text-blue-200" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg><span class="font-mono text-sm md:text-base text-blue-50">Periode: 1 Des 2025 (00:01) - 4 Des 2025 (23:59)</span></div></div></div></div>
 <div id="view-pendaftar-select" class="hidden"><div class="max-w-xl mx-auto bg-white rounded-lg shadow-sm border border-gray-200 p-6 text-center mt-4"><h3 class="text-lg font-bold text-gray-900 mb-1">Mulai Pendaftaran</h3><div class="mb-4 text-left"><label class="block text-sm font-semibold text-gray-700 mb-2">Pilih Kategori Lomba</label><select id="kategori-select" class="block w-full text-base sm:text-lg p-3 sm:p-4 rounded-xl border-2 border-indigo-200 shadow-md bg-white text-gray-900 focus:border-indigo-600 focus:ring-4 focus:ring-indigo-100 transition-all cursor-pointer" title="Silakan pilih kategori lomba yang ingin Anda ikuti"><option value="" disabled selected>-- Ketuk Disini Untuk Memilih Kategori --</option></select></div><button id="btn-pilih-kategori" class="w-full flex justify-center items-center py-3 px-4 rounded-xl shadow-lg text-base font-bold text-white bg-indigo-600 hover:bg-indigo-700 hover:shadow-xl transition-all transform hover:-translate-y-0.5" title="Klik untuk lanjut mengisi formulir kategori terpilih">Lanjutkan Mengisi Formulir</button></div></div>
 <div id="view-pendaftar-form" class="hidden"><div id="form-card" class="max-w-3xl mx-auto bg-white rounded-lg shadow-sm border border-gray-200"><div class="p-4 sm:p-6"><button id="btn-kembali" class="mb-4 text-xs font-medium text-gray-500 hover:text-indigo-600 flex items-center" title="Kembali untuk mengubah pilihan kategori"><svg class="w-3 h-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/></svg> Kembali Pilih Kategori</button><div class="text-center mb-8"><h2 id="form-title" class="text-3xl font-bold text-gray-900">Formulir Pendaftaran</h2><p id="form-subtitle" class="text-gray-500 mt-2 text-sm">Mengajukan untuk kategori yang dipilih.</p></div><div id="stepper-container" class="mb-6 px-1"><ol class="flex items-center w-full justify-between relative"><li id="stepper-step-1" class="stepper-step active" title="Langkah 1: Identitas"><span class="stepper-circle">1</span><div class="stepper-line"></div><span class="stepper-label">Identitas</span></li><li id="stepper-step-2" class="stepper-step" title="Langkah 2: Kepegawaian"><span class="stepper-circle">2</span><div class="stepper-line"></div><span class="stepper-label">Kepegawaian</span></li><li id="stepper-step-3" class="stepper-step" title="Langkah 3: Unit Kerja"><span class="stepper-circle">3</span><div class="stepper-line"></div><span class="stepper-label">Unit Kerja</span></li><li id="stepper-step-4" class="stepper-step" title="Langkah 4: Domisili"><span class="stepper-circle">4</span><div class="stepper-line"></div><span class="stepper-label">Domisili</span></li><li id="stepper-step-5" class="stepper-step" title="Langkah 5: Kontak"><span class="stepper-circle">5</span><div class="stepper-line"></div><span class="stepper-label">Kontak</span></li><li id="stepper-step-6" class="stepper-step" title="Langkah 6: Materi Lomba"><span class="stepper-circle">6</span><span class="stepper-label">Materi</span></li></ol></div>
-<!-- ADDED NOVALIDATE TO PREVENT BROWSER BLOCKING HIDDEN FIELDS -->
 <form id="form-pendaftaran" class="space-y-6" novalidate>
 <div id="form-step-1" class="form-step space-y-4"><div class="form-section-header"><h3>Identitas Diri</h3></div><div><label class="block text-sm font-semibold text-gray-700 mb-1">Nama Lengkap (disertai gelar)</label><input type="text" id="nama-lengkap" class="form-input-field" placeholder="Contoh: Dr. Budi Santoso, M.Pd." required title="Masukkan nama lengkap beserta gelar akademik"><p class="error-msg">Nama lengkap wajib diisi</p></div><div class="grid grid-cols-1 sm:grid-cols-2 gap-4"><div><label class="block text-sm font-semibold text-gray-700 mb-1">Tempat Lahir</label><input type="text" id="tempat-lahir" class="form-input-field" placeholder="Contoh: Pandeglang" required title="Kota tempat lahir sesuai KTP"><p class="error-msg">Tempat lahir wajib diisi</p></div><div><label class="block text-sm font-semibold text-gray-700 mb-1">Tanggal Lahir</label><input type="date" id="tanggal-lahir" class="form-input-field" required title="Tanggal lahir sesuai KTP"><p class="error-msg">Tanggal lahir wajib diisi</p></div></div><div><label class="block text-sm font-semibold text-gray-700 mb-1">NIK (16 Digit)</label><input type="text" id="nik" pattern="\d{16}" class="form-input-field" placeholder="16 digit angka sesuai KTP" required title="Masukkan 16 digit Nomor Induk Kependudukan"><p class="error-msg">Masukkan 16 digit NIK yang valid</p></div></div>
 <div id="form-step-2" class="form-step hidden space-y-4"><div class="form-section-header"><h3>Data Kepegawaian</h3></div><div><label class="block text-sm font-semibold text-gray-700 mb-1">Status Kepegawaian</label><select id="status-kepegawaian" class="form-input-field" required title="Pilih status kepegawaian Anda"><option value="" disabled selected>-- Pilih --</option><option value="ASN PNS">ASN PNS</option><option value="ASN PPPK">ASN PPPK</option><option value="Non ASN">Non ASN</option></select><p class="error-msg">Pilih status kepegawaian</p></div><div class="grid grid-cols-1 sm:grid-cols-2 gap-4"><div><label class="block text-sm font-semibold text-gray-700 mb-1">NIP</label><input type="text" id="nip" class="form-input-field" placeholder="Isi - jika tidak ada" required title="Nomor Induk Pegawai (Isi '-' jika Non-ASN)"><p class="error-msg">NIP wajib diisi (isi - jika tidak ada)</p></div><div><label class="block text-sm font-semibold text-gray-700 mb-1">NUPTK</label><input type="text" id="nuptk" class="form-input-field" placeholder="16 digit angka" title="Nomor Unik Pendidik dan Tenaga Kependidikan"></div></div><div class="grid grid-cols-1 sm:grid-cols-2 gap-4"><div><label class="block text-sm font-semibold text-gray-700 mb-1">Pangkat/Gol</label><select id="pangkat-gol" class="form-input-field" title="Pilih Pangkat dan Golongan Ruang"><option value="" disabled selected>-- Pilih --</option><option value="Pengatur Muda, II/a">Pengatur Muda, II/a</option><option value="Pengatur Muda Tingkat I, II/b">Pengatur Muda Tingkat I, II/b</option><option value="Pengatur Muda, II/c">Pengatur Muda, II/c</option><option value="Pengatur Muda, II/d">Pengatur Muda, II/d</option><option value="Penata Muda, III/a">Penata Muda, III/a</option><option value="Penata Muda Tingkat I, III/b">Penata Muda Tingkat I, III/b</option><option value="Penata, III/c">Penata, III/c</option><option value="Penata Tingkat I, III/d">Penata Tingkat I, III/d</option><option value="Pembina, IV/a">Pembina, IV/a</option><option value="Pembina Tingkat I, IV/b">Pembina Tingkat I, IV/b</option><option value="Pembina Utama Muda, IV/c">Pembina Utama Muda, IV/c</option><option value="Pembina Utama Madya, IV/d">Pembina Utama Madya, IV/d</option><option value="Pembina Utama, IV/e">Pembina Utama, IV/e</option><option value="-">-</option></select></div><div><label class="block text-sm font-semibold text-gray-700 mb-1">Jabatan Fungsional</label><select id="jabatan-fungsional" class="form-input-field" title="Pilih Jabatan Fungsional Guru"><option value="" disabled selected>-- Pilih --</option><option value="Guru Ahli Pertama">Guru Ahli Pertama</option><option value="Guru Ahli Muda">Guru Ahli Muda</option><option value="Guru Ahli Madya">Guru Ahli Madya</option><option value="Guru Ahli Utama">Guru Ahli Utama</option><option value="-">-</option></select></div></div></div>
@@ -80,31 +70,22 @@
 <div id="form-step-6" class="form-step hidden space-y-4"><div class="form-section-header"><h3>Materi Lomba</h3></div><div><label class="block text-sm font-semibold text-gray-700 mb-1">Deskripsi Singkat Inovasi</label><textarea id="deskripsi" rows="4" class="form-input-field" placeholder="Jelaskan secara singkat..." required title="Jelaskan deskripsi singkat mengenai karya inovasi Anda"></textarea><p class="error-msg">Deskripsi inovasi wajib diisi</p></div><div class="bg-yellow-50 border-l-4 border-yellow-400 p-4 mt-2"><div class="flex"><div class="flex-shrink-0"><svg class="h-5 w-5 text-yellow-600" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clip-rule="evenodd"/></svg></div><div class="ml-3"><p class="text-sm font-medium text-yellow-800">PENTING: Pastikan Link Video Google Drive diset ke <strong>Public/Anyone with the link</strong>.</p></div></div></div><div class="mt-4"><label class="block text-sm font-semibold text-gray-700 mb-1">Link Video Karya</label><input type="url" id="tautan-video" class="form-input-field" placeholder="https://drive.google.com/..." required title="Tempel URL Video Google Drive di sini (Wajib Public)"><p class="error-msg">Masukkan Link Google Drive yang valid</p></div><div class="flex items-center mt-4 p-3 bg-indigo-50 rounded-lg"><input id="persetujuan" type="checkbox" class="h-5 w-5 text-indigo-600 border-gray-300 rounded focus:ring-indigo-500" required title="Centang untuk menyetujui pernyataan"><label for="persetujuan" class="ml-2 block text-sm font-medium text-gray-800">Saya menyatakan data benar & karya ini asli buatan saya.</label></div></div>
 <div class="mt-8 pt-6 border-t flex justify-between gap-4"><button type="button" id="btn-prev" class="hidden px-6 py-2.5 rounded-lg border border-gray-300 bg-white text-gray-700 font-medium hover:bg-gray-50 flex items-center" title="Kembali ke langkah sebelumnya">Kembali</button><div class="flex-grow"></div><button type="button" id="btn-next" class="px-6 py-2.5 rounded-lg bg-indigo-600 text-white font-medium hover:bg-indigo-700 flex items-center" title="Lanjut ke langkah berikutnya">Selanjutnya</button><button type="submit" id="submit-form-btn" class="hidden px-6 py-2.5 rounded-lg bg-green-600 text-white font-bold hover:bg-green-700 flex items-center" title="Kirim Data Pendaftaran">Kirim Pendaftaran</button></div>
 </form></div></div></div></div>
-
 <div id="main-content-juri" class="main-content-div hidden"><div id="juri-content-wrapper" class="hidden"><div class="flex flex-wrap justify-between items-center mb-4 gap-3"><div class="flex items-center space-x-2 flex-grow sm:flex-grow-0"><div class="relative"><input type="text" id="juri-search" placeholder="Cari Nama/Sekolah..." class="border border-gray-300 text-sm rounded-lg pl-9 pr-4 py-2 focus:ring-indigo-500 focus:border-indigo-500 w-48 sm:w-64" title="Cari data peserta berdasarkan nama atau sekolah"><div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none"><svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg></div></div><span id="juri-filter-status" class="text-sm font-medium text-indigo-600 bg-indigo-50 px-3 py-2 rounded-lg border border-indigo-200 hidden" title="Kategori terkunci sesuai akun Juri"></span><select id="juri-filter-kategori" class="border border-gray-300 text-sm rounded-lg p-2 bg-white focus:ring-indigo-500 focus:border-indigo-500" title="Filter tampilan berdasarkan kategori lomba"><option value="all">Tampilkan Semua</option></select><span class="text-sm font-medium text-gray-500 bg-white px-3 py-2 rounded-lg border border-gray-200 whitespace-nowrap" title="Total jumlah data yang ditampilkan saat ini">Total: <span id="juri-total-count">0</span></span></div></div><div class="bg-white shadow-sm rounded-lg overflow-hidden border border-gray-200"><div class="table-container"><table class="min-w-full divide-y divide-gray-200 text-sm" id="juri-table"><thead class="bg-gray-50"><tr><th class="px-4 py-2 text-left font-bold text-gray-500 sortable-header" data-col="index" data-type="number" title="Klik untuk urutkan nomor">No</th><th class="px-4 py-2 text-left font-bold text-gray-500 sortable-header" data-col="timestamp" data-type="date" title="Klik untuk urutkan waktu daftar">Time Stamp <span class="sort-icon"></span></th><th class="px-4 py-2 text-left font-bold text-gray-500 sortable-header" data-col="nama" data-type="string" title="Klik untuk urutkan nama">Nama <span class="sort-icon"></span></th><th class="px-4 py-2 text-left font-bold text-gray-500 sortable-header" data-col="kategori" data-type="string" title="Klik untuk urutkan kategori">Kategori <span class="sort-icon"></span></th><th class="px-4 py-2 text-left font-bold text-gray-500 sortable-header" data-col="nilai" data-type="number" title="Klik untuk urutkan nilai">Nilai <span class="sort-icon"></span></th><th class="px-4 py-2 text-center font-bold text-gray-500" title="Aksi yang tersedia">Aksi</th></tr></thead><tbody class="bg-white divide-y divide-gray-200 text-xs sm:text-sm"></tbody></table></div></div></div></div>
-
 <div id="main-content-admin" class="main-content-div hidden"><div id="admin-content-wrapper" class="hidden"><div class="flex flex-wrap justify-between items-center mb-4 gap-3"><div class="flex items-center space-x-2 flex-grow sm:flex-grow-0"><div class="relative"><input type="text" id="admin-search" placeholder="Cari Nama/Sekolah..." class="border border-gray-300 text-sm rounded-lg pl-9 pr-4 py-2 focus:ring-indigo-500 focus:border-indigo-500 w-48 sm:w-64" title="Cari data pendaftar"><div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none"><svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg></div></div><select id="admin-filter-kategori" class="border border-gray-300 text-sm rounded-lg p-2 bg-white focus:ring-indigo-500 focus:border-indigo-500" title="Filter data per kategori"><option value="all">Tampilkan Semua</option></select><span class="text-sm font-medium text-gray-500 bg-white px-3 py-2 rounded-lg border border-gray-200 whitespace-nowrap" title="Total jumlah data">Total: <span id="admin-total-count">0</span></span></div><button id="btn-export" class="inline-flex items-center px-4 py-2 border border-green-600 text-sm font-bold rounded-lg text-white bg-green-600 hover:bg-green-700 shadow-sm transition-colors" title="Unduh data tabel ini ke format Excel"><svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>Ekspor ke Excel</button></div><div class="bg-white shadow-sm rounded-lg overflow-hidden border border-gray-200"><div class="table-container"><table class="min-w-full divide-y divide-gray-200 text-sm" id="admin-table"><thead class="bg-gray-50"><tr><th class="px-4 py-2 text-left font-bold text-gray-500 sortable-header" data-col="index" data-type="number" title="Urutkan No">No</th><th class="px-4 py-2 text-left font-bold text-gray-500 sortable-header" data-col="timestamp" data-type="date" title="Urutkan Waktu">Time Stamp <span class="sort-icon"></span></th><th class="px-4 py-2 text-left font-bold text-gray-500 sortable-header" data-col="nama" data-type="string" title="Urutkan Nama">Nama <span class="sort-icon"></span></th><th class="px-4 py-2 text-left font-bold text-gray-500 sortable-header" data-col="kecSekolah" data-type="string" title="Urutkan Kecamatan">Kecamatan <span class="sort-icon"></span></th><th class="px-4 py-2 text-left font-bold text-gray-500 sortable-header" data-col="sekolah" data-type="string" title="Urutkan Sekolah">Sekolah <span class="sort-icon"></span></th><th class="px-4 py-2 text-left font-bold text-gray-500 sortable-header" data-col="kategori" data-type="string" title="Urutkan Kategori">Kategori <span class="sort-icon"></span></th><th class="px-4 py-2 text-center font-bold text-gray-500" title="Menu Aksi">Aksi</th></tr></thead><tbody class="bg-white divide-y divide-gray-200 text-xs sm:text-sm"></tbody></table></div></div></div></div>
-
 <div id="main-content-superadmin" class="main-content-div hidden"><div id="superadmin-content-wrapper" class="hidden"><div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6"><div class="bg-white p-6 rounded-lg shadow-sm border border-gray-200"><h3 class="text-lg font-bold text-gray-900 mb-4 border-b pb-2">Pengaturan Sistem</h3><div class="bg-gray-50 p-4 rounded-lg border border-gray-200 space-y-4"><div><label class="block text-sm font-bold text-gray-700 mb-1">Mode Pendaftaran</label><select id="registration-mode" class="w-full border border-gray-300 rounded-md p-2 text-sm focus:ring-indigo-500" title="Atur status buka/tutup pendaftaran secara manual atau otomatis"><option value="auto">Otomatis (1-4 Des 2025)</option><option value="open">Paksa Buka (Manual)</option><option value="closed">Paksa Tutup (Manual)</option></select></div><div class="flex items-center justify-between pt-2"><span class="text-xs text-gray-500">Status Aktual saat ini:</span><span id="system-status-text" class="text-xs font-bold text-gray-700">Memeriksa...</span></div><button id="btn-save-config" class="w-full mt-2 bg-indigo-600 text-white text-sm font-bold py-2 rounded hover:bg-indigo-700 transition-colors" title="Simpan konfigurasi sistem">Simpan Konfigurasi</button></div></div><div class="bg-white p-6 rounded-lg shadow-sm border border-gray-200"><h3 class="text-lg font-bold text-gray-900 mb-4 border-b pb-2">Tambah Pengguna</h3><form id="create-user-form" class="space-y-3"><div><label class="block text-xs font-semibold text-gray-700 mb-1">Username</label><input type="text" id="new-username" class="w-full border rounded p-2 text-sm" required title="Masukkan username untuk login"></div><div><label class="block text-xs font-semibold text-gray-700 mb-1">Password</label><input type="text" id="new-password" class="w-full border rounded p-2 text-sm" required title="Masukkan password akun"></div><div><label class="block text-xs font-semibold text-gray-700 mb-1">Role</label><select id="new-role" class="w-full border rounded p-2 text-sm" title="Pilih peran pengguna"><option value="admin">Admin</option><option value="juri">Juri</option></select></div>
 <div id="kategori-spesifik-container" class="hidden"><label class="block text-xs font-semibold text-gray-700 mb-1">Kategori Spesifik (Khusus Juri)</label><select id="new-kategori-spesifik" class="w-full border rounded p-2 text-sm" title="Pilih kategori yang akan dinilai oleh Juri ini"><option value="all">Semua Kategori (Ketua Juri)</option></select></div>
 <button type="submit" id="btn-create-user" class="w-full bg-blue-600 text-white font-bold py-2 rounded hover:bg-blue-700 text-sm mt-2" title="Buat akun pengguna baru">+ Tambah User</button></form></div></div><div class="bg-white shadow-sm rounded-lg overflow-hidden border border-gray-200 mb-8"><div class="px-4 py-3 bg-gray-50 border-b border-gray-200 font-bold text-sm text-gray-700">Daftar Akun</div><table class="min-w-full divide-y divide-gray-200 text-sm" id="users-table"><thead class="bg-white"><tr><th class="px-4 py-2 text-left" title="Username Akun">Username</th><th class="px-4 py-2 text-left" title="Peran Akun">Role</th><th class="px-4 py-2 text-left" title="Aksi Akun">Aksi</th></tr></thead><tbody class="bg-white divide-y divide-gray-200 text-gray-700"></tbody></table></div><div class="mt-6 p-4 bg-blue-50 text-blue-800 rounded-lg text-sm border border-blue-100 flex items-start"><svg class="w-5 h-5 mr-2 mt-0.5 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg><p><strong>Catatan:</strong> Gunakan tab <strong>Admin</strong> atau <strong>Juri</strong> untuk mengelola data pendaftar. Anda memiliki akses penuh.</p></div></div></div></main>
 <footer class="bg-white border-t border-gray-200 mt-auto py-8"><div class="container mx-auto px-4 text-center"><p class="text-gray-600 font-medium text-sm">© 2025 PGRI Pandeglang</p><p class="text-indigo-600 text-sm font-bold mt-1 tracking-wide">Managed By Edi Brata</p></div></footer>
-
-<!-- MODALS -->
 <div id="video-choice-modal" class="hidden fixed inset-0 bg-gray-900 bg-opacity-60 flex items-center justify-center z-[85] p-4 backdrop-blur-sm"><div class="bg-white rounded-lg shadow-xl max-w-sm w-full p-6 text-center"><h3 class="text-lg font-bold mb-4">Putar Video</h3><div class="flex flex-col gap-3"><button id="btn-play-popup" class="w-full py-2 bg-indigo-600 text-white rounded hover:bg-indigo-700" title="Putar video dalam popup di halaman ini">Putar di Sini (Popup)</button><button id="btn-play-newtab" class="w-full py-2 border border-gray-300 text-gray-700 rounded hover:bg-gray-50" title="Buka video di tab browser baru">Buka di Tab Baru</button><button onclick="document.getElementById('video-choice-modal').classList.add('hidden')" class="text-sm text-gray-500 hover:underline mt-2" title="Batalkan">Batal</button></div></div></div>
 <div id="video-player-modal" class="hidden fixed inset-0 bg-black bg-opacity-90 flex items-center justify-center z-[90] p-4"><div class="w-full max-w-4xl bg-black rounded-lg overflow-hidden relative" style="height:80vh"><button onclick="document.getElementById('video-player-modal').classList.add('hidden')" class="absolute top-4 right-4 text-white hover:text-gray-300 z-50" title="Tutup Video"><svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg></button><iframe id="video-frame" class="w-full h-full" frameborder="0" allow="autoplay; fullscreen"></iframe></div></div>
-
 <div id="video-warning-modal" class="hidden fixed inset-0 bg-gray-900 bg-opacity-60 flex items-center justify-center z-[80] p-4 backdrop-blur-sm"><div class="bg-white rounded-lg shadow-xl max-w-lg w-full overflow-hidden transform transition-all"><div class="p-6"><div class="flex items-start"><div class="flex-shrink-0 flex items-center justify-center h-12 w-12 rounded-full bg-yellow-100"><svg class="h-6 w-6 text-yellow-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg></div><div class="ml-4"><h3 class="text-lg font-bold text-gray-900">PERHATIAN PENTING SEBELUM LANJUT</h3><div class="mt-2 text-sm text-gray-600 space-y-2"><p>Anda harus mengunggah video karya Anda ke Google Drive pribadi dan menyalin tautan (link) ke dalam formulir.</p><p class="font-medium bg-yellow-50 p-2 rounded border border-yellow-200 text-yellow-800">Pastikan SEBELUM MENGISI tautan, akses tautan video Anda sudah disetel ke "Siapa saja yang memiliki tautan dapat melihat" (Anyone with the link).</p><p>Jika akses dikunci, panitia tidak akan bisa menilai karya Anda.</p></div></div></div></div><div class="bg-gray-50 px-6 py-3 sm:flex sm:flex-row-reverse"><button onclick="closeVideoModal(true)" class="w-full inline-flex justify-center rounded-md border border-transparent px-4 py-2 bg-indigo-600 text-base font-medium text-white hover:bg-indigo-700 focus:outline-none sm:ml-3 sm:w-auto sm:text-sm" title="Saya Mengerti, Lanjutkan">OK, saya mengerti</button><button onclick="closeVideoModal(false)" class="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm" title="Batalkan">Batal</button></div></div></div>
 <div id="login-modal" class="hidden fixed inset-0 bg-gray-900 bg-opacity-50 flex items-center justify-center z-[90] p-4"><div class="bg-white rounded-lg shadow-lg p-6 w-full max-w-sm relative"><button onclick="hideLoginModal()" class="absolute top-4 right-4 text-gray-400 hover:text-gray-600" title="Tutup Modal Login"><svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg></button><div class="flex items-center mb-6"><div class="bg-indigo-100 p-2 rounded-full mr-3"><svg class="w-6 h-6 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path></svg></div><div><h3 class="text-xl font-bold text-gray-800" id="login-modal-title">Login</h3><p class="text-xs text-gray-500">Silakan masukkan username dan password Anda.</p></div></div><div class="mb-4"><label class="block text-sm font-medium text-gray-700 mb-1">Username</label><input type="text" id="login-username" class="w-full p-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 outline-none text-sm" placeholder="Username" title="Masukkan username"></div><div class="mb-6"><label class="block text-sm font-medium text-gray-700 mb-1">Password</label><div class="relative"><input type="password" id="login-password" class="w-full p-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 outline-none text-sm pr-10" placeholder="Password" title="Masukkan password"><button type="button" id="toggle-password" class="absolute inset-y-0 right-0 px-3 flex items-center text-gray-500 hover:text-gray-700" title="Lihat/Sembunyikan Password"><svg id="icon-eye" class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg><svg id="icon-eye-off" class="w-5 h-5 hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.542-7a9.956 9.956 0 012.563-4.263m3.57-2.29A9.956 9.956 0 0112 5c4.478 0 8.268 2.943 9.542 7a9.987 9.987 0 01-4.043 5.362M15 12a3 3 0 00-3-3m0 0a3 3 0 013 3m-3-3L3 3m9 9a3 3 0 01-3 3m0 0a3 3 0 003-3m-3 3l10 10"/></svg></button></div></div><p id="login-error" class="text-red-500 text-xs hidden mb-3 bg-red-50 p-2 rounded">Username/Password salah.</p><div class="flex justify-end gap-3"><button onclick="hideLoginModal()" class="px-4 py-2 text-gray-600 hover:bg-gray-50 border border-gray-300 rounded-lg text-sm font-medium" title="Batal Login">Batal</button><button id="login-btn-action" class="px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 text-sm font-medium flex items-center" title="Masuk">Login</button></div></div></div>
 <div id="score-modal" class="hidden fixed inset-0 bg-gray-900 bg-opacity-50 flex items-center justify-center z-[60] p-4"><div class="bg-white rounded-lg shadow-lg p-5 w-full max-w-sm"><h3 class="text-lg font-bold mb-2">Nilai</h3><p id="score-participant-name" class="text-xs text-gray-500 mb-3"></p><input type="hidden" id="score-doc-id"><input type="number" id="score-input" min="0" max="100" class="w-full mb-3 p-2 border rounded text-sm" placeholder="Skor (0-100)" title="Masukkan nilai 0-100"><textarea id="score-notes" rows="2" class="w-full mb-3 p-2 border rounded text-sm" placeholder="Catatan..." title="Catatan untuk peserta"></textarea><div class="flex justify-end space-x-2"><button onclick="document.getElementById('score-modal').classList.add('hidden')" class="px-3 py-1.5 text-sm border rounded" title="Batal">Batal</button><button id="save-score-btn" class="px-4 py-1.5 bg-green-600 text-white text-sm rounded" title="Simpan Nilai">Simpan</button></div></div></div>
 <div id="success-modal" class="hidden fixed inset-0 bg-gray-900 bg-opacity-50 flex items-center justify-center z-[70] p-4"><div class="bg-white rounded-lg p-6 text-center shadow-lg max-w-xs w-full"><div class="mx-auto flex items-center justify-center h-12 w-12 rounded-full bg-green-100 mb-4"><svg class="h-6 w-6 text-green-600" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg></div><h3 class="text-lg font-bold text-gray-900 mb-2">Pendaftaran Berhasil!</h3><p class="text-sm text-gray-600 mb-4">Bukti pendaftaran (PDF) akan terunduh otomatis. Silakan simpan sebagai bukti.</p><button onclick="location.reload()" class="mt-4 w-full px-4 py-2 bg-indigo-600 text-white text-sm rounded" title="Tutup">Tutup</button></div></div>
-
 <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
     import { getAuth, signInAnonymously } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
-    import { getFirestore, collection, addDoc, getDocs, query, where, onSnapshot, serverTimestamp, doc, updateDoc, deleteDoc, getDoc, setDoc } 
-    from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
-
+    import { getFirestore, collection, addDoc, getDocs, query, where, onSnapshot, serverTimestamp, doc, updateDoc, deleteDoc, getDoc, setDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
     const firebaseConfig = {
         apiKey: "AIzaSyD2sIYPwmaFjElNiiaJNSqCooEzsVOX62I",
         authDomain: "pgri-award-2025.firebaseapp.com",
@@ -113,14 +94,12 @@
         messagingSenderId: "550141365998",
         appId: "1:550141365998:web:a936cd15f2951497e32dff"
     };
-    
     const app = initializeApp(firebaseConfig);
     const auth = getAuth(app);
     const db = getFirestore(app);
-
     let currentRole = 'pendaftar';
     let isLoggedIn = false;
-    let currentJuriKategori = null; // Specific category for Juri
+    let currentJuriKategori = null;
     let submissionData = [];
     let userData = []; 
     let myChart = null; 
@@ -134,16 +113,8 @@
     let adminSearch = "";
     let juriSearch = "";
     let currentVideoUrl = "";
-
-    const KATEGORI_LIST = [
-        'Guru Berorientasi Pelayanan', 'Guru Akuntabel', 'Guru Kompeten', 'Guru Harmonis',
-        'Guru Loyal', 'Guru Adaptif', 'Guru Kolaboratif'
-    ];
-    
-    const KATEGORI_COLORS = [
-        'rgba(59, 130, 246, 0.7)', 'rgba(16, 185, 129, 0.7)', 'rgba(139, 92, 246, 0.7)', 'rgba(245, 158, 11, 0.7)', 'rgba(107, 114, 128, 0.7)', 'rgba(236, 72, 153, 0.7)', 'rgba(20, 184, 166, 0.7)'
-    ];
-
+    const KATEGORI_LIST = ['Guru Berorientasi Pelayanan', 'Guru Akuntabel', 'Guru Kompeten', 'Guru Harmonis', 'Guru Loyal', 'Guru Adaptif', 'Guru Kolaboratif'];
+    const KATEGORI_COLORS = ['rgba(59, 130, 246, 0.7)', 'rgba(16, 185, 129, 0.7)', 'rgba(139, 92, 246, 0.7)', 'rgba(245, 158, 11, 0.7)', 'rgba(107, 114, 128, 0.7)', 'rgba(236, 72, 153, 0.7)', 'rgba(20, 184, 166, 0.7)'];
     const KATEGORI_ICONS = {
         'Guru Berorientasi Pelayanan': '<svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/></svg>', 
         'Guru Akuntabel': '<svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 6l3 1m0 0l-3 9a5.002 5.002 0 006.001 0M6 7l3 9M6 7l6-2m6 2l3-1m-3 1l-3 9a5.002 5.002 0 006.001 0M18 7l3 9m-3-9l-6-2m0-2v2m0 16V5m0 16H9m3 0h3"/></svg>', 
@@ -153,49 +124,68 @@
         'Guru Adaptif': '<svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg>', 
         'Guru Kolaboratif': '<svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 4a2 2 0 114 0v1a1 1 0 001 1h3a1 1 0 011 1v3a1 1 0 01-1 1h-1a2 2 0 100 4h1a1 1 0 011 1v3a1 1 0 01-1 1h-3a1 1 0 01-1-1v-1a2 2 0 10-4 0v1a1 1 0 01-1 1H7a1 1 0 01-1-1v-3a1 1 0 00-1-1H4a2 2 0 110-4h1a1 1 0 001-1V7a1 1 0 011-1h3a1 1 0 001-1V4z"/></svg>' 
     };
-
     const katSelect = document.getElementById('kategori-select');
     const adminFilter = document.getElementById('admin-filter-kategori');
     const juriFilter = document.getElementById('juri-filter-kategori');
     const newUserKat = document.getElementById('new-kategori-spesifik');
     const juriFilterStatus = document.getElementById('juri-filter-status');
-    
     KATEGORI_LIST.forEach(k => {
         const opt = document.createElement('option'); opt.value = k; opt.textContent = k; katSelect.appendChild(opt);
         const ao = document.createElement('option'); ao.value = k; ao.textContent = k; adminFilter.appendChild(ao);
         const jo = document.createElement('option'); jo.value = k; jo.textContent = k; juriFilter.appendChild(jo);
         const nu = document.createElement('option'); nu.value = k; nu.textContent = k; newUserKat.appendChild(nu);
     });
-
-    // --- TOAST FUNCTION ---
     function showToast(message, type = 'error') {
         const container = document.getElementById('toast-container');
         const toast = document.createElement('div');
         toast.className = `toast toast-${type}`;
-        
         let icon = '';
         if(type === 'error') icon = '<svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>';
         else if(type === 'success') icon = '<svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>';
         else icon = '<svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>';
-
         toast.innerHTML = `${icon}<span>${message}</span>`;
         container.appendChild(toast);
-        
-        // Trigger reflow
         toast.offsetHeight;
         toast.classList.add('show');
-
         setTimeout(() => {
             toast.classList.remove('show');
             setTimeout(() => toast.remove(), 300);
         }, 3000);
     }
-
-    // Update form logic for specific category
+    const tooltip = document.createElement('div');
+    tooltip.id = 'custom-tooltip';
+    document.body.appendChild(tooltip);
+    document.addEventListener('mouseover', (e) => {
+        let target = e.target.closest('[title]');
+        if (target) {
+            target.dataset.tooltip = target.title;
+            target.removeAttribute('title');
+            showTooltip(target.dataset.tooltip, e);
+        } else {
+            target = e.target.closest('[data-tooltip]');
+            if (target) showTooltip(target.dataset.tooltip, e);
+        }
+    });
+    document.addEventListener('mouseout', (e) => {
+        const target = e.target.closest('[data-tooltip]');
+        if(target) tooltip.style.display = 'none';
+    });
+    document.addEventListener('mousemove', (e) => {
+        if(tooltip.style.display === 'block') {
+            tooltip.style.left = (e.clientX + 10) + 'px';
+            tooltip.style.top = (e.clientY + 10) + 'px';
+        }
+    });
+    function showTooltip(text, e) {
+        if (!text) return;
+        tooltip.textContent = text;
+        tooltip.style.display = 'block';
+        tooltip.style.left = (e.clientX + 10) + 'px';
+        tooltip.style.top = (e.clientY + 10) + 'px';
+    }
     document.getElementById('new-role').addEventListener('change', (e) => {
         document.getElementById('kategori-spesifik-container').classList.toggle('hidden', e.target.value !== 'juri');
     });
-
     function loadDraft() {
         const inputs = document.querySelectorAll('#form-pendaftaran input, #form-pendaftaran select, #form-pendaftaran textarea');
         inputs.forEach(input => {
@@ -220,12 +210,10 @@
          localStorage.removeItem('pgri_draft_kategori');
          document.getElementById('kategori-select').value = "";
     }
-
     adminFilter.addEventListener('change', (e) => { currentAdminFilter = e.target.value; renderAdminTable(submissionData); });
     document.getElementById('admin-search').addEventListener('input', (e) => { adminSearch = e.target.value.toLowerCase(); renderAdminTable(submissionData); });
     juriFilter.addEventListener('change', (e) => { currentJuriFilter = e.target.value; renderJuriTable(submissionData); });
     document.getElementById('juri-search').addEventListener('input', (e) => { juriSearch = e.target.value.toLowerCase(); renderJuriTable(submissionData); });
-
     function initChart(data) {
         const counts = KATEGORI_LIST.map(k => data.filter(s => s.kategori === k).length);
         const ctx = document.getElementById('submissionChart').getContext('2d');
@@ -239,7 +227,6 @@
             options: { responsive: true, maintainAspectRatio: false, scales: { y: { beginAtZero: true, ticks: { stepSize: 1 } } }, plugins: { legend: { display: false } } }
         });
     }
-
     function renderDashboardCards(data) {
         const container = document.getElementById('dashboard-cards-container');
         container.innerHTML = '';
@@ -257,7 +244,6 @@
         });
         document.getElementById('stat-total').innerText = data.length;
     }
-
     function startListeners() {
         onSnapshot(collection(db, "submissions"), (snapshot) => {
             submissionData = [];
@@ -279,42 +265,35 @@
             checkRegistrationWindow();
         });
     }
-    
     function initApp(){
         loadDraft(); 
         const s = JSON.parse(localStorage.getItem('pgri_user_session'));
         if(s){ isLoggedIn=true; currentRole=s.role; currentJuriKategori=s.kategoriSpesifik; updateLoginUI(); switchTabVisuals(currentRole); }
         startListeners();
         setInterval(checkRegistrationWindow, 60000);
-        
-        // AUTO SIGN-IN UNTUK MENGHINDARI PERMISSION ERROR
         signInAnonymously(auth).then(() => console.log("System Ready (Auth)")).catch(e => console.error("Auth Fail", e));
     }
     initApp();
-    
     function checkRegistrationWindow() {
         const now = new Date();
         const start = new Date('2025-12-01T00:01:00');
         const end = new Date('2025-12-04T23:59:59');
         const statusText = document.getElementById('system-status-text');
         const regSelect = document.getElementById('registration-mode');
-        
         let activeStatus = 'open';
         if (registrationConfig.status === 'open') activeStatus = 'open';
         else if (registrationConfig.status === 'closed') activeStatus = 'closed';
-        else { // Auto
+        else { 
             if (now < start) activeStatus = 'upcoming';
             else if (now > end) activeStatus = 'closed';
             else activeStatus = 'open';
         }
-        
         if(statusText && regSelect && isLoggedIn && currentRole === 'superadmin') {
             regSelect.value = registrationConfig.status;
             let statusLabel = activeStatus === 'open' ? '<span class="text-green-600">DIBUKA</span>' : '<span class="text-red-600">DITUTUP</span>';
             if(activeStatus === 'upcoming') statusLabel = '<span class="text-yellow-600">BELUM DIBUKA</span>';
             statusText.innerHTML = `Status Aktual: ${statusLabel} (Mode: ${registrationConfig.status.toUpperCase()})`;
         }
-
         const statusDiv = document.getElementById('registration-status-message');
         const title = document.getElementById('reg-status-title');
         const desc = document.getElementById('reg-status-desc');
@@ -322,12 +301,10 @@
         const publicStatus = document.getElementById('public-registration-status');
         const formDiv = document.getElementById('view-pendaftar-form');
         const selectDiv = document.getElementById('view-pendaftar-select');
-
         if (activeStatus !== 'open') {
             statusDiv.classList.remove('hidden');
             selectDiv.classList.add('hidden');
             formDiv.classList.add('hidden');
-            
             if(activeStatus === 'upcoming'){ 
                 title.innerText="Pendaftaran Belum Dibuka";
                 desc.innerText="Mohon bersabar, formulir akan dibuka pada 1 Desember 2025 pukul 00:01 WIB.";
@@ -345,14 +322,11 @@
         } else {
             statusDiv.classList.add('hidden');
             isRegistrationOpen = true;
-            
-            // Only show select if form not visible
             if (formDiv.classList.contains('hidden') && !currentKategori) {
                 selectDiv.classList.remove('hidden');
             } else if(currentKategori) {
                  formDiv.classList.remove('hidden');
             }
-
             if(publicStatus) {
                 publicStatus.className = "mb-4 p-4 rounded-lg border bg-green-50 border-green-200 text-green-800 shadow-sm";
                 publicStatus.innerHTML = '<strong>Pendaftaran DIBUKA.</strong> Silakan isi formulir di tab "Formulir Pendaftaran".';
@@ -360,13 +334,11 @@
             }
         }
     }
-
     document.getElementById('btn-save-config').addEventListener('click', async () => {
         const mode = document.getElementById('registration-mode').value;
         await setDoc(doc(db, "settings", "global"), { registrationStatus: mode }, { merge: true });
         showToast("Konfigurasi sistem berhasil disimpan.", 'success');
     });
-
     function sortData(data, col, dir) {
         return [...data].sort((a, b) => {
             let valA = a[col] || '', valB = b[col] || '';
@@ -386,13 +358,11 @@
             return 0;
         });
     }
-
     function updateSortIcons(tableSelector, sortObj) {
         document.querySelectorAll(`${tableSelector} .sort-icon`).forEach(el => el.innerHTML = '');
         const ah = document.querySelector(`${tableSelector} .sortable-header[data-col="${sortObj.col}"] .sort-icon`);
         if (ah) ah.innerHTML = sortObj.dir === 'asc' ? '▲' : '▼';
     }
-
     document.querySelectorAll('.sortable-header').forEach(th => {
         th.addEventListener('click', () => {
             const col = th.dataset.col;
@@ -403,13 +373,11 @@
             type === 'admin' ? renderAdminTable(submissionData) : renderJuriTable(submissionData);
         });
     });
-
     function renderAdminTable(data, isSuper = false) {
         const tableId = isSuper ? '#superadmin-table' : '#admin-table';
         const tbody = document.querySelector(`${tableId} tbody`);
         const countSpan = document.getElementById('admin-total-count');
         if(!tbody) return;
-        
         let filteredData = data;
         if (currentAdminFilter !== 'all') {
             filteredData = data.filter(item => item.kategori === currentAdminFilter);
@@ -422,9 +390,7 @@
         }
         if(countSpan) countSpan.innerText = filteredData.length;
         filteredData = sortData(filteredData, adminSort.col, adminSort.dir);
-
         if(filteredData.length === 0) { tbody.innerHTML = '<tr><td colspan="7" class="px-4 py-8 text-center text-gray-500 italic">Tidak ada data ditemukan.</td></tr>'; return; }
-
         tbody.innerHTML = filteredData.map((item, index) => {
             const date = item.timestamp ? new Date(item.timestamp.seconds * 1000).toLocaleString('id-ID', {dateStyle: 'medium', timeStyle: 'short'}) : '-';
             return `<tr class="hover:bg-gray-50 border-b border-gray-100">
@@ -443,12 +409,10 @@
         document.querySelectorAll('.btn-video').forEach(b => b.addEventListener('click', (e) => showVideoOptions(e.currentTarget.dataset.url)));
         updateSortIcons('#admin-table', adminSort);
     }
-
     function renderJuriTable(data) {
         const tbody = document.querySelector('#juri-table tbody');
         const countSpan = document.getElementById('juri-total-count');
         if(!tbody) return;
-        
         let filteredData = data;
         if (currentRole === 'juri' && currentJuriKategori && currentJuriKategori !== 'all') {
              filteredData = data.filter(item => item.kategori === currentJuriKategori);
@@ -458,7 +422,6 @@
              juriFilterStatus.classList.remove('hidden');
              juriFilter.classList.add('hidden');
         } else {
-             // Ketua Juri / Super Admin
              if (currentJuriFilter !== 'all') {
                  filteredData = data.filter(item => item.kategori === currentJuriFilter);
              }
@@ -466,18 +429,14 @@
              juriFilterStatus.classList.add('hidden');
              juriFilter.classList.remove('hidden');
         }
-
         if (juriSearch) {
             filteredData = filteredData.filter(item => 
                 (item.nama && item.nama.toLowerCase().includes(juriSearch)) ||
                 (item.sekolah && item.sekolah.toLowerCase().includes(juriSearch))
             );
         }
-        
         if(countSpan) countSpan.innerText = filteredData.length;
         filteredData = sortData(filteredData, juriSort.col, juriSort.dir);
-
-        // EMPTY STATE SPESIFIK JURI
         if(filteredData.length === 0) { 
             let emptyMessage = 'Tidak ada data ditemukan.';
             if(currentRole === 'juri' && currentJuriKategori !== 'all') {
@@ -486,7 +445,6 @@
             tbody.innerHTML = `<tr><td colspan="6" class="px-4 py-8 text-center text-gray-500 italic">${emptyMessage}</td></tr>`; 
             return; 
         }
-
         tbody.innerHTML = filteredData.map((item, index) => {
             const date = item.timestamp ? new Date(item.timestamp.seconds * 1000).toLocaleString('id-ID', {dateStyle: 'medium', timeStyle: 'short'}) : '-';
             return `<tr class="hover:bg-gray-50 border-b border-gray-100">
@@ -511,22 +469,17 @@
         document.querySelectorAll('.btn-video').forEach(b => b.addEventListener('click', (e) => showVideoOptions(e.currentTarget.dataset.url)));
         updateSortIcons('#juri-table', juriSort);
     }
-    
-    // --- VIDEO LOGIC ---
     function showVideoOptions(url) {
         currentVideoUrl = url;
         document.getElementById('video-choice-modal').classList.remove('hidden');
     }
-    
     document.getElementById('btn-play-newtab').addEventListener('click', () => {
         window.open(currentVideoUrl, '_blank');
         document.getElementById('video-choice-modal').classList.add('hidden');
     });
-    
     document.getElementById('btn-play-popup').addEventListener('click', () => {
         document.getElementById('video-choice-modal').classList.add('hidden');
         const frame = document.getElementById('video-frame');
-        // Convert normal view link to preview link for embedding
         let embedUrl = currentVideoUrl;
         if (embedUrl.includes('drive.google.com') && embedUrl.includes('/view')) {
             embedUrl = embedUrl.replace('/view', '/preview');
@@ -534,20 +487,17 @@
         frame.src = embedUrl;
         document.getElementById('video-player-modal').classList.remove('hidden');
     });
-
     document.getElementById('video-player-modal').addEventListener('click', (e) => {
          if(e.target === document.getElementById('video-player-modal')) {
              document.getElementById('video-player-modal').classList.add('hidden');
              document.getElementById('video-frame').src = "";
          }
     });
-
     function renderUserManagementTable(users) {
         const tbody = document.querySelector('#users-table tbody');
         tbody.innerHTML = users.map(u => `<tr class="hover:bg-gray-50 border-b border-gray-100"><td class="px-4 py-2 font-medium text-gray-900">${u.username}</td><td class="px-4 py-2 text-gray-500"><span class="px-2 py-1 bg-gray-200 rounded text-xs font-bold">${u.role.toUpperCase()}</span> ${u.kategoriSpesifik && u.kategoriSpesifik !== 'all' ? `<br><span class="text-xs text-indigo-600">(${u.kategoriSpesifik})</span>` : ''}</td><td class="px-4 py-2">${u.role !== 'superadmin' ? `<button class="btn-delete-user text-red-600 hover:text-red-800 text-xs font-bold" data-id="${u.id}" title="Hapus Akun Pengguna Ini">Hapus</button>` : '<span class="text-gray-400 text-xs">Locked</span>'}</td></tr>`).join('');
         document.querySelectorAll('.btn-delete-user').forEach(btn => { btn.addEventListener('click', async (e) => { if(confirm("Hapus user ini?")) await deleteDoc(doc(db, "users", e.target.dataset.id)); }); });
     }
-    
     document.getElementById('create-user-form').addEventListener('submit', async (e) => {
         e.preventDefault();
         const u = document.getElementById('new-username').value, p = document.getElementById('new-password').value, r = document.getElementById('new-role').value;
@@ -562,7 +512,6 @@
             document.getElementById('kategori-spesifik-container').classList.add('hidden');
         } catch(err) { showToast(err.message, 'error'); }
     });
-
     document.getElementById('save-score-btn').addEventListener('click', async () => {
         try {
             await updateDoc(doc(db, "submissions", document.getElementById('score-doc-id').value), { nilai: document.getElementById('score-input').value, catatan: document.getElementById('score-notes').value });
@@ -570,7 +519,6 @@
             showToast("Nilai berhasil disimpan", 'success');
         } catch (e) { showToast(e.message, 'error'); }
     });
-
     window.closeVideoModal = (proceed) => {
         const modal = document.getElementById('video-warning-modal');
         modal.classList.add('hidden');
@@ -586,8 +534,6 @@
             document.getElementById('kategori-select').value = "";
         }
     };
-
-    // Tombol Lanjutkan saat memilih kategori
     document.getElementById('btn-pilih-kategori').addEventListener('click', () => {
         if(!document.getElementById('kategori-select').value) { showToast("Pilih kategori terlebih dahulu!", 'warning'); return; }
         currentKategori = document.getElementById('kategori-select').value;
@@ -595,24 +541,18 @@
         document.getElementById('form-subtitle').textContent = `Mengajukan untuk kategori ${currentKategori}.`;
         document.getElementById('video-warning-modal').classList.remove('hidden');
     });
-
-    // LOGIKA TOMBOL KEMBALI DI FORM
-    // Mengubah perilaku agar tidak reload, tapi switch view kembali ke select
     document.getElementById('btn-kembali').addEventListener('click', () => {
          document.getElementById('view-pendaftar-form').classList.add('hidden');
          document.getElementById('view-pendaftar-select').classList.remove('hidden');
-         // Reset Stepper Visuals ke Step 1
          currentStep = 1;
          document.querySelectorAll('.form-step').forEach(d => d.classList.add('hidden'));
          document.getElementById('form-step-1').classList.remove('hidden');
-         
          document.querySelectorAll('.stepper-step').forEach(s => {
             s.classList.remove('active', 'completed');
          });
          document.getElementById('stepper-step-1').classList.add('active');
          updateNav();
     });
-
     window.showLoginModal = (role) => { 
         let displayRole = role;
         if(role === 'superadmin') displayRole = 'Super Admin';
@@ -622,14 +562,12 @@
         document.getElementById('login-modal').dataset.role = role;
         document.getElementById('login-username').focus();
     };
-    
     window.hideLoginModal = () => {
         document.getElementById('login-modal').classList.add('hidden');
         document.getElementById('login-error').classList.add('hidden');
         document.getElementById('login-username').value = '';
         document.getElementById('login-password').value = '';
     };
-
     document.getElementById('toggle-password').addEventListener('click', () => {
         const passwordInput = document.getElementById('login-password');
         const iconEye = document.getElementById('icon-eye');
@@ -644,7 +582,6 @@
             iconEyeOff.classList.add('hidden');
         }
     });
-
     window.handleLogin = async () => {
         const u = document.getElementById('login-username').value.trim();
         const p = document.getElementById('login-password').value.trim();
@@ -652,12 +589,9 @@
         const btn = document.getElementById('login-btn-action');
         const originalText = btn.innerHTML;
         btn.innerHTML = 'Loading...'; btn.disabled = true;
-
         try {
-            // STEP 1: Cek Username dulu (Case Sensitive)
             const qUser = query(collection(db, "users"), where("username", "==", u));
             const snap = await getDocs(qUser);
-
             if (snap.empty) {
                 document.getElementById('login-error').innerText = "Username tidak ditemukan.";
                 document.getElementById('login-error').classList.remove('hidden');
@@ -665,26 +599,20 @@
                 btn.innerHTML = originalText; btn.disabled = false;
                 return;
             }
-
             let userFound = null;
             let passwordMatch = false;
             let roleMatch = false;
-
             snap.forEach(doc => {
                 const userData = doc.data();
-                // STEP 2: Cek Password
                 if (userData.password === p) {
                     passwordMatch = true;
-                    // STEP 3: Cek Role
                     if (userData.role === role) {
                         roleMatch = true;
                         userFound = userData;
-                        // Simpan ID dokumen juga jika perlu
                         userFound.id = doc.id;
                     }
                 }
             });
-
             if (!passwordMatch) {
                 document.getElementById('login-error').innerText = "Password salah.";
                 document.getElementById('login-error').classList.remove('hidden');
@@ -695,11 +623,9 @@
                 document.getElementById('login-error').classList.remove('hidden');
                 showToast(msg, 'error');
             } else {
-                // SUCCESS LOGIN
                 isLoggedIn = true; 
                 currentRole = role; 
                 currentJuriKategori = userFound.kategoriSpesifik || 'all';
-                
                 localStorage.setItem('pgri_user_session', JSON.stringify({role:role, username:u, kategoriSpesifik: currentJuriKategori})); 
                 window.hideLoginModal(); 
                 updateLoginUI();
@@ -708,12 +634,10 @@
                 if(role === 'admin' || role === 'superadmin') renderAdminTable(submissionData);
                 if(role === 'juri' || role === 'superadmin') renderJuriTable(submissionData);
                 if(role === 'superadmin') renderUserManagementTable(userData);
-                
                 if(role === 'juri' && currentJuriKategori !== 'all') {
                      showToast(`Juri Spesifik: ${currentJuriKategori}`, 'info');
                 }
             }
-
         } catch(e) { 
             console.error(e); 
             document.getElementById('login-error').innerText = "Terjadi kesalahan sistem (Permission/Network).";
@@ -722,14 +646,12 @@
         } 
         finally { btn.innerHTML = originalText; btn.disabled = false; }
     };
-
     function updateLoginUI() {
         let roleDisplay = currentRole;
         if(currentRole === 'superadmin') roleDisplay = 'Super Admin';
         document.getElementById('login-role-display').innerText = roleDisplay.charAt(0).toUpperCase() + roleDisplay.slice(1);
         document.getElementById('logout-btn').classList.remove('hidden');
     }
-
     document.querySelectorAll('.main-tab-btn').forEach(btn => {
         btn.addEventListener('click', (e) => {
             const targetTab = e.currentTarget.dataset.tab; 
@@ -742,27 +664,22 @@
             switchTabVisuals(targetTab);
         });
     });
-
     function switchTabVisuals(tabName) {
         document.querySelectorAll('.main-content-div').forEach(d => d.classList.add('hidden'));
         const content = document.getElementById(`main-content-${tabName}`);
         if(content) content.classList.remove('hidden');
-        
         if(tabName === 'juri') document.getElementById('juri-content-wrapper').classList.remove('hidden');
         if(tabName === 'admin') document.getElementById('admin-content-wrapper').classList.remove('hidden');
         if(tabName === 'superadmin') document.getElementById('superadmin-content-wrapper').classList.remove('hidden');
-
         document.querySelectorAll('.main-tab-btn').forEach(b => b.classList.remove('active'));
         const activeBtn = document.querySelector(`.main-tab-btn[data-tab="${tabName}"]`);
         if(activeBtn) activeBtn.classList.add('active');
     }
-    
     document.getElementById('login-btn-action').addEventListener('click', window.handleLogin);
     document.getElementById('logout-btn').addEventListener('click', () => {
         localStorage.removeItem('pgri_user_session');
         location.reload();
     });
-
     document.getElementById('main-tabs-mobile').addEventListener('change', (e) => {
          const target = e.target.value;
          if(['juri', 'admin', 'superadmin'].includes(target)) {
@@ -774,31 +691,22 @@
          }
          switchTabVisuals(target);
     });
-
     let currentStep = 1;
     const btnNext = document.getElementById('btn-next');
     const btnPrev = document.getElementById('btn-prev');
     const submitBtn = document.getElementById('submit-form-btn');
-
     btnNext.addEventListener('click', () => {
         const stepDiv = document.getElementById(`form-step-${currentStep}`);
-        
-        // --- IMPROVED VALIDATION LOGIC ---
-        // Instead of just checking value, use checkValidity() to respect HTML attributes like pattern, minlength, type=email
         const inputs = stepDiv.querySelectorAll('input, select, textarea');
         let valid = true;
-        
         inputs.forEach(i => {
             if (!i.checkValidity()) {
                 i.classList.add('input-error');
                 valid = false;
-                // Optional: Report validity to show default bubble
-                // i.reportValidity(); 
             } else {
                 i.classList.remove('input-error');
             }
         });
-
         if(valid && currentStep < 6) {
             document.getElementById(`form-step-${currentStep}`).classList.add('hidden');
             document.getElementById(`stepper-step-${currentStep}`).classList.remove('active');
@@ -812,7 +720,6 @@
             showToast("Mohon lengkapi data dengan format yang benar", 'warning');
         }
     });
-
     btnPrev.addEventListener('click', () => {
         if(currentStep > 1) {
             document.getElementById(`form-step-${currentStep}`).classList.add('hidden');
@@ -825,13 +732,11 @@
             window.scrollTo(0,0);
         }
     });
-
     function updateNav() {
         btnPrev.classList.toggle('hidden', currentStep === 1);
         btnNext.classList.toggle('hidden', currentStep === 6);
         submitBtn.classList.toggle('hidden', currentStep !== 6);
     }
-
     const handleExport = (role) => {
         if (submissionData.length === 0) { showToast("Belum ada data.", 'warning'); return; }
         let dataToExport = submissionData;
@@ -854,7 +759,6 @@
         XLSX.writeFile(wb, `PGRI Award 2025_Data Pendaftar_${catLabel}_${ts}.xlsx`);
     };
     document.getElementById('btn-export').addEventListener('click', () => handleExport('admin'));
-
     async function generatePDF(data) {
         const { jsPDF } = window.jspdf;
         const doc = new jsPDF();
@@ -873,19 +777,14 @@
         y += 10; doc.setFontSize(9); doc.setFont("helvetica", "italic");
         doc.text("Simpan dokumen ini sebagai bukti pendaftaran yang sah.", 105, y, null, null, "center");
         doc.text("Panitia PGRI Pandeglang Award 2025", 105, y + 5, null, null, "center");
-        
         const now = new Date();
         const ds = now.getFullYear() + String(now.getMonth() + 1).padStart(2, '0') + String(now.getDate()).padStart(2, '0');
         const ts = String(now.getHours()).padStart(2, '0') + String(now.getMinutes()).padStart(2, '0') + String(now.getSeconds()).padStart(2, '0');
-        
         doc.save(`PGRI Pandeglang Award 2025_Bukti Pendaftaran_${data.nama}_${ds} ${ts}.pdf`);
     }
-
     document.getElementById('form-pendaftaran').addEventListener('submit', async (e) => {
         e.preventDefault();
         if(!isRegistrationOpen) { showToast("Maaf, pendaftaran telah ditutup.", 'error'); return; }
-        
-        // --- MANUAL VALIDATION ON SUBMIT (For Step 6 specifically) ---
         const step6 = document.getElementById('form-step-6');
         const inputs6 = step6.querySelectorAll('input, textarea');
         let valid6 = true;
@@ -897,26 +796,20 @@
                i.classList.remove('input-error');
            }
         });
-
         if (!valid6) {
             showToast("Mohon lengkapi formulir dengan benar", 'error');
             return;
         }
-
-        // --- VALIDASI GOOGLE DRIVE ---
         const videoUrl = document.getElementById('tautan-video').value;
         const driveRegex = /^https?:\/\/(www\.)?drive\.google\.com\/(file\/d\/|open\?id=|drive\/folders\/).+/;
-        
         if (!videoUrl.includes("drive.google.com")) {
             showToast("Link harus Google Drive!", 'error');
             return;
         }
-        // Validasi ekstra (opsional: pastikan bukan sekadar domain root)
         if (!driveRegex.test(videoUrl) && !videoUrl.includes("/d/") && !videoUrl.includes("id=")) {
              showToast("Format link Google Drive tidak lengkap", 'error');
              return;
         }
-
         const btn = document.getElementById('submit-form-btn');
         btn.innerText = "Mengirim..."; btn.disabled = true;
         try {
