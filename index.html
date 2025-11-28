@@ -4,7 +4,7 @@
 <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>PGRI Pandeglang Award 2025</title>
 <script src="https://cdn.tailwindcss.com"></script><script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
 body{font-family:'Inter',sans-serif;display:flex;flex-direction:column;min-height:100vh;background-color:#f9fafb}main{flex:1}
 ::-webkit-scrollbar{width:6px;height:6px}::-webkit-scrollbar-track{background:#f1f1f1}::-webkit-scrollbar-thumb{background:#c4c4c4;border-radius:3px}::-webkit-scrollbar-thumb:hover{background:#a1a1a1}
@@ -38,7 +38,6 @@ body{font-family:'Inter',sans-serif;display:flex;flex-direction:column;min-heigh
 .toast-warning { background-color: #d97706; }
 .toast-success { background-color: #16a34a; }
 #custom-tooltip { position: fixed; background: rgba(17, 24, 39, 0.95); color: #fff; padding: 6px 10px; border-radius: 6px; font-size: 12px; pointer-events: none; z-index: 10000; display: none; backdrop-filter: blur(4px); box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1); white-space: nowrap; border: 1px solid rgba(255, 255, 255, 0.1); transition: opacity 0.15s ease; }
-/* Compact Rubric Styles */
 .rubric-option { cursor: pointer; transition: all 0.15s; border: 1px solid #e5e7eb; border-radius: 0.375rem; padding: 0.5rem; margin-bottom: 0.25rem; display: flex; align-items: flex-start; }
 .rubric-option:hover { border-color: #4f46e5; background-color: #f5f3ff; }
 .rubric-option.selected { border-color: #4f46e5; background-color: #eef2ff; ring: 1px solid #4f46e5; }
@@ -46,6 +45,11 @@ body{font-family:'Inter',sans-serif;display:flex;flex-direction:column;min-heigh
 .rubric-label { font-size: 0.7rem; font-weight: 700; color: #4f46e5; margin-bottom: 0.1rem; text-transform: uppercase; letter-spacing: 0.025em; }
 .rubric-desc { font-size: 0.75rem; color: #374151; line-height: 1.2; }
 .aspect-title { font-size: 0.85rem; font-weight: 700; color: #1f2937; margin-bottom: 0.5rem; padding-top: 0.5rem; border-top: 1px dashed #e5e7eb; }
+.timeline-item { position: relative; padding-left: 2rem; padding-bottom: 2rem; border-left: 2px solid #e5e7eb; }
+.timeline-item:last-child { border-left: 0; }
+.timeline-dot { position: absolute; left: -0.4rem; top: 0; height: 0.8rem; width: 0.8rem; border-radius: 50%; background-color: #4f46e5; ring: 4px solid #e0e7ff; }
+.category-card { transition: all 0.3s ease; }
+.category-card:hover { transform: translateY(-5px); box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05); }
 </style>
 </head>
 <body class="text-gray-800 antialiased text-sm">
@@ -54,24 +58,35 @@ body{font-family:'Inter',sans-serif;display:flex;flex-direction:column;min-heigh
 <div class="flex items-center space-x-4 overflow-hidden"><div class="w-14 h-14 rounded-full overflow-hidden flex-shrink-0 bg-white cursor-help" title="Logo Resmi PGRI Pandeglang"><img class="w-full h-full object-contain" src="https://raw.githubusercontent.com/edibrata/image/main/Logo%20PGRI%20Official.png" alt="Logo"></div><div class="min-w-0 flex-1 flex flex-col justify-center"><h1 class="text-xl sm:text-2xl font-bold text-gray-900 leading-tight truncate">PGRI PANDEGLANG AWARD 2025</h1><p class="text-sm font-semibold text-indigo-600 truncate">Anugerah Guru BerAKHLAK</p><p class="text-xs text-gray-500 truncate mt-0.5">Dalam Rangka Memperingati Hari Guru Nasional dan HUT Ke-80 PGRI Tahun 2025</p></div></div>
 <div id="login-status" class="flex items-center gap-2 flex-shrink-0 ml-4"><div class="text-right hidden sm:block"><p class="text-xs text-gray-500">Anda masuk sebagai:</p><p id="login-role-display" class="text-sm font-bold text-indigo-600" title="Status Peran Akun Anda Saat Ini">Pendaftar</p></div><button id="logout-btn" title="Klik untuk keluar dari akun sistem" class="hidden text-xs font-medium text-white bg-red-600 hover:bg-red-700 px-3 py-1.5 rounded transition-colors flex items-center"><svg class="w-3 h-3 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/></svg> Keluar</button></div></div></div></header>
 <main class="container mx-auto p-3 sm:p-4 lg:p-6 max-w-7xl">
-<div class="mb-4"><div class="sm:hidden"><select id="main-tabs-mobile" class="block w-full text-sm rounded-md border-gray-300 focus:border-indigo-500 focus:ring-indigo-500" title="Navigasi Menu Utama"><option value="dashboard" selected>Dashboard Publik</option><option value="form">Formulir Pendaftaran</option><option value="juri">Juri</option><option value="admin">Admin</option><option value="superadmin">Super Admin</option></select></div><div class="hidden sm:block"><div id="main-tab-nav" class="border-b border-gray-200"><nav class="-mb-px flex space-x-4 lg:space-x-8" aria-label="Tabs">
-<button class="main-tab-btn active whitespace-nowrap py-2 px-3 border-b-2 font-medium text-sm flex items-center" data-tab="dashboard" title="Lihat statistik dan grafik pendaftar"><svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/></svg>Dashboard Publik</button>
+<div class="mb-4"><div class="sm:hidden"><select id="main-tabs-mobile" class="block w-full text-sm rounded-md border-gray-300 focus:border-indigo-500 focus:ring-indigo-500" title="Navigasi Menu Utama"><option value="home" selected>Beranda</option><option value="form">Formulir Pendaftaran</option><option value="dashboard">Dashboard Statistik</option><option value="juri">Juri</option><option value="admin">Admin</option><option value="superadmin">Super Admin</option></select></div><div class="hidden sm:block"><div id="main-tab-nav" class="border-b border-gray-200"><nav class="-mb-px flex space-x-4 lg:space-x-8" aria-label="Tabs">
+<button class="main-tab-btn active whitespace-nowrap py-2 px-3 border-b-2 font-medium text-sm flex items-center" data-tab="home" title="Halaman Utama"><svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/></svg>Beranda</button>
 <button class="main-tab-btn whitespace-nowrap py-2 px-3 border-b-2 font-medium text-sm hover:text-gray-700 flex items-center" data-tab="form" title="Isi formulir pendaftaran lomba"><svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>Formulir Pendaftaran</button>
+<button class="main-tab-btn whitespace-nowrap py-2 px-3 border-b-2 font-medium text-sm hover:text-gray-700 flex items-center" data-tab="dashboard" title="Lihat statistik (Khusus Juri/Admin)"><svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 12l3-3 3 3 4-4M8 21l4-4 4 4M3 4h18M4 4h16v12a1 1 0 01-1 1H5a1 1 0 01-1-1V4z"/></svg>Dashboard Statistik</button>
 <button class="main-tab-btn whitespace-nowrap py-2 px-3 border-b-2 font-medium text-sm hover:text-gray-700 flex items-center" data-tab="juri" title="Area khusus Juri untuk menilai"><svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 15l-2 5L9 9l11 4-5 2zm0 0l5 5M7.188 2.239l.777 2.897M5.136 7.965l-2.898-.777M13.95 4.05l-2.122 2.122m-5.657 5.656l-2.12 2.122"/></svg>Juri</button>
 <button class="main-tab-btn whitespace-nowrap py-2 px-3 border-b-2 font-medium text-sm hover:text-gray-700 flex items-center" data-tab="admin" title="Area khusus Admin untuk mengelola data"><svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>Admin</button>
 <button class="main-tab-btn whitespace-nowrap py-2 px-3 border-b-2 font-medium text-sm text-red-500 hover:text-red-700 flex items-center" data-tab="superadmin" title="Area Super Admin untuk konfigurasi sistem"><svg class="w-4 h-4 mr-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 7a2 2 0 012 2m4 0a6 6 0 01-7.743 5.743L11 17H9v2H7v2H4a1 1 0 01-1-1v-2.586a1 1 0 01.293-.707l5.964-5.964A6 6 0 1121 9z"/></svg>Super Admin</button></nav></div></div></div>
-<div id="main-content-dashboard" class="main-content-div"><div id="public-registration-status" class="hidden mb-4 p-4 rounded-lg border shadow-sm transition-all" title="Status Pendaftaran Saat Ini"></div><div class="bg-white rounded-lg shadow-sm border border-gray-200 p-4 mb-4" title="Grafik Statistik Pendaftar"><div class="flex justify-between items-center mb-2"><h3 class="text-sm font-semibold text-gray-800">Statistik Sebaran</h3><div class="text-xs bg-indigo-50 text-indigo-700 px-2 py-1 rounded-md font-bold" title="Total Seluruh Pendaftar">Total: <span id="stat-total">0</span></div></div><div class="relative h-40 w-full"><canvas id="submissionChart"></canvas></div></div><h3 class="text-sm font-bold text-gray-900 mb-3 uppercase tracking-wide">Rincian Per Kategori</h3><div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3" id="dashboard-cards-container"></div></div>
+
+<div id="main-content-home" class="main-content-div">
+ <div class="bg-gradient-to-br from-indigo-600 to-purple-700 rounded-2xl text-white p-8 md:p-12 mb-10 shadow-xl text-center relative overflow-hidden"><div class="relative z-10"><h2 class="text-3xl md:text-5xl font-extrabold mb-4 leading-tight tracking-tight">PGRI PANDEGLANG<br>AWARD 2025</h2><p class="text-lg md:text-xl text-indigo-100 mb-8 font-light max-w-2xl mx-auto">Ajang penghargaan bergengsi bagi Guru yang menunjukkan dedikasi, inovasi, dan implementasi nilai-nilai BerAKHLAK dalam pelayanan pendidikan.</p><button id="btn-hero-daftar" class="px-8 py-3 bg-white text-indigo-600 font-bold rounded-full shadow-lg hover:bg-indigo-50 hover:scale-105 transition-transform text-base">Daftar Sekarang</button></div><div class="absolute top-0 left-0 w-full h-full opacity-10"><svg class="w-full h-full" fill="currentColor" viewBox="0 0 100 100" preserveAspectRatio="none"><path d="M0 100 C 20 0 50 0 100 100 Z"></path></svg></div></div>
+ <div class="mb-12"><h3 class="text-2xl font-bold text-gray-900 text-center mb-8">Kategori Lomba</h3><div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5" id="home-categories-grid"></div></div>
+ <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-12">
+  <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-200"><h3 class="text-lg font-bold text-gray-900 mb-4 border-b pb-2">Jadwal Kegiatan</h3><div class="space-y-0"><div class="timeline-item"><div class="timeline-dot"></div><h4 class="text-sm font-bold text-gray-900">1 - 4 Desember 2025</h4><p class="text-sm text-gray-600">Pendaftaran &amp; Unggah Video Inovasi</p></div><div class="timeline-item"><div class="timeline-dot"></div><h4 class="text-sm font-bold text-gray-900">Desember (Minggu Ke-1)</h4><p class="text-sm text-gray-600">Seleksi 5 Video Terbaik per Kategori</p></div><div class="timeline-item"><div class="timeline-dot"></div><h4 class="text-sm font-bold text-gray-900">Desember (Minggu Ke-2)</h4><p class="text-sm text-gray-600">Wawancara Online Peserta &amp; Pimpinan</p></div><div class="timeline-item"><div class="timeline-dot"></div><h4 class="text-sm font-bold text-gray-900">Puncak Acara</h4><p class="text-sm text-gray-600">Resepsi HUT PGRI Ke-80 &amp; Penganugerahan</p></div></div></div>
+  <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-200"><h3 class="text-lg font-bold text-gray-900 mb-4 border-b pb-2">Persyaratan Utama</h3><ul class="space-y-3 text-sm text-gray-600"><li class="flex items-start"><svg class="w-5 h-5 text-green-500 mr-2 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg><span>Wajib mengenakan pakaian <strong>Batik PGRI Kusuma Bangsa</strong> dalam video.</span></li><li class="flex items-start"><svg class="w-5 h-5 text-green-500 mr-2 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg><span>Durasi video pendek maksimal <strong>120 detik (2 menit)</strong>.</span></li><li class="flex items-start"><svg class="w-5 h-5 text-green-500 mr-2 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg><span>Konten video bernilai positif &amp; menunjukkan dedikasi pelayanan publik.</span></li><li class="flex items-start"><svg class="w-5 h-5 text-green-500 mr-2 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg><span>Video diunggah ke Google Drive (Setting: Public).</span></li></ul></div>
+ </div>
+</div>
+
+<div id="main-content-dashboard" class="main-content-div hidden"><div id="public-registration-status" class="hidden mb-4 p-4 rounded-lg border shadow-sm transition-all" title="Status Pendaftaran Saat Ini"></div><div class="bg-white rounded-lg shadow-sm border border-gray-200 p-4 mb-4" title="Grafik Statistik Pendaftar"><div class="flex justify-between items-center mb-2"><h3 class="text-sm font-semibold text-gray-800">Statistik Sebaran</h3><div class="text-xs bg-indigo-50 text-indigo-700 px-2 py-1 rounded-md font-bold" title="Total Seluruh Pendaftar">Total: <span id="stat-total">0</span></div></div><div class="relative h-40 w-full"><canvas id="submissionChart"></canvas></div></div><h3 class="text-sm font-bold text-gray-900 mb-3 uppercase tracking-wide">Rincian Per Kategori</h3><div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3" id="dashboard-cards-container"></div></div>
 <div id="main-content-form" class="main-content-div hidden">
 <div id="registration-status-message" class="hidden max-w-4xl mx-auto"><div class="bg-gradient-to-r from-blue-600 to-indigo-700 rounded-xl shadow-lg overflow-hidden text-white mb-8 fade-in-up"><div class="px-6 py-10 text-center"><div class="mx-auto flex items-center justify-center h-16 w-16 rounded-full bg-white bg-opacity-20 mb-6 backdrop-blur-sm"><svg class="h-8 w-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg></div><h2 id="reg-status-title" class="text-2xl md:text-3xl font-extrabold tracking-tight mb-2">Pendaftaran Belum Dibuka</h2><p id="reg-status-desc" class="text-blue-100 text-lg md:text-xl font-medium mx-auto leading-relaxed mb-6">Mohon bersabar, formulir akan dibuka pada 1 Desember 2025 pukul 00:01 WIB.</p><div id="reg-status-period" class="inline-flex items-center px-4 py-2 rounded-full bg-white bg-opacity-10 border border-white border-opacity-20 backdrop-filter backdrop-blur-sm"><svg class="w-4 h-4 mr-2 text-blue-200" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg><span class="font-mono text-sm md:text-base text-blue-50">Periode: 1 Des 2025 (00:01) - 4 Des 2025 (23:59)</span></div></div></div></div>
 <div id="view-pendaftar-select" class="hidden"><div class="max-w-xl mx-auto bg-white rounded-lg shadow-sm border border-gray-200 p-6 text-center mt-4"><h3 class="text-lg font-bold text-gray-900 mb-1">Mulai Pendaftaran</h3><div class="mb-4 text-left"><label class="block text-sm font-semibold text-gray-700 mb-2">Pilih Kategori Lomba</label><select id="kategori-select" class="block w-full text-base sm:text-lg p-3 sm:p-4 rounded-xl border-2 border-indigo-200 shadow-md bg-white text-gray-900 focus:border-indigo-600 focus:ring-4 focus:ring-indigo-100 transition-all cursor-pointer" title="Silakan pilih kategori lomba yang ingin Anda ikuti"><option value="" disabled selected>-- Ketuk Disini Untuk Memilih Kategori --</option></select></div><button id="btn-pilih-kategori" class="w-full flex justify-center items-center py-3 px-4 rounded-xl shadow-lg text-base font-bold text-white bg-indigo-600 hover:bg-indigo-700 hover:shadow-xl transition-all transform hover:-translate-y-0.5" title="Klik untuk lanjut mengisi formulir kategori terpilih">Lanjutkan Mengisi Formulir</button></div></div>
 <div id="view-pendaftar-form" class="hidden"><div id="form-card" class="max-w-3xl mx-auto bg-white rounded-lg shadow-sm border border-gray-200"><div class="p-4 sm:p-6"><button id="btn-kembali" class="mb-4 text-xs font-medium text-gray-500 hover:text-indigo-600 flex items-center" title="Kembali untuk mengubah pilihan kategori"><svg class="w-3 h-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/></svg> Kembali Pilih Kategori</button><div class="text-center mb-8"><h2 id="form-title" class="text-3xl font-bold text-gray-900">Formulir Pendaftaran</h2><p id="form-subtitle" class="text-gray-500 mt-2 text-sm">Mengajukan untuk kategori yang dipilih.</p></div><div id="stepper-container" class="mb-6 px-1"><ol class="flex items-center w-full justify-between relative"><li id="stepper-step-1" class="stepper-step active" title="Langkah 1: Identitas"><span class="stepper-circle">1</span><div class="stepper-line"></div><span class="stepper-label">Identitas</span></li><li id="stepper-step-2" class="stepper-step" title="Langkah 2: Kepegawaian"><span class="stepper-circle">2</span><div class="stepper-line"></div><span class="stepper-label">Kepegawaian</span></li><li id="stepper-step-3" class="stepper-step" title="Langkah 3: Unit Kerja"><span class="stepper-circle">3</span><div class="stepper-line"></div><span class="stepper-label">Unit Kerja</span></li><li id="stepper-step-4" class="stepper-step" title="Langkah 4: Domisili"><span class="stepper-circle">4</span><div class="stepper-line"></div><span class="stepper-label">Domisili</span></li><li id="stepper-step-5" class="stepper-step" title="Langkah 5: Kontak"><span class="stepper-circle">5</span><div class="stepper-line"></div><span class="stepper-label">Kontak</span></li><li id="stepper-step-6" class="stepper-step" title="Langkah 6: Materi Lomba"><span class="stepper-circle">6</span><span class="stepper-label">Materi</span></li></ol></div>
 <form id="form-pendaftaran" class="space-y-6" novalidate>
-<div id="form-step-1" class="form-step space-y-4"><div class="form-section-header"><h3>Identitas Diri</h3></div><div><label class="block text-sm font-semibold text-gray-700 mb-1">Nama Lengkap (disertai gelar)</label><input type="text" id="nama-lengkap" class="form-input-field" placeholder="Contoh: Dr. Budi Santoso, M.Pd." required title="Masukkan nama lengkap beserta gelar akademik"><p class="error-msg">Nama lengkap wajib diisi</p></div><div class="grid grid-cols-1 sm:grid-cols-2 gap-4"><div><label class="block text-sm font-semibold text-gray-700 mb-1">Tempat Lahir</label><input type="text" id="tempat-lahir" class="form-input-field" placeholder="Contoh: Pandeglang" required title="Kota tempat lahir sesuai KTP"><p class="error-msg">Tempat lahir wajib diisi</p></div><div><label class="block text-sm font-semibold text-gray-700 mb-1">Tanggal Lahir</label><input type="date" id="tanggal-lahir" class="form-input-field" required title="Tanggal lahir sesuai KTP"><p class="error-msg">Tanggal lahir wajib diisi</p></div></div><div><label class="block text-sm font-semibold text-gray-700 mb-1">NIK (16 Digit)</label><input type="text" id="nik" pattern="\d{16}" class="form-input-field" placeholder="16 digit angka sesuai KTP" required title="Masukkan 16 digit NIK yang valid"><p class="error-msg">Masukkan 16 digit NIK yang valid</p></div></div>
+<div id="form-step-1" class="form-step space-y-4"><div class="form-section-header"><h3>Identitas Diri</h3></div><div><label class="block text-sm font-semibold text-gray-700 mb-1">Nama Lengkap (disertai gelar)</label><input type="text" id="nama-lengkap" class="form-input-field" placeholder="Contoh: Dr. Budi Santoso, M.Pd." required title="Masukkan nama lengkap beserta gelar akademik"><p class="error-msg">Nama lengkap wajib diisi</p></div><div class="grid grid-cols-1 sm:grid-cols-2 gap-4"><div><label class="block text-sm font-semibold text-gray-700 mb-1">Tempat Lahir</label><input type="text" id="tempat-lahir" class="form-input-field" placeholder="Contoh: Pandeglang" required title="Kota tempat lahir sesuai KTP"><p class="error-msg">Tempat lahir wajib diisi</p></div><div><label class="block text-sm font-semibold text-gray-700 mb-1">Tanggal Lahir</label><input type="date" id="tanggal-lahir" class="form-input-field" required title="Tanggal lahir sesuai KTP"><p class="error-msg">Tanggal lahir wajib diisi</p></div></div><div><label class="block text-sm font-semibold text-gray-700 mb-1">NIK (16 Digit)</label><input type="text" id="nik" pattern="\d{16}" class="form-input-field" placeholder="16 digit angka sesuai KTP" required title="Masukkan 16 digit Nomor Induk Kependudukan"><p class="error-msg">Masukkan 16 digit NIK yang valid</p></div></div>
 <div id="form-step-2" class="form-step hidden space-y-4"><div class="form-section-header"><h3>Data Kepegawaian</h3></div><div><label class="block text-sm font-semibold text-gray-700 mb-1">Status Kepegawaian</label><select id="status-kepegawaian" class="form-input-field" required title="Pilih status kepegawaian Anda"><option value="" disabled selected>-- Pilih --</option><option value="ASN PNS">ASN PNS</option><option value="ASN PPPK">ASN PPPK</option><option value="Non ASN">Non ASN</option></select><p class="error-msg">Pilih status kepegawaian</p></div><div class="grid grid-cols-1 sm:grid-cols-2 gap-4"><div><label class="block text-sm font-semibold text-gray-700 mb-1">NIP</label><input type="text" id="nip" class="form-input-field" placeholder="Isi - jika tidak ada" required title="Nomor Induk Pegawai (Isi '-' jika Non-ASN)"><p class="error-msg">NIP wajib diisi (isi - jika tidak ada)</p></div><div><label class="block text-sm font-semibold text-gray-700 mb-1">NUPTK</label><input type="text" id="nuptk" class="form-input-field" placeholder="16 digit angka" title="Nomor Unik Pendidik dan Tenaga Kependidikan"></div></div><div class="grid grid-cols-1 sm:grid-cols-2 gap-4"><div><label class="block text-sm font-semibold text-gray-700 mb-1">Pangkat/Gol</label><select id="pangkat-gol" class="form-input-field" title="Pilih Pangkat dan Golongan Ruang"><option value="" disabled selected>-- Pilih --</option><option value="Pengatur Muda, II/a">Pengatur Muda, II/a</option><option value="Pengatur Muda Tingkat I, II/b">Pengatur Muda Tingkat I, II/b</option><option value="Pengatur Muda, II/c">Pengatur Muda, II/c</option><option value="Pengatur Muda, II/d">Pengatur Muda, II/d</option><option value="Penata Muda, III/a">Penata Muda, III/a</option><option value="Penata Muda Tingkat I, III/b">Penata Muda Tingkat I, III/b</option><option value="Penata, III/c">Penata, III/c</option><option value="Penata Tingkat I, III/d">Penata Tingkat I, III/d</option><option value="Pembina, IV/a">Pembina, IV/a</option><option value="Pembina Tingkat I, IV/b">Pembina Tingkat I, IV/b</option><option value="Pembina Utama Muda, IV/c">Pembina Utama Muda, IV/c</option><option value="Pembina Utama Madya, IV/d">Pembina Utama Madya, IV/d</option><option value="Pembina Utama, IV/e">Pembina Utama, IV/e</option><option value="-">-</option></select></div><div><label class="block text-sm font-semibold text-gray-700 mb-1">Jabatan Fungsional</label><select id="jabatan-fungsional" class="form-input-field" title="Pilih Jabatan Fungsional Guru"><option value="" disabled selected>-- Pilih --</option><option value="Guru Ahli Pertama">Guru Ahli Pertama</option><option value="Guru Ahli Muda">Guru Ahli Muda</option><option value="Guru Ahli Madya">Guru Ahli Madya</option><option value="Guru Ahli Utama">Guru Ahli Utama</option><option value="-">-</option></select></div></div></div>
 <div id="form-step-3" class="form-step hidden space-y-4"><div class="form-section-header"><h3>Unit Kerja</h3></div><div class="grid grid-cols-1 sm:grid-cols-2 gap-4"><div><label class="block text-sm font-semibold text-gray-700 mb-1">Jenjang</label><select id="jenjang" class="form-input-field" required title="Pilih Jenjang Pendidikan Tempat Mengajar"><option value="" disabled selected>-- Pilih --</option><option value="PAUD">PAUD</option><option value="SD">SD</option><option value="SMP">SMP</option><option value="SMA/SMK">SMA/SMK</option></select><p class="error-msg">Pilih jenjang pendidikan</p></div><div><label class="block text-sm font-semibold text-gray-700 mb-1">Nama Sekolah</label><input type="text" id="nama-satuan-pendidikan" class="form-input-field" placeholder="Contoh: SDN 1 Pandeglang" required title="Masukkan nama lengkap sekolah"><p class="error-msg">Nama sekolah wajib diisi</p></div></div><div><label class="block text-sm font-semibold text-gray-700 mb-1">Alamat Sekolah</label><input type="text" id="alamat-satuan-pendidikan" class="form-input-field" placeholder="Jl. Raya Labuan Km 5..." required title="Masukkan alamat lengkap sekolah"><p class="error-msg">Alamat sekolah wajib diisi</p></div><div><label class="block text-sm font-semibold text-gray-700 mb-1">Kecamatan Tempat Tugas</label><select id="kecamatan-satuan-pendidikan" class="form-input-field" required title="Pilih Kecamatan Lokasi Sekolah"><option value="" disabled selected>-- Pilih --</option><option value="Angsana">Angsana</option><option value="Banjar">Banjar</option><option value="Bojong">Bojong</option><option value="Cadasari">Cadasari</option><option value="Carita">Carita</option><option value="Cibaliung">Cibaliung</option><option value="Cibitung">Cibitung</option><option value="Cigeulis">Cigeulis</option><option value="Cikedal">Cikedal</option><option value="Cikeusik">Cikeusik</option><option value="Cimanggu">Cimanggu</option><option value="Cimanuk">Cimanuk</option><option value="Cipeucang">Cipeucang</option><option value="Cisata">Cisata</option><option value="Jiput">Jiput</option><option value="Kaduhejo">Kaduhejo</option><option value="Karang Tanjung">Karang Tanjung</option><option value="Koroncong">Koroncong</option><option value="Labuan">Labuan</option><option value="Majasari">Majasari</option><option value="Mandalawangi">Mandalawangi</option><option value="Mekarjaya">Mekarjaya</option><option value="Menes">Menes</option><option value="Munjul">Munjul</option><option value="Pagelaran">Pagelaran</option><option value="Pandeglang">Pandeglang</option><option value="Panimbang">Panimbang</option><option value="Patia">Patia</option><option value="Picung">Picung</option><option value="Pulosari">Pulosari</option><option value="Saketi">Saketi</option><option value="Sindangresmi">Sindangresmi</option><option value="Sobang">Sobang</option><option value="Sukaresmi">Sukaresmi</option><option value="Sumur">Sumur</option></select><p class="error-msg">Pilih kecamatan tempat tugas</p></div></div>
 <div id="form-step-4" class="form-step hidden space-y-4"><div class="form-section-header"><h3>Tempat Tinggal</h3></div><div><label class="block text-sm font-semibold text-gray-700 mb-1">Alamat Rumah</label><input type="text" id="alamat-tempat-tinggal" class="form-input-field" placeholder="Kp. Ciekek..." required title="Masukkan alamat lengkap tempat tinggal Anda"><p class="error-msg">Alamat rumah wajib diisi</p></div><div class="grid grid-cols-1 sm:grid-cols-2 gap-4"><div><label class="block text-sm font-semibold text-gray-700 mb-1">Kecamatan</label><input type="text" id="kecamatan-tempat-tinggal" class="form-input-field" placeholder="Contoh: Majasari" required title="Masukkan Kecamatan tempat tinggal"><p class="error-msg">Kecamatan wajib diisi</p></div><div><label class="block text-sm font-semibold text-gray-700 mb-1">Kota/Kabupaten</label><input type="text" id="kabupaten-kota-tempat-tinggal" class="form-input-field" placeholder="Contoh: Kabupaten Pandeglang" required title="Masukkan Kota atau Kabupaten"><p class="error-msg">Kota/Kabupaten wajib diisi</p></div></div></div>
 <div id="form-step-5" class="form-step hidden space-y-4"><div class="form-section-header"><h3>Kontak</h3></div><div class="grid grid-cols-1 sm:grid-cols-2 gap-4"><div><label class="block text-sm font-semibold text-gray-700 mb-1">WhatsApp</label><input type="tel" id="nomor-whatsapp" class="form-input-field" placeholder="08xxx" required title="Nomor WhatsApp aktif untuk koordinasi"><p class="error-msg">Nomor WhatsApp wajib diisi</p></div><div><label class="block text-sm font-semibold text-gray-700 mb-1">Email</label><input type="email" id="email-personal" class="form-input-field" placeholder="nama@email.com" required title="Alamat email aktif"><p class="error-msg">Format email tidak valid</p></div></div></div>
-<div id="form-step-6" class="form-step hidden space-y-4"><div class="form-section-header"><h3>Materi Lomba</h3></div><div><label class="block text-sm font-semibold text-gray-700 mb-1">Deskripsi Singkat Inovasi</label><textarea id="deskripsi" rows="4" class="form-input-field" placeholder="Jelaskan secara singkat..." required title="Jelaskan deskripsi singkat mengenai karya inovasi Anda"></textarea><p class="error-msg">Deskripsi inovasi wajib diisi</p></div><div class="bg-yellow-50 border-l-4 border-yellow-400 p-4 mt-2"><div class="flex items-start"><div class="flex-shrink-0"><svg class="h-5 w-5 text-yellow-600" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clip-rule="evenodd"/></svg></div><div class="ml-3"><p class="text-sm font-medium text-yellow-800">PENTING: Pastikan Link Video Google Drive diset ke <strong>Public/Anyone with the link</strong>.</p></div></div></div><div class="mt-4"><label class="block text-sm font-semibold text-gray-700 mb-1 flex items-center">Link Video Karya <button type="button" id="btn-info-rubrik" class="ml-2 text-indigo-600 hover:text-indigo-800 focus:outline-none" title="Lihat Kriteria Penilaian"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg></button></label><input type="url" id="tautan-video" class="form-input-field" placeholder="https://drive.google.com/..." required title="Tempel URL Video Google Drive di sini (Wajib Public)"><p class="error-msg">Masukkan Link Google Drive yang valid</p></div><div class="flex items-center mt-4 p-3 bg-indigo-50 rounded-lg"><input id="persetujuan" type="checkbox" class="h-5 w-5 text-indigo-600 border-gray-300 rounded focus:ring-indigo-500" required title="Centang untuk menyetujui pernyataan"><label for="persetujuan" class="ml-2 block text-sm font-medium text-gray-800">Saya menyatakan data benar & karya ini asli buatan saya.</label></div></div>
+<div id="form-step-6" class="form-step hidden space-y-4"><div class="form-section-header"><h3>Materi Lomba</h3></div><div><label class="block text-sm font-semibold text-gray-700 mb-1">Deskripsi Singkat Inovasi</label><textarea id="deskripsi" rows="4" class="form-input-field" placeholder="Jelaskan secara singkat..." required title="Jelaskan deskripsi singkat mengenai karya inovasi Anda"></textarea><p class="error-msg">Deskripsi inovasi wajib diisi</p></div><div class="bg-yellow-50 border-l-4 border-yellow-400 p-4 mt-2"><div class="flex items-start"><div class="flex-shrink-0"><svg class="h-5 w-5 text-yellow-600" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clip-rule="evenodd"/></svg></div><div class="ml-3"><p class="text-sm font-medium text-yellow-800">PENTING: Pastikan Link Video Google Drive diset ke <strong>Public/Anyone with the link</strong>.</p></div></div></div><div class="mt-4"><label class="block text-sm font-semibold text-gray-700 mb-1 flex items-center">Link Video Karya <button type="button" id="btn-info-rubrik" class="ml-2 text-indigo-600 hover:text-indigo-800 focus:outline-none" title="Lihat Kriteria Penilaian"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg></button></label><input type="url" id="tautan-video" class="form-input-field" placeholder="https://drive.google.com/..." required title="Tempel URL Video Google Drive di sini (Wajib Public)"><p class="error-msg">Masukkan Link Google Drive yang valid</p></div><div class="flex items-center mt-4 p-3 bg-indigo-50 rounded-lg"><input id="persetujuan" type="checkbox" class="h-5 w-5 text-indigo-600 border-gray-300 rounded focus:ring-indigo-500" required title="Centang untuk menyetujui pernyataan"><label for="persetujuan" class="ml-2 block text-sm font-medium text-gray-800">Saya menyatakan data benar & karya ini asli buatan saya, memakai batik PGRI Kusuma Bangsa dalam video.</label></div></div>
 <div class="mt-8 pt-6 border-t flex justify-between gap-4"><button type="button" id="btn-prev" class="hidden px-6 py-2.5 rounded-lg border border-gray-300 bg-white text-gray-700 font-medium hover:bg-gray-50 flex items-center" title="Kembali ke langkah sebelumnya">Kembali</button><div class="flex-grow"></div><button type="button" id="btn-next" class="px-6 py-2.5 rounded-lg bg-indigo-600 text-white font-medium hover:bg-indigo-700 flex items-center" title="Lanjut ke langkah berikutnya">Selanjutnya</button><button type="submit" id="submit-form-btn" class="hidden px-6 py-2.5 rounded-lg bg-green-600 text-white font-bold hover:bg-green-700 flex items-center" title="Kirim Data Pendaftaran">Kirim Pendaftaran</button></div>
 </form></div></div></div></div>
 <div id="main-content-juri" class="main-content-div hidden"><div id="juri-content-wrapper" class="hidden"><div class="flex flex-wrap justify-between items-center mb-4 gap-3"><div class="flex items-center space-x-2 flex-grow sm:flex-grow-0"><div class="relative"><input type="text" id="juri-search" placeholder="Cari Nama/Sekolah..." class="border border-gray-300 text-sm rounded-lg pl-9 pr-4 py-2 focus:ring-indigo-500 focus:border-indigo-500 w-48 sm:w-64" title="Cari data peserta berdasarkan nama atau sekolah"><div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none"><svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg></div></div><span id="juri-filter-status" class="text-sm font-medium text-indigo-600 bg-indigo-50 px-3 py-2 rounded-lg border border-indigo-200 hidden" title="Kategori terkunci sesuai akun Juri"></span><select id="juri-filter-kategori" class="border border-gray-300 text-sm rounded-lg p-2 bg-white focus:ring-indigo-500 focus:border-indigo-500" title="Filter tampilan berdasarkan kategori lomba"><option value="all">Tampilkan Semua</option></select><span class="text-sm font-medium text-gray-500 bg-white px-3 py-2 rounded-lg border border-gray-200 whitespace-nowrap" title="Total jumlah data yang ditampilkan saat ini">Total: <span id="juri-total-count">0</span></span></div></div><div class="bg-white shadow-sm rounded-lg overflow-hidden border border-gray-200"><div class="table-container"><table class="min-w-full divide-y divide-gray-200 text-sm" id="juri-table"><thead class="bg-gray-50"><tr><th class="px-4 py-2 text-left font-bold text-gray-500 sortable-header" data-col="index" data-type="number" title="Klik untuk urutkan nomor">No</th><th class="px-4 py-2 text-left font-bold text-gray-500 sortable-header" data-col="timestamp" data-type="date" title="Klik untuk urutkan waktu daftar">Time Stamp <span class="sort-icon"></span></th><th class="px-4 py-2 text-left font-bold text-gray-500 sortable-header" data-col="nama" data-type="string" title="Klik untuk urutkan nama">Nama <span class="sort-icon"></span></th><th class="px-4 py-2 text-left font-bold text-gray-500 sortable-header" data-col="kategori" data-type="string" title="Klik untuk urutkan kategori">Kategori <span class="sort-icon"></span></th><th class="px-4 py-2 text-left font-bold text-gray-500 sortable-header" data-col="nilai" data-type="number" title="Klik untuk urutkan nilai">Nilai <span class="sort-icon"></span></th><th class="px-4 py-2 text-center font-bold text-gray-500" title="Aksi yang tersedia">Aksi</th></tr></thead><tbody class="bg-white divide-y divide-gray-200 text-xs sm:text-sm"></tbody></table></div></div></div></div>
@@ -257,48 +272,61 @@ body{font-family:'Inter',sans-serif;display:flex;flex-direction:column;min-heigh
     juriFilter.addEventListener('change', (e) => { currentJuriFilter = e.target.value; renderJuriTable(submissionData); });
     document.getElementById('juri-search').addEventListener('input', (e) => { juriSearch = e.target.value.toLowerCase(); renderJuriTable(submissionData); });
     function initChart(data) {
-        try {
-            const canvas = document.getElementById('submissionChart');
-            if (!canvas) return;
-            if (typeof Chart === 'undefined') return;
-            const counts = KATEGORI_LIST.map(k => data.filter(s => s.kategori === k).length);
-            const ctx = canvas.getContext('2d');
-            if (myChart) myChart.destroy();
-            myChart = new Chart(ctx, {
-                type: 'bar',
-                data: {
-                    labels: KATEGORI_LIST.map(k => k.replace('Guru ', '')),
-                    datasets: [{ label: 'Pendaftar', data: counts, backgroundColor: KATEGORI_COLORS, borderRadius: 4 }]
-                },
-                options: { responsive: true, maintainAspectRatio: false, scales: { y: { beginAtZero: true, ticks: { stepSize: 1 } } }, plugins: { legend: { display: false } } }
-            });
-        } catch (e) { console.error("Chart Error", e); }
+        const canvas = document.getElementById('submissionChart');
+        if (!canvas) return;
+        const counts = KATEGORI_LIST.map(k => data.filter(s => s.kategori === k).length);
+        const ctx = canvas.getContext('2d');
+        if (myChart) myChart.destroy();
+        myChart = new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: KATEGORI_LIST.map(k => k.replace('Guru ', '')),
+                datasets: [{ label: 'Pendaftar', data: counts, backgroundColor: KATEGORI_COLORS, borderRadius: 4 }]
+            },
+            options: { responsive: true, maintainAspectRatio: false, scales: { y: { beginAtZero: true, ticks: { stepSize: 1 } } }, plugins: { legend: { display: false } } }
+        });
     }
     function renderDashboardCards(data) {
-        try {
-            const container = document.getElementById('dashboard-cards-container');
-            if(!container) return;
-            container.innerHTML = '';
-            KATEGORI_LIST.forEach(cat => {
-                const count = data.filter(s => s.kategori === cat).length;
-                container.innerHTML += `<div class="bg-white rounded-lg p-3 shadow-sm border border-gray-100 flex items-center justify-between hover:shadow-md transition-shadow" title="Total pendaftar untuk kategori ${cat}"><div class="flex items-center space-x-3"><div class="text-indigo-600 bg-indigo-50 p-2 rounded-lg">${KATEGORI_ICONS[cat]}</div><span class="text-xs font-medium text-gray-600">${cat.replace('Guru ', '')}</span></div><span class="text-lg font-bold text-gray-800">${count}</span></div>`;
-            });
-            const totalEl = document.getElementById('stat-total');
-            if(totalEl) totalEl.innerText = data.length;
-        } catch (e) { console.error("Dashboard Error", e); }
+        const container = document.getElementById('dashboard-cards-container');
+        container.innerHTML = '';
+        // Check if KATEGORI_ICONS is available
+        if (typeof KATEGORI_ICONS === 'undefined') return;
+
+        KATEGORI_LIST.forEach(cat => {
+            const count = data.filter(s => s.kategori === cat).length;
+            const icon = KATEGORI_ICONS[cat] || ''; 
+            container.innerHTML += `<div class="bg-white rounded-lg p-3 shadow-sm border border-gray-100 flex items-center justify-between hover:shadow-md transition-shadow" title="Total pendaftar untuk kategori ${cat}"><div class="flex items-center space-x-3"><div class="text-indigo-600 bg-indigo-50 p-2 rounded-lg">${icon}</div><span class="text-xs font-medium text-gray-600">${cat.replace('Guru ', '')}</span></div><span class="text-lg font-bold text-gray-800">${count}</span></div>`;
+        });
+        
+        const statTotal = document.getElementById('stat-total');
+        if(statTotal) statTotal.innerText = data.length;
+
+        // Also init chart for Home page if needed or just Dashboard
+        const activeTab = document.querySelector('.main-tab-btn.active')?.dataset.tab;
+        if(activeTab === 'dashboard') initChart(data);
     }
+    
+    function renderHomeCategories() {
+        const container = document.getElementById('home-categories-grid');
+        if(!container) return;
+        container.innerHTML = '';
+        KATEGORI_LIST.forEach(cat => {
+             const icon = KATEGORI_ICONS[cat] || '';
+             container.innerHTML += `<div class="bg-white p-6 rounded-xl shadow-sm border border-gray-100 flex flex-col items-center text-center category-card cursor-pointer" onclick="document.getElementById('btn-hero-daftar').click()"><div class="text-indigo-600 bg-indigo-50 p-4 rounded-full mb-4 w-16 h-16 flex items-center justify-center">${icon}</div><h4 class="font-bold text-gray-900">${cat}</h4></div>`;
+        });
+    }
+    
     function startListeners() {
         onSnapshot(collection(db, "submissions"), (snapshot) => {
             submissionData = [];
             snapshot.forEach((doc) => submissionData.push({ id: doc.id, ...doc.data() }));
-            renderDashboardCards(submissionData);
-            initChart(submissionData);
+            renderDashboardCards(submissionData); // Now safe
+            renderHomeCategories(); // Render home grid
+            
             const activeTab = document.querySelector('.main-tab-btn.active')?.dataset.tab;
             if(activeTab === 'juri' && isLoggedIn) renderJuriTable(submissionData);
             if(activeTab === 'admin' && isLoggedIn) renderAdminTable(submissionData);
-        }, (error) => {
-            console.error("Data Fetch Error:", error);
-            showToast("Gagal mengambil data: Izin Ditolak (Auth).", 'error');
+            if(activeTab === 'dashboard' && isLoggedIn) initChart(submissionData);
         });
         onSnapshot(collection(db, "users"), (snapshot) => {
             userData = [];
@@ -313,18 +341,18 @@ body{font-family:'Inter',sans-serif;display:flex;flex-direction:column;min-heigh
     async function initApp(){
         loadDraft(); 
         const s = JSON.parse(localStorage.getItem('pgri_user_session'));
-        if(s){ isLoggedIn=true; currentRole=s.role; currentJuriKategori=s.kategoriSpesifik; updateLoginUI(); switchTabVisuals(currentRole); }
+        // Default to Home tab
+        switchTabVisuals('home');
+        
+        if(s){ isLoggedIn=true; currentRole=s.role; currentJuriKategori=s.kategoriSpesifik; updateLoginUI(); }
         
         try {
             await signInAnonymously(auth);
             console.log("System Ready (Auth)");
         } catch (e) {
-            if (e.code === 'auth/configuration-not-found' || e.code === 'auth/admin-restricted-operation') {
-                console.warn("Peringatan: Anonymous Auth belum diaktifkan.");
-            } else {
-                console.error("Auth Fail", e);
-            }
+            console.warn("Auth Warning:", e.code);
         }
+
         startListeners();
         setInterval(checkRegistrationWindow, 60000);
     }
@@ -433,9 +461,11 @@ body{font-family:'Inter',sans-serif;display:flex;flex-direction:column;min-heigh
         const tbody = document.querySelector(`${tableId} tbody`);
         const countSpan = document.getElementById('admin-total-count');
         if(!tbody) return;
+        
         const wrapper = document.getElementById('admin-content-wrapper');
         if(wrapper && wrapper.classList.contains('hidden')) wrapper.classList.remove('hidden');
-        let filteredData = data || [];
+
+        let filteredData = data;
         if (currentAdminFilter !== 'all') {
             filteredData = data.filter(item => item.kategori === currentAdminFilter);
         }
@@ -457,112 +487,100 @@ body{font-family:'Inter',sans-serif;display:flex;flex-direction:column;min-heigh
         updateSortIcons('#admin-table', adminSort);
     }
     function renderJuriTable(data) {
-        try {
-            const tbody = document.querySelector('#juri-table tbody');
-            const countSpan = document.getElementById('juri-total-count');
-            const juriFilter = document.getElementById('juri-filter-kategori');
-            const juriFilterStatus = document.getElementById('juri-filter-status');
-            if(!tbody) return;
-            const wrapper = document.getElementById('juri-content-wrapper');
-            if(wrapper && wrapper.classList.contains('hidden')) wrapper.classList.remove('hidden');
-            let filteredData = data || [];
-            if (currentRole === 'juri' && currentJuriKategori && currentJuriKategori !== 'all') {
-                 filteredData = filteredData.filter(item => item.kategori === currentJuriKategori);
-                 if(juriFilter) {
-                    juriFilter.value = currentJuriKategori;
-                    juriFilter.disabled = true;
-                    juriFilter.classList.add('hidden');
-                 }
-                 if(juriFilterStatus) {
-                    juriFilterStatus.textContent = "Kategori: " + currentJuriKategori;
-                    juriFilterStatus.classList.remove('hidden');
-                 }
-            } else {
-                 if (currentJuriFilter !== 'all') {
-                     filteredData = filteredData.filter(item => item.kategori === currentJuriFilter);
-                 }
-                 if(juriFilter) {
-                    juriFilter.disabled = false;
-                    juriFilter.classList.remove('hidden');
-                 }
-                 if(juriFilterStatus) juriFilterStatus.classList.add('hidden');
+        const tbody = document.querySelector('#juri-table tbody');
+        const countSpan = document.getElementById('juri-total-count');
+        if(!tbody) return;
+        
+        const wrapper = document.getElementById('juri-content-wrapper');
+        if(wrapper && wrapper.classList.contains('hidden')) wrapper.classList.remove('hidden');
+
+        let filteredData = data;
+        const juriFilter = document.getElementById('juri-filter-kategori');
+        const juriFilterStatus = document.getElementById('juri-filter-status');
+
+        // LOGIC: If user is Juri AND has specific category (not 'all') -> Filter Strict
+        // If user is Admin/Superadmin/Juri Ketua -> Show All (unless dropdown filtered)
+        
+        if (currentRole === 'juri' && currentJuriKategori && currentJuriKategori !== 'all') {
+             filteredData = data.filter(item => item.kategori === currentJuriKategori);
+             if(juriFilter) { juriFilter.value = currentJuriKategori; juriFilter.classList.add('hidden'); }
+             if(juriFilterStatus) { juriFilterStatus.innerText = "Kategori: " + currentJuriKategori; juriFilterStatus.classList.remove('hidden'); }
+        } else {
+             if(juriFilter) juriFilter.classList.remove('hidden');
+             if(juriFilterStatus) juriFilterStatus.classList.add('hidden');
+             if (currentJuriFilter !== 'all') {
+                 filteredData = data.filter(item => item.kategori === currentJuriFilter);
+             }
+        }
+        
+        if (juriSearch) {
+            filteredData = filteredData.filter(item => 
+                (item.nama && item.nama.toLowerCase().includes(juriSearch)) ||
+                (item.sekolah && item.sekolah.toLowerCase().includes(juriSearch))
+            );
+        }
+        if(countSpan) countSpan.innerText = filteredData.length;
+        filteredData = sortData(filteredData, juriSort.col, juriSort.dir);
+        if(filteredData.length === 0) { 
+            let emptyMessage = 'Tidak ada data ditemukan.';
+            if(currentRole === 'juri' && currentJuriKategori !== 'all') {
+                emptyMessage = `Belum ada peserta yang mendaftar untuk kategori <strong>${currentJuriKategori}</strong>.`;
             }
-            if (juriSearch) {
-                filteredData = filteredData.filter(item => 
-                    (item.nama && item.nama.toLowerCase().includes(juriSearch)) ||
-                    (item.sekolah && item.sekolah.toLowerCase().includes(juriSearch))
-                );
+            tbody.innerHTML = `<tr><td colspan="6" class="px-4 py-8 text-center text-gray-500 italic">${emptyMessage}</td></tr>`; 
+            return; 
+        }
+        tbody.innerHTML = filteredData.map((item, index) => {
+            const date = item.timestamp ? new Date(item.timestamp.seconds * 1000).toLocaleString('id-ID', {dateStyle: 'medium', timeStyle: 'short'}) : '-';
+            return `<tr class="hover:bg-gray-50 border-b border-gray-100"><td class="px-4 py-2 font-medium text-gray-900 text-center">${index + 1}</td><td class="px-4 py-2 text-gray-500 text-xs whitespace-nowrap">${date}</td><td class="px-4 py-2 font-medium text-gray-900">${item.nama}</td><td class="px-4 py-2 text-gray-500 text-xs"><span class="bg-indigo-50 text-indigo-700 px-2 py-1 rounded-full">${item.kategori.replace('Guru ','')}</span></td><td class="px-4 py-2 font-bold ${item.nilai ? 'text-green-600' : 'text-gray-300'}">${item.nilai || 'Belum'}</td><td class="px-4 py-2 flex justify-center space-x-2"><button class="btn-video text-blue-600 hover:text-blue-800 bg-blue-50 p-1.5 rounded-lg" data-url="${item.videoUrl}" data-id="${item.id}" title="Tonton Video Peserta"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg></button><button class="btn-score text-indigo-600 hover:text-indigo-800 bg-indigo-50 p-1.5 rounded-lg" data-id="${item.id}" data-name="${item.nama}" data-score="${item.nilai||0}" data-notes="${item.catatan||''}" data-kategori="${item.kategori}" title="Beri Nilai Peserta"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/></svg></button></td></tr>`;
+        }).join('');
+        document.querySelectorAll('.btn-score').forEach(b => b.addEventListener('click', (e) => {
+            const d = e.currentTarget.dataset;
+            // Check if video watched or previously scored
+            if (!watchedSubmissions.has(d.id) && (!d.score || d.score == '0')) {
+                showToast("Anda wajib menonton video peserta ini terlebih dahulu sebelum memberikan nilai.", 'warning');
+                return;
             }
-            if(countSpan) countSpan.innerText = filteredData.length;
-            filteredData = sortData(filteredData, juriSort.col, juriSort.dir);
-            if(filteredData.length === 0) { 
-                let emptyMessage = 'Tidak ada data ditemukan.';
-                if(currentRole === 'juri' && currentJuriKategori !== 'all') {
-                    emptyMessage = `Belum ada peserta yang mendaftar untuk kategori <strong>${currentJuriKategori}</strong>.`;
-                }
-                tbody.innerHTML = `<tr><td colspan="6" class="px-4 py-8 text-center text-gray-500 italic">${emptyMessage}</td></tr>`; 
-                return; 
-            }
-            tbody.innerHTML = filteredData.map((item, index) => {
-                const date = item.timestamp ? new Date(item.timestamp.seconds * 1000).toLocaleString('id-ID', {dateStyle: 'medium', timeStyle: 'short'}) : '-';
-                return `<tr class="hover:bg-gray-50 border-b border-gray-100"><td class="px-4 py-2 font-medium text-gray-900 text-center">${index + 1}</td><td class="px-4 py-2 text-gray-500 text-xs whitespace-nowrap">${date}</td><td class="px-4 py-2 font-medium text-gray-900">${item.nama}</td><td class="px-4 py-2 text-gray-500 text-xs"><span class="bg-indigo-50 text-indigo-700 px-2 py-1 rounded-full">${item.kategori.replace('Guru ','')}</span></td><td class="px-4 py-2 font-bold ${item.nilai ? 'text-green-600' : 'text-gray-300'}">${item.nilai || 'Belum'}</td><td class="px-4 py-2 flex justify-center space-x-2"><button class="btn-video text-blue-600 hover:text-blue-800 bg-blue-50 p-1.5 rounded-lg" data-url="${item.videoUrl}" data-id="${item.id}" title="Tonton Video Peserta"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg></button><button class="btn-score text-indigo-600 hover:text-indigo-800 bg-indigo-50 p-1.5 rounded-lg" data-id="${item.id}" data-name="${item.nama}" data-score="${item.nilai||0}" data-notes="${item.catatan||''}" data-kategori="${item.kategori}" title="Beri Nilai Peserta"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/></svg></button></td></tr>`;
-            }).join('');
-            document.querySelectorAll('.btn-score').forEach(b => b.addEventListener('click', (e) => {
-                const d = e.currentTarget.dataset;
-                if (!watchedSubmissions.has(d.id) && (!d.score || d.score == '0')) {
-                    showToast("Anda wajib menonton video peserta ini terlebih dahulu sebelum memberikan nilai.", 'warning');
-                    return;
-                }
-                document.getElementById('score-doc-id').value = d.id;
-                document.getElementById('score-participant-name').innerText = d.name;
-                document.getElementById('score-participant-cat').innerText = d.kategori;
-                document.getElementById('score-notes').value = d.notes;
-                const container = document.getElementById('rubric-container');
-                container.innerHTML = '';
-                if(RUBRIC_DATA[d.kategori]) {
-                    RUBRIC_DATA[d.kategori].forEach((aspect, idx) => {
-                        let html = `<div class="mb-3 border-b border-gray-100 pb-2"><p class="aspect-title">${idx+1}. ${aspect.t}</p><div class="grid grid-cols-1 gap-1">`;
-                        const labels = ["Kurang (1)", "Cukup (2)", "Baik (3)", "Sangat Baik (4)"];
-                        aspect.i.forEach((indicator, i) => {
-                           const val = i + 1;
-                           html += `<label class="rubric-option"><input type="radio" name="aspect_${idx}" value="${val}" class="rubric-radio text-indigo-600 focus:ring-indigo-500"><div><span class="block rubric-label">${labels[i]}</span><span class="rubric-desc">${indicator}</span></div></label>`;
-                        });
-                        html += `</div></div>`;
-                        container.innerHTML += html;
+            
+            document.getElementById('score-doc-id').value = d.id;
+            document.getElementById('score-participant-name').innerText = d.name;
+            document.getElementById('score-participant-cat').innerText = d.kategori;
+            document.getElementById('score-notes').value = d.notes;
+            const container = document.getElementById('rubric-container');
+            container.innerHTML = '';
+            if(RUBRIC_DATA[d.kategori]) {
+                RUBRIC_DATA[d.kategori].forEach((aspect, idx) => {
+                    let html = `<div class="mb-3 border-b border-gray-100 pb-2"><p class="aspect-title">${idx+1}. ${aspect.t}</p><div class="grid grid-cols-1 gap-1">`;
+                    const labels = ["Kurang (1)", "Cukup (2)", "Baik (3)", "Sangat Baik (4)"];
+                    aspect.i.forEach((indicator, i) => {
+                       const val = i + 1;
+                       html += `<label class="rubric-option"><input type="radio" name="aspect_${idx}" value="${val}" class="rubric-radio text-indigo-600 focus:ring-indigo-500"><div><span class="block rubric-label">${labels[i]}</span><span class="rubric-desc">${indicator}</span></div></label>`;
                     });
-                    document.querySelectorAll('.rubric-radio').forEach(r => {
-                        r.addEventListener('change', () => {
-                            let currentTotal = 0;
-                            let count = 0;
-                            document.querySelectorAll('.rubric-radio:checked').forEach(c => { currentTotal += parseInt(c.value); count++; });
-                            const maxPoints = RUBRIC_DATA[d.kategori].length * 4;
-                            const finalScore = count === RUBRIC_DATA[d.kategori].length ? Math.round((currentTotal / maxPoints) * 100) : 0;
-                            document.getElementById('calculated-score').innerText = finalScore;
-                            document.querySelectorAll('.rubric-option').forEach(op => op.classList.remove('selected'));
-                            document.querySelectorAll('.rubric-radio:checked').forEach(c => c.closest('.rubric-option').classList.add('selected'));
-                        });
+                    html += `</div></div>`;
+                    container.innerHTML += html;
+                });
+                document.querySelectorAll('.rubric-radio').forEach(r => {
+                    r.addEventListener('change', () => {
+                        let currentTotal = 0;
+                        let count = 0;
+                        document.querySelectorAll('.rubric-radio:checked').forEach(c => { currentTotal += parseInt(c.value); count++; });
+                        const maxPoints = RUBRIC_DATA[d.kategori].length * 4;
+                        const finalScore = count === RUBRIC_DATA[d.kategori].length ? Math.round((currentTotal / maxPoints) * 100) : 0;
+                        document.getElementById('calculated-score').innerText = finalScore;
+                        document.querySelectorAll('.rubric-option').forEach(op => op.classList.remove('selected'));
+                        document.querySelectorAll('.rubric-radio:checked').forEach(c => c.closest('.rubric-option').classList.add('selected'));
                     });
-                } else { container.innerHTML = '<p class="text-sm text-red-500">Rubrik belum tersedia untuk kategori ini.</p>'; }
-                document.getElementById('score-modal').classList.remove('hidden');
-            }));
-            document.querySelectorAll('.btn-video').forEach(b => b.addEventListener('click', (e) => {
-                const url = e.currentTarget.dataset.url;
-                const id = e.currentTarget.dataset.id;
-                if(id) watchedSubmissions.add(id);
-                showVideoOptions(url);
-            }));
-            updateSortIcons('#juri-table', juriSort);
-        } catch (err) { console.error("Render Juri Error:", err); }
+                });
+            } else { container.innerHTML = '<p class="text-sm text-red-500">Rubrik belum tersedia untuk kategori ini.</p>'; }
+            document.getElementById('score-modal').classList.remove('hidden');
+        }));
+        document.querySelectorAll('.btn-video').forEach(b => b.addEventListener('click', (e) => {
+            const url = e.currentTarget.dataset.url;
+            const id = e.currentTarget.dataset.id;
+            if(id) watchedSubmissions.add(id);
+            showVideoOptions(url);
+        }));
+        updateSortIcons('#juri-table', juriSort);
     }
-    document.getElementById('btn-info-rubrik').addEventListener('click', () => {
-        const cat = document.getElementById('kategori-select').value;
-        if (!cat) { showToast("Pilih kategori terlebih dahulu!", 'warning'); return; }
-        const content = document.getElementById('info-modal-content');
-        if (RUBRIC_DATA[cat]) {
-            content.innerHTML = RUBRIC_DATA[cat].map((a, i) => `<div class="mb-2"><p class="font-bold text-indigo-700">${i+1}. ${a.t}</p><ul class="list-disc pl-5 mt-1 text-xs text-gray-500"><li>${a.i[3]} (Sangat Baik)</li></ul></div>`).join('');
-            document.getElementById('info-modal').classList.remove('hidden');
-        } else { showToast("Info rubrik belum tersedia.", 'warning'); }
-    });
     function showVideoOptions(url) {
         currentVideoUrl = url;
         document.getElementById('video-choice-modal').classList.remove('hidden');
@@ -636,6 +654,12 @@ body{font-family:'Inter',sans-serif;display:flex;flex-direction:column;min-heigh
         document.getElementById('form-title').textContent = `Formulir: ${currentKategori}`;
         document.getElementById('form-subtitle').textContent = `Mengajukan untuk kategori ${currentKategori}.`;
         document.getElementById('video-warning-modal').classList.remove('hidden');
+    });
+    document.getElementById('btn-hero-daftar').addEventListener('click', () => {
+        // Use the mobile select to trigger change or manually switch
+        const mobileSelect = document.getElementById('main-tabs-mobile');
+        if(mobileSelect) mobileSelect.value = 'form';
+        switchTabVisuals('form');
     });
     document.getElementById('btn-kembali').addEventListener('click', () => {
          document.getElementById('view-pendaftar-form').classList.add('hidden');
@@ -728,6 +752,7 @@ body{font-family:'Inter',sans-serif;display:flex;flex-direction:column;min-heigh
                 switchTabVisuals(role);
                 showToast(`Login berhasil sebagai ${role}`, 'success');
                 if(role === 'admin' || role === 'superadmin') renderAdminTable(submissionData);
+                // IMPORTANT: Allow Admin/Superadmin to see Juri Table
                 if(role === 'juri' || role === 'admin' || role === 'superadmin') renderJuriTable(submissionData);
             }
         } catch(e) { 
@@ -747,9 +772,20 @@ body{font-family:'Inter',sans-serif;display:flex;flex-direction:column;min-heigh
     document.querySelectorAll('.main-tab-btn').forEach(btn => {
         btn.addEventListener('click', (e) => {
             const targetTab = e.currentTarget.dataset.tab; 
-            if(['juri', 'admin', 'superadmin'].includes(targetTab)) {
-                 if (!isLoggedIn || (currentRole !== targetTab && currentRole !== 'superadmin')) {
-                    window.showLoginModal(targetTab);
+            // Dashboard, Juri, Admin, Superadmin require login
+            if(['juri', 'admin', 'superadmin', 'dashboard'].includes(targetTab)) {
+                 const hasAccess = isLoggedIn && (
+                    (targetTab === 'dashboard' && ['juri','admin','superadmin'].includes(currentRole)) ||
+                    (targetTab === 'juri' && ['juri','superadmin','admin'].includes(currentRole)) || // Admin allowed
+                    (targetTab === 'admin' && ['admin','superadmin'].includes(currentRole)) ||
+                    (targetTab === 'superadmin' && currentRole === 'superadmin')
+                 );
+
+                 if (!hasAccess) {
+                    // Determine which role to show in modal based on clicked tab
+                    let roleToLogin = targetTab;
+                    if(targetTab === 'dashboard') roleToLogin = 'juri'; // Default for dashboard click
+                    window.showLoginModal(roleToLogin);
                     return;
                  }
             }
@@ -763,6 +799,10 @@ body{font-family:'Inter',sans-serif;display:flex;flex-direction:column;min-heigh
         document.querySelectorAll('.main-content-div').forEach(d => d.classList.add('hidden'));
         const content = document.getElementById(`main-content-${tabName}`);
         if(content) content.classList.remove('hidden');
+        
+        // Trigger render logic
+        if(tabName === 'home') renderHomeCategories();
+        if(tabName === 'dashboard' && isLoggedIn) initChart(submissionData);
         if(tabName === 'juri') {
             document.getElementById('juri-content-wrapper').classList.remove('hidden');
             if(isLoggedIn && (currentRole === 'juri' || currentRole === 'admin' || currentRole === 'superadmin')) renderJuriTable(submissionData);
@@ -780,10 +820,12 @@ body{font-family:'Inter',sans-serif;display:flex;flex-direction:column;min-heigh
     });
     document.getElementById('main-tabs-mobile').addEventListener('change', (e) => {
          const target = e.target.value;
-         if(['juri', 'admin', 'superadmin'].includes(target)) {
-             if (!isLoggedIn || (currentRole !== target && currentRole !== 'superadmin')) {
-                 window.showLoginModal(target);
-                 e.target.value = 'dashboard'; 
+         // Simple check for protected tabs on mobile
+         if(['juri', 'admin', 'superadmin', 'dashboard'].includes(target)) {
+             if (!isLoggedIn) {
+                 let r = target === 'dashboard' ? 'juri' : target;
+                 window.showLoginModal(r);
+                 e.target.value = 'home'; 
                  return;
              }
          }
