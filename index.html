@@ -257,28 +257,35 @@ body{font-family:'Inter',sans-serif;display:flex;flex-direction:column;min-heigh
     juriFilter.addEventListener('change', (e) => { currentJuriFilter = e.target.value; renderJuriTable(submissionData); });
     document.getElementById('juri-search').addEventListener('input', (e) => { juriSearch = e.target.value.toLowerCase(); renderJuriTable(submissionData); });
     function initChart(data) {
-        const canvas = document.getElementById('submissionChart');
-        if (!canvas) return;
-        const counts = KATEGORI_LIST.map(k => data.filter(s => s.kategori === k).length);
-        const ctx = canvas.getContext('2d');
-        if (myChart) myChart.destroy();
-        myChart = new Chart(ctx, {
-            type: 'bar',
-            data: {
-                labels: KATEGORI_LIST.map(k => k.replace('Guru ', '')),
-                datasets: [{ label: 'Pendaftar', data: counts, backgroundColor: KATEGORI_COLORS, borderRadius: 4 }]
-            },
-            options: { responsive: true, maintainAspectRatio: false, scales: { y: { beginAtZero: true, ticks: { stepSize: 1 } } }, plugins: { legend: { display: false } } }
-        });
+        try {
+            const canvas = document.getElementById('submissionChart');
+            if (!canvas) return;
+            if (typeof Chart === 'undefined') return;
+            const counts = KATEGORI_LIST.map(k => data.filter(s => s.kategori === k).length);
+            const ctx = canvas.getContext('2d');
+            if (myChart) myChart.destroy();
+            myChart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: KATEGORI_LIST.map(k => k.replace('Guru ', '')),
+                    datasets: [{ label: 'Pendaftar', data: counts, backgroundColor: KATEGORI_COLORS, borderRadius: 4 }]
+                },
+                options: { responsive: true, maintainAspectRatio: false, scales: { y: { beginAtZero: true, ticks: { stepSize: 1 } } }, plugins: { legend: { display: false } } }
+            });
+        } catch (e) { console.error("Chart Error", e); }
     }
     function renderDashboardCards(data) {
-        const container = document.getElementById('dashboard-cards-container');
-        container.innerHTML = '';
-        KATEGORI_LIST.forEach(cat => {
-            const count = data.filter(s => s.kategori === cat).length;
-            container.innerHTML += `<div class="bg-white rounded-lg p-3 shadow-sm border border-gray-100 flex items-center justify-between hover:shadow-md transition-shadow" title="Total pendaftar untuk kategori ${cat}"><div class="flex items-center space-x-3"><div class="text-indigo-600 bg-indigo-50 p-2 rounded-lg">${KATEGORI_ICONS[cat]}</div><span class="text-xs font-medium text-gray-600">${cat.replace('Guru ', '')}</span></div><span class="text-lg font-bold text-gray-800">${count}</span></div>`;
-        });
-        document.getElementById('stat-total').innerText = data.length;
+        try {
+            const container = document.getElementById('dashboard-cards-container');
+            if(!container) return;
+            container.innerHTML = '';
+            KATEGORI_LIST.forEach(cat => {
+                const count = data.filter(s => s.kategori === cat).length;
+                container.innerHTML += `<div class="bg-white rounded-lg p-3 shadow-sm border border-gray-100 flex items-center justify-between hover:shadow-md transition-shadow" title="Total pendaftar untuk kategori ${cat}"><div class="flex items-center space-x-3"><div class="text-indigo-600 bg-indigo-50 p-2 rounded-lg">${KATEGORI_ICONS[cat]}</div><span class="text-xs font-medium text-gray-600">${cat.replace('Guru ', '')}</span></div><span class="text-lg font-bold text-gray-800">${count}</span></div>`;
+            });
+            const totalEl = document.getElementById('stat-total');
+            if(totalEl) totalEl.innerText = data.length;
+        } catch (e) { console.error("Dashboard Error", e); }
     }
     function startListeners() {
         onSnapshot(collection(db, "submissions"), (snapshot) => {
@@ -286,11 +293,12 @@ body{font-family:'Inter',sans-serif;display:flex;flex-direction:column;min-heigh
             snapshot.forEach((doc) => submissionData.push({ id: doc.id, ...doc.data() }));
             renderDashboardCards(submissionData);
             initChart(submissionData);
-            
-            // FORCE RE-RENDER TABLES IF ACTIVE
             const activeTab = document.querySelector('.main-tab-btn.active')?.dataset.tab;
             if(activeTab === 'juri' && isLoggedIn) renderJuriTable(submissionData);
             if(activeTab === 'admin' && isLoggedIn) renderAdminTable(submissionData);
+        }, (error) => {
+            console.error("Data Fetch Error:", error);
+            showToast("Gagal mengambil data: Izin Ditolak (Auth).", 'error');
         });
         onSnapshot(collection(db, "users"), (snapshot) => {
             userData = [];
@@ -312,12 +320,11 @@ body{font-family:'Inter',sans-serif;display:flex;flex-direction:column;min-heigh
             console.log("System Ready (Auth)");
         } catch (e) {
             if (e.code === 'auth/configuration-not-found' || e.code === 'auth/admin-restricted-operation') {
-                console.warn("Peringatan: Anonymous Auth belum diaktifkan di Firebase Console. Aplikasi berjalan tanpa autentikasi otomatis.");
+                console.warn("Peringatan: Anonymous Auth belum diaktifkan.");
             } else {
                 console.error("Auth Fail", e);
             }
         }
-
         startListeners();
         setInterval(checkRegistrationWindow, 60000);
     }
@@ -426,12 +433,9 @@ body{font-family:'Inter',sans-serif;display:flex;flex-direction:column;min-heigh
         const tbody = document.querySelector(`${tableId} tbody`);
         const countSpan = document.getElementById('admin-total-count');
         if(!tbody) return;
-        
-        // FORCE SHOW TABLE IF HIDDEN
         const wrapper = document.getElementById('admin-content-wrapper');
         if(wrapper && wrapper.classList.contains('hidden')) wrapper.classList.remove('hidden');
-
-        let filteredData = data;
+        let filteredData = data || [];
         if (currentAdminFilter !== 'all') {
             filteredData = data.filter(item => item.kategori === currentAdminFilter);
         }
@@ -453,99 +457,112 @@ body{font-family:'Inter',sans-serif;display:flex;flex-direction:column;min-heigh
         updateSortIcons('#admin-table', adminSort);
     }
     function renderJuriTable(data) {
-        const tbody = document.querySelector('#juri-table tbody');
-        const countSpan = document.getElementById('juri-total-count');
-        if(!tbody) return;
-        
-        // FORCE SHOW TABLE IF HIDDEN
-        const wrapper = document.getElementById('juri-content-wrapper');
-        if(wrapper && wrapper.classList.contains('hidden')) wrapper.classList.remove('hidden');
-
-        let filteredData = data;
-        if (currentRole === 'juri' && currentJuriKategori && currentJuriKategori !== 'all') {
-             filteredData = data.filter(item => item.kategori === currentJuriKategori);
-             juriFilter.value = currentJuriKategori;
-             juriFilter.disabled = true;
-             juriFilterStatus.textContent = "Kategori: " + currentJuriKategori;
-             juriFilterStatus.classList.remove('hidden');
-             juriFilter.classList.add('hidden');
-        } else {
-             // logic for admin/superadmin/ketua juri
-             if (currentJuriFilter !== 'all') {
-                 filteredData = data.filter(item => item.kategori === currentJuriFilter);
-             }
-             juriFilter.disabled = false;
-             juriFilterStatus.classList.add('hidden');
-             juriFilter.classList.remove('hidden');
-        }
-        if (juriSearch) {
-            filteredData = filteredData.filter(item => 
-                (item.nama && item.nama.toLowerCase().includes(juriSearch)) ||
-                (item.sekolah && item.sekolah.toLowerCase().includes(juriSearch))
-            );
-        }
-        if(countSpan) countSpan.innerText = filteredData.length;
-        filteredData = sortData(filteredData, juriSort.col, juriSort.dir);
-        if(filteredData.length === 0) { 
-            let emptyMessage = 'Tidak ada data ditemukan.';
-            if(currentRole === 'juri' && currentJuriKategori !== 'all') {
-                emptyMessage = `Belum ada peserta yang mendaftar untuk kategori <strong>${currentJuriKategori}</strong>.`;
+        try {
+            const tbody = document.querySelector('#juri-table tbody');
+            const countSpan = document.getElementById('juri-total-count');
+            const juriFilter = document.getElementById('juri-filter-kategori');
+            const juriFilterStatus = document.getElementById('juri-filter-status');
+            if(!tbody) return;
+            const wrapper = document.getElementById('juri-content-wrapper');
+            if(wrapper && wrapper.classList.contains('hidden')) wrapper.classList.remove('hidden');
+            let filteredData = data || [];
+            if (currentRole === 'juri' && currentJuriKategori && currentJuriKategori !== 'all') {
+                 filteredData = filteredData.filter(item => item.kategori === currentJuriKategori);
+                 if(juriFilter) {
+                    juriFilter.value = currentJuriKategori;
+                    juriFilter.disabled = true;
+                    juriFilter.classList.add('hidden');
+                 }
+                 if(juriFilterStatus) {
+                    juriFilterStatus.textContent = "Kategori: " + currentJuriKategori;
+                    juriFilterStatus.classList.remove('hidden');
+                 }
+            } else {
+                 if (currentJuriFilter !== 'all') {
+                     filteredData = filteredData.filter(item => item.kategori === currentJuriFilter);
+                 }
+                 if(juriFilter) {
+                    juriFilter.disabled = false;
+                    juriFilter.classList.remove('hidden');
+                 }
+                 if(juriFilterStatus) juriFilterStatus.classList.add('hidden');
             }
-            tbody.innerHTML = `<tr><td colspan="6" class="px-4 py-8 text-center text-gray-500 italic">${emptyMessage}</td></tr>`; 
-            return; 
-        }
-        tbody.innerHTML = filteredData.map((item, index) => {
-            const date = item.timestamp ? new Date(item.timestamp.seconds * 1000).toLocaleString('id-ID', {dateStyle: 'medium', timeStyle: 'short'}) : '-';
-            return `<tr class="hover:bg-gray-50 border-b border-gray-100"><td class="px-4 py-2 font-medium text-gray-900 text-center">${index + 1}</td><td class="px-4 py-2 text-gray-500 text-xs whitespace-nowrap">${date}</td><td class="px-4 py-2 font-medium text-gray-900">${item.nama}</td><td class="px-4 py-2 text-gray-500 text-xs"><span class="bg-indigo-50 text-indigo-700 px-2 py-1 rounded-full">${item.kategori.replace('Guru ','')}</span></td><td class="px-4 py-2 font-bold ${item.nilai ? 'text-green-600' : 'text-gray-300'}">${item.nilai || 'Belum'}</td><td class="px-4 py-2 flex justify-center space-x-2"><button class="btn-video text-blue-600 hover:text-blue-800 bg-blue-50 p-1.5 rounded-lg" data-url="${item.videoUrl}" data-id="${item.id}" title="Tonton Video Peserta"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg></button><button class="btn-score text-indigo-600 hover:text-indigo-800 bg-indigo-50 p-1.5 rounded-lg" data-id="${item.id}" data-name="${item.nama}" data-score="${item.nilai||0}" data-notes="${item.catatan||''}" data-kategori="${item.kategori}" title="Beri Nilai Peserta"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/></svg></button></td></tr>`;
-        }).join('');
-        document.querySelectorAll('.btn-score').forEach(b => b.addEventListener('click', (e) => {
-            const d = e.currentTarget.dataset;
-            // Check if video watched or previously scored
-            if (!watchedSubmissions.has(d.id) && (!d.score || d.score == '0')) {
-                showToast("Anda wajib menonton video peserta ini terlebih dahulu sebelum memberikan nilai.", 'warning');
-                return;
+            if (juriSearch) {
+                filteredData = filteredData.filter(item => 
+                    (item.nama && item.nama.toLowerCase().includes(juriSearch)) ||
+                    (item.sekolah && item.sekolah.toLowerCase().includes(juriSearch))
+                );
             }
-            
-            document.getElementById('score-doc-id').value = d.id;
-            document.getElementById('score-participant-name').innerText = d.name;
-            document.getElementById('score-participant-cat').innerText = d.kategori;
-            document.getElementById('score-notes').value = d.notes;
-            const container = document.getElementById('rubric-container');
-            container.innerHTML = '';
-            if(RUBRIC_DATA[d.kategori]) {
-                RUBRIC_DATA[d.kategori].forEach((aspect, idx) => {
-                    let html = `<div class="mb-3 border-b border-gray-100 pb-2"><p class="aspect-title">${idx+1}. ${aspect.t}</p><div class="grid grid-cols-1 gap-1">`;
-                    const labels = ["Kurang (1)", "Cukup (2)", "Baik (3)", "Sangat Baik (4)"];
-                    aspect.i.forEach((indicator, i) => {
-                       const val = i + 1;
-                       html += `<label class="rubric-option"><input type="radio" name="aspect_${idx}" value="${val}" class="rubric-radio text-indigo-600 focus:ring-indigo-500"><div><span class="block rubric-label">${labels[i]}</span><span class="rubric-desc">${indicator}</span></div></label>`;
+            if(countSpan) countSpan.innerText = filteredData.length;
+            filteredData = sortData(filteredData, juriSort.col, juriSort.dir);
+            if(filteredData.length === 0) { 
+                let emptyMessage = 'Tidak ada data ditemukan.';
+                if(currentRole === 'juri' && currentJuriKategori !== 'all') {
+                    emptyMessage = `Belum ada peserta yang mendaftar untuk kategori <strong>${currentJuriKategori}</strong>.`;
+                }
+                tbody.innerHTML = `<tr><td colspan="6" class="px-4 py-8 text-center text-gray-500 italic">${emptyMessage}</td></tr>`; 
+                return; 
+            }
+            tbody.innerHTML = filteredData.map((item, index) => {
+                const date = item.timestamp ? new Date(item.timestamp.seconds * 1000).toLocaleString('id-ID', {dateStyle: 'medium', timeStyle: 'short'}) : '-';
+                return `<tr class="hover:bg-gray-50 border-b border-gray-100"><td class="px-4 py-2 font-medium text-gray-900 text-center">${index + 1}</td><td class="px-4 py-2 text-gray-500 text-xs whitespace-nowrap">${date}</td><td class="px-4 py-2 font-medium text-gray-900">${item.nama}</td><td class="px-4 py-2 text-gray-500 text-xs"><span class="bg-indigo-50 text-indigo-700 px-2 py-1 rounded-full">${item.kategori.replace('Guru ','')}</span></td><td class="px-4 py-2 font-bold ${item.nilai ? 'text-green-600' : 'text-gray-300'}">${item.nilai || 'Belum'}</td><td class="px-4 py-2 flex justify-center space-x-2"><button class="btn-video text-blue-600 hover:text-blue-800 bg-blue-50 p-1.5 rounded-lg" data-url="${item.videoUrl}" data-id="${item.id}" title="Tonton Video Peserta"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg></button><button class="btn-score text-indigo-600 hover:text-indigo-800 bg-indigo-50 p-1.5 rounded-lg" data-id="${item.id}" data-name="${item.nama}" data-score="${item.nilai||0}" data-notes="${item.catatan||''}" data-kategori="${item.kategori}" title="Beri Nilai Peserta"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/></svg></button></td></tr>`;
+            }).join('');
+            document.querySelectorAll('.btn-score').forEach(b => b.addEventListener('click', (e) => {
+                const d = e.currentTarget.dataset;
+                if (!watchedSubmissions.has(d.id) && (!d.score || d.score == '0')) {
+                    showToast("Anda wajib menonton video peserta ini terlebih dahulu sebelum memberikan nilai.", 'warning');
+                    return;
+                }
+                document.getElementById('score-doc-id').value = d.id;
+                document.getElementById('score-participant-name').innerText = d.name;
+                document.getElementById('score-participant-cat').innerText = d.kategori;
+                document.getElementById('score-notes').value = d.notes;
+                const container = document.getElementById('rubric-container');
+                container.innerHTML = '';
+                if(RUBRIC_DATA[d.kategori]) {
+                    RUBRIC_DATA[d.kategori].forEach((aspect, idx) => {
+                        let html = `<div class="mb-3 border-b border-gray-100 pb-2"><p class="aspect-title">${idx+1}. ${aspect.t}</p><div class="grid grid-cols-1 gap-1">`;
+                        const labels = ["Kurang (1)", "Cukup (2)", "Baik (3)", "Sangat Baik (4)"];
+                        aspect.i.forEach((indicator, i) => {
+                           const val = i + 1;
+                           html += `<label class="rubric-option"><input type="radio" name="aspect_${idx}" value="${val}" class="rubric-radio text-indigo-600 focus:ring-indigo-500"><div><span class="block rubric-label">${labels[i]}</span><span class="rubric-desc">${indicator}</span></div></label>`;
+                        });
+                        html += `</div></div>`;
+                        container.innerHTML += html;
                     });
-                    html += `</div></div>`;
-                    container.innerHTML += html;
-                });
-                document.querySelectorAll('.rubric-radio').forEach(r => {
-                    r.addEventListener('change', () => {
-                        let currentTotal = 0;
-                        let count = 0;
-                        document.querySelectorAll('.rubric-radio:checked').forEach(c => { currentTotal += parseInt(c.value); count++; });
-                        const maxPoints = RUBRIC_DATA[d.kategori].length * 4;
-                        const finalScore = count === RUBRIC_DATA[d.kategori].length ? Math.round((currentTotal / maxPoints) * 100) : 0;
-                        document.getElementById('calculated-score').innerText = finalScore;
-                        document.querySelectorAll('.rubric-option').forEach(op => op.classList.remove('selected'));
-                        document.querySelectorAll('.rubric-radio:checked').forEach(c => c.closest('.rubric-option').classList.add('selected'));
+                    document.querySelectorAll('.rubric-radio').forEach(r => {
+                        r.addEventListener('change', () => {
+                            let currentTotal = 0;
+                            let count = 0;
+                            document.querySelectorAll('.rubric-radio:checked').forEach(c => { currentTotal += parseInt(c.value); count++; });
+                            const maxPoints = RUBRIC_DATA[d.kategori].length * 4;
+                            const finalScore = count === RUBRIC_DATA[d.kategori].length ? Math.round((currentTotal / maxPoints) * 100) : 0;
+                            document.getElementById('calculated-score').innerText = finalScore;
+                            document.querySelectorAll('.rubric-option').forEach(op => op.classList.remove('selected'));
+                            document.querySelectorAll('.rubric-radio:checked').forEach(c => c.closest('.rubric-option').classList.add('selected'));
+                        });
                     });
-                });
-            } else { container.innerHTML = '<p class="text-sm text-red-500">Rubrik belum tersedia untuk kategori ini.</p>'; }
-            document.getElementById('score-modal').classList.remove('hidden');
-        }));
-        document.querySelectorAll('.btn-video').forEach(b => b.addEventListener('click', (e) => {
-            const url = e.currentTarget.dataset.url;
-            const id = e.currentTarget.dataset.id;
-            if(id) watchedSubmissions.add(id);
-            showVideoOptions(url);
-        }));
-        updateSortIcons('#juri-table', juriSort);
+                } else { container.innerHTML = '<p class="text-sm text-red-500">Rubrik belum tersedia untuk kategori ini.</p>'; }
+                document.getElementById('score-modal').classList.remove('hidden');
+            }));
+            document.querySelectorAll('.btn-video').forEach(b => b.addEventListener('click', (e) => {
+                const url = e.currentTarget.dataset.url;
+                const id = e.currentTarget.dataset.id;
+                if(id) watchedSubmissions.add(id);
+                showVideoOptions(url);
+            }));
+            updateSortIcons('#juri-table', juriSort);
+        } catch (err) { console.error("Render Juri Error:", err); }
     }
+    document.getElementById('btn-info-rubrik').addEventListener('click', () => {
+        const cat = document.getElementById('kategori-select').value;
+        if (!cat) { showToast("Pilih kategori terlebih dahulu!", 'warning'); return; }
+        const content = document.getElementById('info-modal-content');
+        if (RUBRIC_DATA[cat]) {
+            content.innerHTML = RUBRIC_DATA[cat].map((a, i) => `<div class="mb-2"><p class="font-bold text-indigo-700">${i+1}. ${a.t}</p><ul class="list-disc pl-5 mt-1 text-xs text-gray-500"><li>${a.i[3]} (Sangat Baik)</li></ul></div>`).join('');
+            document.getElementById('info-modal').classList.remove('hidden');
+        } else { showToast("Info rubrik belum tersedia.", 'warning'); }
+    });
     function showVideoOptions(url) {
         currentVideoUrl = url;
         document.getElementById('video-choice-modal').classList.remove('hidden');
