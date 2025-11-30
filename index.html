@@ -90,11 +90,26 @@ body{font-family:'Inter',sans-serif;display:flex;flex-direction:column;min-heigh
 <div id="form-step-6" class="form-step hidden space-y-4"><div class="form-section-header"><h3>Materi Lomba</h3></div><div><label class="block text-sm font-semibold text-gray-700 mb-1">Deskripsi Singkat Inovasi</label><textarea id="deskripsi" rows="4" class="form-input-field" placeholder="Jelaskan secara singkat..." required title="Jelaskan deskripsi singkat mengenai karya inovasi Anda"></textarea><p class="error-msg">Deskripsi inovasi wajib diisi</p></div><div class="bg-yellow-50 border-l-4 border-yellow-400 p-4 mt-2"><div class="flex items-start"><div class="flex-shrink-0"><svg class="h-5 w-5 text-yellow-600" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clip-rule="evenodd"/></svg></div><div class="ml-3"><p class="text-sm font-medium text-yellow-800">PENTING: Pastikan Link Video Google Drive diset ke <strong>Public/Anyone with the link</strong>.</p></div></div></div><div class="mt-4"><label class="block text-sm font-semibold text-gray-700 mb-1 flex items-center">Link Video Karya <button type="button" id="btn-info-rubrik" class="ml-2 text-indigo-600 hover:text-indigo-800 focus:outline-none" title="Lihat Kriteria Penilaian"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg></button></label><input type="url" id="tautan-video" class="form-input-field" placeholder="https://drive.google.com/..." required title="Tempel URL Video Google Drive di sini (Wajib Public)"><p class="error-msg">Masukkan Link Google Drive yang valid</p></div><div class="flex items-center mt-4 p-3 bg-indigo-50 rounded-lg"><input id="persetujuan" type="checkbox" class="h-5 w-5 text-indigo-600 border-gray-300 rounded focus:ring-indigo-500" required title="Centang untuk menyetujui pernyataan"><label for="persetujuan" class="ml-2 block text-sm font-medium text-gray-800">Saya menyatakan data benar & karya ini asli buatan saya, memakai batik PGRI Kusuma Bangsa dalam video.</label></div></div>
 <div class="mt-8 pt-6 border-t flex justify-between gap-4"><button type="button" id="btn-prev" class="hidden px-6 py-2.5 rounded-lg border border-gray-300 bg-white text-gray-700 font-medium hover:bg-gray-50 flex items-center" title="Kembali ke langkah sebelumnya">Kembali</button><div class="flex-grow"></div><button type="button" id="btn-next" class="px-6 py-2.5 rounded-lg bg-indigo-600 text-white font-medium hover:bg-indigo-700 flex items-center" title="Lanjut ke langkah berikutnya">Selanjutnya</button><button type="submit" id="submit-form-btn" class="hidden px-6 py-2.5 rounded-lg bg-green-600 text-white font-bold hover:bg-green-700 flex items-center" title="Kirim Data Pendaftaran">Kirim Pendaftaran</button></div>
 </form></div></div></div></div>
-<div id="main-content-juri" class="main-content-div hidden"><div id="juri-content-wrapper" class="hidden"><div class="flex flex-wrap justify-between items-center mb-4 gap-3"><div class="flex items-center space-x-2 flex-grow sm:flex-grow-0"><div class="relative"><input type="text" id="juri-search" placeholder="Cari Nama/Sekolah..." class="border border-gray-300 text-sm rounded-lg pl-9 pr-4 py-2 focus:ring-indigo-500 focus:border-indigo-500 w-48 sm:w-64" title="Cari data peserta berdasarkan nama atau sekolah"><div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none"><svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg></div></div><span id="juri-filter-status" class="text-sm font-medium text-indigo-600 bg-indigo-50 px-3 py-2 rounded-lg border border-indigo-200 hidden" title="Kategori terkunci sesuai akun Juri"></span><select id="juri-filter-kategori" class="border border-gray-300 text-sm rounded-lg p-2 bg-white focus:ring-indigo-500 focus:border-indigo-500" title="Filter tampilan berdasarkan kategori lomba"><option value="all">Tampilkan Semua</option></select><span class="text-sm font-medium text-gray-500 bg-white px-3 py-2 rounded-lg border border-gray-200 whitespace-nowrap" title="Total jumlah data yang ditampilkan saat ini">Total: <span id="juri-total-count">0</span></span></div></div><div class="bg-white shadow-sm rounded-lg overflow-hidden border border-gray-200"><div class="table-container"><table class="min-w-full divide-y divide-gray-200 text-sm" id="juri-table"><thead class="bg-gray-50"><tr><th class="px-4 py-2 text-left font-bold text-gray-500 sortable-header" data-col="index" data-type="number" title="Klik untuk urutkan nomor">No</th><th class="px-4 py-2 text-left font-bold text-gray-500 sortable-header" data-col="timestamp" data-type="date" title="Klik untuk urutkan waktu daftar">Time Stamp <span class="sort-icon"></span></th><th class="px-4 py-2 text-left font-bold text-gray-500 sortable-header" data-col="nama" data-type="string" title="Klik untuk urutkan nama">Nama <span class="sort-icon"></span></th><th class="px-4 py-2 text-left font-bold text-gray-500 sortable-header" data-col="kategori" data-type="string" title="Klik untuk urutkan kategori">Kategori <span class="sort-icon"></span></th><th class="px-4 py-2 text-left font-bold text-gray-500 sortable-header" data-col="nilai" data-type="number" title="Klik untuk urutkan nilai">Nilai <span class="sort-icon"></span></th><th class="px-4 py-2 text-center font-bold text-gray-500" title="Aksi yang tersedia">Aksi</th></tr></thead><tbody class="bg-white divide-y divide-gray-200 text-xs sm:text-sm"></tbody></table></div></div></div></div>
+<div id="main-content-juri" class="main-content-div hidden"><div id="juri-content-wrapper" class="hidden"><div class="flex flex-wrap justify-between items-center mb-4 gap-3"><div class="flex items-center space-x-2 flex-grow sm:flex-grow-0"><div class="relative"><input type="text" id="juri-search" placeholder="Cari Nama/Sekolah..." class="border border-gray-300 text-sm rounded-lg pl-9 pr-4 py-2 focus:ring-indigo-500 focus:border-indigo-500 w-48 sm:w-64" title="Cari data peserta berdasarkan nama atau sekolah"><div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none"><svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg></div></div><span id="juri-filter-status" class="text-sm font-medium text-indigo-600 bg-indigo-50 px-3 py-2 rounded-lg border border-indigo-200 hidden" title="Kategori terkunci sesuai akun Juri"></span><select id="juri-filter-kategori" class="border border-gray-300 text-sm rounded-lg p-2 bg-white focus:ring-indigo-500 focus:border-indigo-500" title="Filter tampilan berdasarkan kategori lomba"><option value="all">Tampilkan Semua</option></select><span class="text-sm font-medium text-gray-500 bg-white px-3 py-2 rounded-lg border border-gray-200 whitespace-nowrap" title="Total jumlah data yang ditampilkan saat ini">Total: <span id="juri-total-count">0</span></span></div></div><div class="bg-white shadow-sm rounded-lg overflow-hidden border border-gray-200"><div class="table-container"><table class="min-w-full divide-y divide-gray-200 text-sm" id="juri-table"><thead class="bg-gray-50"><tr><th class="px-4 py-2 text-left font-bold text-gray-500 sortable-header" data-col="index" data-type="number" title="Klik untuk urutkan nomor">No</th><th class="px-4 py-2 text-left font-bold text-gray-500 sortable-header" data-col="timestamp" data-type="date" title="Klik untuk urutkan waktu daftar">Time Stamp <span class="sort-icon"></span></th><th class="px-4 py-2 text-left font-bold text-gray-500 sortable-header" data-col="nama" data-type="string" title="Klik untuk urutkan nama">Nama <span class="sort-icon"></span></th><th class="px-4 py-2 text-left font-bold text-gray-500 sortable-header" data-col="kategori" data-type="string" title="Klik untuk urutkan kategori">Kategori <span class="sort-icon"></span></th><th class="px-4 py-2 text-left font-bold text-gray-500 sortable-header" data-col="nilai" data-type="number" title="Klik untuk urutkan nilai">Nilai <span class="sort-icon"></span></th><th class="px-4 py-2 text-center font-bold text-gray-500">Peringkat</th><th class="px-4 py-2 text-center font-bold text-gray-500" title="Aksi yang tersedia">Aksi</th></tr></thead><tbody class="bg-white divide-y divide-gray-200 text-xs sm:text-sm"></tbody></table></div></div></div></div>
 <div id="main-content-admin" class="main-content-div hidden"><div id="admin-content-wrapper" class="hidden"><div class="flex flex-wrap justify-between items-center mb-4 gap-3"><div class="flex items-center space-x-2 flex-grow sm:flex-grow-0"><div class="relative"><input type="text" id="admin-search" placeholder="Cari Nama/Sekolah..." class="border border-gray-300 text-sm rounded-lg pl-9 pr-4 py-2 focus:ring-indigo-500 focus:border-indigo-500 w-48 sm:w-64" title="Cari data pendaftar"><div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none"><svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg></div></div><select id="admin-filter-kategori" class="border border-gray-300 text-sm rounded-lg p-2 bg-white focus:ring-indigo-500 focus:border-indigo-500" title="Filter data per kategori"><option value="all">Tampilkan Semua</option></select><span class="text-sm font-medium text-gray-500 bg-white px-3 py-2 rounded-lg border border-gray-200 whitespace-nowrap" title="Total jumlah data">Total: <span id="admin-total-count">0</span></span></div><button id="btn-export" class="inline-flex items-center px-4 py-2 border border-green-600 text-sm font-bold rounded-lg text-white bg-green-600 hover:bg-green-700 shadow-sm transition-colors" title="Unduh data tabel ini ke format Excel"><svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>Ekspor ke Excel</button></div><div class="bg-white shadow-sm rounded-lg overflow-hidden border border-gray-200"><div class="table-container"><table class="min-w-full divide-y divide-gray-200 text-sm" id="admin-table"><thead class="bg-gray-50"><tr><th class="px-4 py-2 text-left font-bold text-gray-500 sortable-header" data-col="index" data-type="number" title="Urutkan No">No</th><th class="px-4 py-2 text-left font-bold text-gray-500 sortable-header" data-col="timestamp" data-type="date" title="Urutkan Waktu">Time Stamp <span class="sort-icon"></span></th><th class="px-4 py-2 text-left font-bold text-gray-500 sortable-header" data-col="nama" data-type="string" title="Urutkan Nama">Nama <span class="sort-icon"></span></th><th class="px-4 py-2 text-left font-bold text-gray-500 sortable-header" data-col="kecSekolah" data-type="string" title="Urutkan Kecamatan">Kecamatan <span class="sort-icon"></span></th><th class="px-4 py-2 text-left font-bold text-gray-500 sortable-header" data-col="sekolah" data-type="string" title="Urutkan Sekolah">Sekolah <span class="sort-icon"></span></th><th class="px-4 py-2 text-left font-bold text-gray-500 sortable-header" data-col="kategori" data-type="string" title="Urutkan Kategori">Kategori <span class="sort-icon"></span></th><th class="px-4 py-2 text-center font-bold text-gray-500" title="Menu Aksi">Aksi</th></tr></thead><tbody class="bg-white divide-y divide-gray-200 text-xs sm:text-sm"></tbody></table></div></div></div></div>
 <div id="main-content-superadmin" class="main-content-div hidden"><div id="superadmin-content-wrapper" class="hidden"><div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6"><div class="bg-white p-6 rounded-lg shadow-sm border border-gray-200"><h3 class="text-lg font-bold text-gray-900 mb-4 border-b pb-2">Pengaturan Sistem</h3><div class="bg-gray-50 p-4 rounded-lg border border-gray-200 space-y-4"><div><label class="block text-sm font-bold text-gray-700 mb-1">Mode Pendaftaran</label><select id="registration-mode" class="w-full border border-gray-300 rounded-md p-2 text-sm focus:ring-indigo-500" title="Atur status buka/tutup pendaftaran secara manual atau otomatis"><option value="auto">Otomatis (1-4 Des 2025)</option><option value="open">Paksa Buka (Manual)</option><option value="closed">Paksa Tutup (Manual)</option></select></div><div class="flex items-center justify-between pt-2"><span class="text-xs text-gray-500">Status Aktual saat ini:</span><span id="system-status-text" class="text-xs font-bold text-gray-700">Memeriksa...</span></div><button id="btn-save-config" class="w-full mt-2 bg-indigo-600 text-white text-sm font-bold py-2 rounded hover:bg-indigo-700 transition-colors" title="Simpan konfigurasi sistem">Simpan Konfigurasi</button></div></div><div class="bg-white p-6 rounded-lg shadow-sm border border-gray-200"><h3 class="text-lg font-bold text-gray-900 mb-4 border-b pb-2">Tambah Pengguna</h3><form id="create-user-form" class="space-y-3"><div><label class="block text-xs font-semibold text-gray-700 mb-1">Username</label><input type="text" id="new-username" class="w-full border rounded p-2 text-sm" required title="Masukkan username untuk login"></div><div><label class="block text-xs font-semibold text-gray-700 mb-1">Password</label><input type="text" id="new-password" class="w-full border rounded p-2 text-sm" required title="Masukkan password akun"></div><div><label class="block text-xs font-semibold text-gray-700 mb-1">Role</label><select id="new-role" class="w-full border rounded p-2 text-sm" title="Pilih peran pengguna"><option value="admin">Admin</option><option value="juri">Juri</option></select></div>
-<div id="kategori-spesifik-container" class="hidden"><label class="block text-xs font-semibold text-gray-700 mb-1">Kategori Spesifik (Khusus Juri)</label><select id="new-kategori-spesifik" class="w-full border rounded p-2 text-sm" title="Pilih kategori yang akan dinilai oleh Juri ini"><option value="all">Semua Kategori (Ketua Juri)</option></select></div>
-<button type="submit" id="btn-create-user" class="w-full bg-blue-600 text-white font-bold py-2 rounded hover:bg-blue-700 text-sm mt-2" title="Buat akun pengguna baru">+ Tambah User</button></form></div></div><div class="bg-white shadow-sm rounded-lg overflow-hidden border border-gray-200 mb-8"><div class="px-4 py-3 bg-gray-50 border-b border-gray-200 font-bold text-sm text-gray-700">Daftar Akun</div><table class="min-w-full divide-y divide-gray-200 text-sm" id="users-table"><thead class="bg-white"><tr><th class="px-4 py-2 text-left" title="Username Akun">Username</th><th class="px-4 py-2 text-left" title="Peran Akun">Role</th><th class="px-4 py-2 text-left" title="Aksi Akun">Aksi</th></tr></thead><tbody class="bg-white divide-y divide-gray-200 text-gray-700"></tbody></table></div><div class="mt-6 p-4 bg-blue-50 text-blue-800 rounded-lg text-sm border border-blue-100 flex items-start"><svg class="w-5 h-5 mr-2 mt-0.5 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg><p><strong>Catatan:</strong> Gunakan tab <strong>Admin</strong> atau <strong>Juri</strong> untuk mengelola data pendaftar. Anda memiliki akses penuh.</p></div></div></div></main>
+<div id="kategori-spesifik-container" class="hidden"><label class="block text-xs font-semibold text-gray-700 mb-1">Kategori Spesifik (Khusus Juri)</label><select id="new-kategori-spesifik" class="w-full border rounded p-2 text-sm" title="Pilih kategori yang akan dinilai oleh Juri ini"><option value="" disabled selected>-- Pilih Kategori --</option></select></div>
+<button type="submit" id="btn-create-user" class="w-full bg-blue-600 text-white font-bold py-2 rounded hover:bg-blue-700 text-sm mt-2" title="Buat akun pengguna baru">+ Tambah User</button></form></div></div><div class="bg-white shadow-sm rounded-lg overflow-hidden border border-gray-200 mb-8"><div class="px-4 py-3 bg-gray-50 border-b border-gray-200 font-bold text-sm text-gray-700 flex justify-between items-center"><span>Daftar Akun</span><button id="btn-export-users" class="text-xs bg-green-600 text-white px-3 py-1 rounded hover:bg-green-700 flex items-center"><svg class="w-3 h-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>Ekspor Akun</button></div>
+<div class="table-container" style="max-height: 400px; overflow-y: auto;">
+<table class="min-w-full divide-y divide-gray-200 text-sm" id="users-table">
+<thead class="bg-gray-50 sticky top-0 z-10">
+<tr>
+<th class="px-2 py-2 text-center font-bold text-gray-700 w-12">No</th>
+<th class="px-2 py-2 text-center font-bold text-gray-700 sortable-header cursor-pointer" data-col="username" title="Urutkan Username">Username <span class="sort-icon"></span></th>
+<th class="px-2 py-2 text-center font-bold text-gray-700 sortable-header cursor-pointer" data-col="role" title="Urutkan Role">Role <span class="sort-icon"></span></th>
+<th class="px-2 py-2 text-center font-bold text-gray-700">Kategori Spesifik</th>
+<th class="px-2 py-2 text-center font-bold text-gray-700 w-20" title="Aksi Akun">Aksi</th>
+</tr>
+</thead>
+<tbody class="bg-white divide-y divide-gray-200 text-xs text-gray-700"></tbody>
+</table>
+</div>
+</div><div class="mt-6 p-4 bg-blue-50 text-blue-800 rounded-lg text-sm border border-blue-100 flex items-start"><svg class="w-5 h-5 mr-2 mt-0.5 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg><p><strong>Catatan:</strong> Gunakan tab <strong>Admin</strong> atau <strong>Juri</strong> untuk mengelola data pendaftar. Anda memiliki akses penuh.</p></div></div></div></main>
 <footer class="bg-white border-t border-gray-200 mt-auto py-8"><div class="container mx-auto px-4 text-center"><p class="text-gray-600 font-medium text-sm">© 2025 PGRI Pandeglang</p><p class="text-indigo-600 text-sm font-bold mt-1 tracking-wide">Managed By Edi Brata</p></div></footer>
 <div id="video-choice-modal" class="hidden fixed inset-0 bg-gray-900 bg-opacity-60 flex items-center justify-center z-[85] p-4 backdrop-blur-sm"><div class="bg-white rounded-lg shadow-xl max-w-sm w-full p-6 text-center"><h3 class="text-lg font-bold mb-4">Putar Video</h3><div class="flex flex-col gap-3"><button id="btn-play-popup" class="w-full py-2 bg-indigo-600 text-white rounded hover:bg-indigo-700" title="Putar video dalam popup di halaman ini">Putar di Sini (Popup)</button><button id="btn-play-newtab" class="w-full py-2 border border-gray-300 text-gray-700 rounded hover:bg-gray-50" title="Buka video di tab browser baru">Buka di Tab Baru</button><button onclick="document.getElementById('video-choice-modal').classList.add('hidden')" class="text-sm text-gray-500 hover:underline mt-2" title="Batalkan">Batal</button></div></div></div>
 <div id="video-player-modal" class="hidden fixed inset-0 bg-black bg-opacity-90 flex items-center justify-center z-[90] p-4"><div class="w-full max-w-4xl bg-black rounded-lg overflow-hidden relative" style="height:80vh"><button onclick="document.getElementById('video-player-modal').classList.add('hidden')" class="absolute top-4 right-4 text-white hover:text-gray-300 z-50" title="Tutup Video"><svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg></button><iframe id="video-frame" class="w-full h-full" frameborder="0" allow="autoplay; fullscreen"></iframe></div></div>
@@ -131,6 +146,7 @@ body{font-family:'Inter',sans-serif;display:flex;flex-direction:column;min-heigh
     let currentJuriFilter = 'all';
     let adminSort = { col: 'timestamp', dir: 'desc' };
     let juriSort = { col: 'timestamp', dir: 'desc' };
+    let userSort = { col: 'username', dir: 'asc' }; // New state for User Sort
     let adminSearch = "";
     let juriSearch = "";
     let currentVideoUrl = "";
@@ -290,7 +306,6 @@ body{font-family:'Inter',sans-serif;display:flex;flex-direction:column;min-heigh
     function renderDashboardCards(data) {
         const container = document.getElementById('dashboard-cards-container');
         container.innerHTML = '';
-        // Check if KATEGORI_ICONS is available
         if (typeof KATEGORI_ICONS === 'undefined') return;
 
         KATEGORI_LIST.forEach(cat => {
@@ -302,7 +317,6 @@ body{font-family:'Inter',sans-serif;display:flex;flex-direction:column;min-heigh
         const statTotal = document.getElementById('stat-total');
         if(statTotal) statTotal.innerText = data.length;
 
-        // Also init chart for Home page if needed or just Dashboard
         const activeTab = document.querySelector('.main-tab-btn.active')?.dataset.tab;
         if(activeTab === 'dashboard') initChart(data);
     }
@@ -321,8 +335,8 @@ body{font-family:'Inter',sans-serif;display:flex;flex-direction:column;min-heigh
         onSnapshot(collection(db, "submissions"), (snapshot) => {
             submissionData = [];
             snapshot.forEach((doc) => submissionData.push({ id: doc.id, ...doc.data() }));
-            renderDashboardCards(submissionData); // Now safe
-            renderHomeCategories(); // Render home grid
+            renderDashboardCards(submissionData);
+            renderHomeCategories();
             
             const activeTab = document.querySelector('.main-tab-btn.active')?.dataset.tab;
             if(activeTab === 'juri' && isLoggedIn) renderJuriTable(submissionData);
@@ -342,18 +356,9 @@ body{font-family:'Inter',sans-serif;display:flex;flex-direction:column;min-heigh
     async function initApp(){
         loadDraft(); 
         const s = JSON.parse(localStorage.getItem('pgri_user_session'));
-        // Default to Home tab
         switchTabVisuals('home');
-        
         if(s){ isLoggedIn=true; currentRole=s.role; currentJuriKategori=s.kategoriSpesifik; updateLoginUI(); }
-        
-        try {
-            await signInAnonymously(auth);
-            console.log("System Ready (Auth)");
-        } catch (e) {
-            console.warn("Auth Warning:", e.code);
-        }
-
+        try { await signInAnonymously(auth); console.log("System Ready (Auth)"); } catch (e) { console.warn("Auth Warning:", e.code); }
         startListeners();
         setInterval(checkRegistrationWindow, 60000);
     }
@@ -450,7 +455,16 @@ body{font-family:'Inter',sans-serif;display:flex;flex-direction:column;min-heigh
     document.querySelectorAll('.sortable-header').forEach(th => {
         th.addEventListener('click', () => {
             const col = th.dataset.col;
-            const type = th.closest('table').id.includes('admin') ? 'admin' : 'juri';
+            const type = th.closest('table').id.includes('admin') ? 'admin' : (th.closest('table').id.includes('users') ? 'users' : 'juri');
+            
+            // Handle User Sort
+            if(type === 'users') {
+                if (userSort.col === col) userSort.dir = userSort.dir === 'asc' ? 'desc' : 'asc';
+                else { userSort.col = col; userSort.dir = 'asc'; }
+                renderUserManagementTable(userData);
+                return;
+            }
+
             let sortObj = type === 'admin' ? adminSort : juriSort;
             if (sortObj.col === col) sortObj.dir = sortObj.dir === 'asc' ? 'desc' : 'asc';
             else { sortObj.col = col; sortObj.dir = 'asc'; }
@@ -499,15 +513,12 @@ body{font-family:'Inter',sans-serif;display:flex;flex-direction:column;min-heigh
         const juriFilter = document.getElementById('juri-filter-kategori');
         const juriFilterStatus = document.getElementById('juri-filter-status');
 
-        // LOGIC: If user is Juri AND has specific category (not 'all') -> Filter Strict
-        // If user is Admin/Superadmin/Juri Ketua -> Show All (unless dropdown filtered)
-        
         if (currentRole === 'juri' && currentJuriKategori && currentJuriKategori !== 'all') {
              filteredData = data.filter(item => item.kategori === currentJuriKategori);
-             if(juriFilter) { juriFilter.value = currentJuriKategori; juriFilter.classList.add('hidden'); }
+             if(juriFilter) { juriFilter.classList.add('hidden'); } 
              if(juriFilterStatus) { juriFilterStatus.innerText = "Kategori: " + currentJuriKategori; juriFilterStatus.classList.remove('hidden'); }
         } else {
-             if(juriFilter) juriFilter.classList.remove('hidden');
+             if(juriFilter) juriFilter.classList.remove('hidden'); 
              if(juriFilterStatus) juriFilterStatus.classList.add('hidden');
              if (currentJuriFilter !== 'all') {
                  filteredData = data.filter(item => item.kategori === currentJuriFilter);
@@ -521,31 +532,76 @@ body{font-family:'Inter',sans-serif;display:flex;flex-direction:column;min-heigh
             );
         }
         if(countSpan) countSpan.innerText = filteredData.length;
-        filteredData = sortData(filteredData, juriSort.col, juriSort.dir);
+        
+        filteredData.sort((a, b) => {
+            const nA = Number(a.nilai) || 0;
+            const nB = Number(b.nilai) || 0;
+            if (nB !== nA) return nB - nA; 
+            const tA = a.timestamp ? a.timestamp.seconds : 0;
+            const tB = b.timestamp ? b.timestamp.seconds : 0;
+            return tA - tB; 
+        });
+
         if(filteredData.length === 0) { 
             let emptyMessage = 'Tidak ada data ditemukan.';
             if(currentRole === 'juri' && currentJuriKategori !== 'all') {
                 emptyMessage = `Belum ada peserta yang mendaftar untuk kategori <strong>${currentJuriKategori}</strong>.`;
             }
-            tbody.innerHTML = `<tr><td colspan="6" class="px-4 py-8 text-center text-gray-500 italic">${emptyMessage}</td></tr>`; 
+            tbody.innerHTML = `<tr><td colspan="7" class="px-4 py-8 text-center text-gray-500 italic">${emptyMessage}</td></tr>`; 
             return; 
         }
+        
         tbody.innerHTML = filteredData.map((item, index) => {
             const date = item.timestamp ? new Date(item.timestamp.seconds * 1000).toLocaleString('id-ID', {dateStyle: 'medium', timeStyle: 'short'}) : '-';
-            return `<tr class="hover:bg-gray-50 border-b border-gray-100"><td class="px-4 py-2 font-medium text-gray-900 text-center">${index + 1}</td><td class="px-4 py-2 text-gray-500 text-xs whitespace-nowrap">${date}</td><td class="px-4 py-2 font-medium text-gray-900">${item.nama}</td><td class="px-4 py-2 text-gray-500 text-xs"><span class="bg-indigo-50 text-indigo-700 px-2 py-1 rounded-full">${item.kategori.replace('Guru ','')}</span></td><td class="px-4 py-2 font-bold ${item.nilai ? 'text-green-600' : 'text-gray-300'}">${item.nilai || 'Belum'}</td><td class="px-4 py-2 flex justify-center space-x-2"><button class="btn-video text-blue-600 hover:text-blue-800 bg-blue-50 p-1.5 rounded-lg" data-url="${item.videoUrl}" data-id="${item.id}" title="Tonton Video Peserta"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg></button><button class="btn-score text-indigo-600 hover:text-indigo-800 bg-indigo-50 p-1.5 rounded-lg" data-id="${item.id}" data-name="${item.nama}" data-score="${item.nilai||0}" data-notes="${item.catatan||''}" data-kategori="${item.kategori}" title="Beri Nilai Peserta"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/></svg></button></td></tr>`;
+            const scoreVal = Number(item.nilai) || 0;
+            const rank = scoreVal > 0 ? (index + 1) : '-';
+            
+            const btnClass = scoreVal > 0 
+                ? "text-yellow-600 hover:text-yellow-800 bg-yellow-50" 
+                : "text-indigo-600 hover:text-indigo-800 bg-indigo-50";
+            const btnText = scoreVal > 0 ? "Edit Nilai" : "Beri Nilai";
+            const btnIcon = scoreVal > 0 
+                ? '<svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"/></svg>'
+                : '<svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/></svg>';
+            
+            const btnReset = scoreVal > 0 
+                ? `<button class="btn-reset text-red-600 hover:text-red-800 bg-red-50 p-1.5 px-2 rounded-lg flex items-center text-xs font-bold ml-1" data-id="${item.id}" title="Reset Nilai ke 0">
+                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg>
+                   </button>`
+                : '';
+
+            const rubricDataStr = item.rubricDetails ? JSON.stringify(item.rubricDetails).replace(/"/g, '&quot;') : '{}';
+
+            return `<tr class="hover:bg-gray-50 border-b border-gray-100">
+                <td class="px-4 py-2 font-medium text-gray-900 text-center">${index + 1}</td>
+                <td class="px-4 py-2 text-gray-500 text-xs whitespace-nowrap">${date}</td>
+                <td class="px-4 py-2 font-medium text-gray-900">${item.nama}</td>
+                <td class="px-4 py-2 text-gray-500 text-xs"><span class="bg-indigo-50 text-indigo-700 px-2 py-1 rounded-full">${item.kategori.replace('Guru ','')}</span></td>
+                <td class="px-4 py-2 font-bold text-center ${item.nilai ? 'text-green-600' : 'text-gray-300'}">${item.nilai || 'Belum'}</td>
+                <td class="px-4 py-2 font-bold text-center text-indigo-900 bg-indigo-50 border-l border-r border-indigo-100">${rank}</td>
+                <td class="px-4 py-2 flex justify-center space-x-2">
+                    <button class="btn-video text-blue-600 hover:text-blue-800 bg-blue-50 p-1.5 rounded-lg" data-url="${item.videoUrl}" data-id="${item.id}" title="Tonton Video Peserta">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                    </button>
+                    <button class="btn-score ${btnClass} p-1.5 px-2 rounded-lg flex items-center text-xs font-bold" data-id="${item.id}" data-name="${item.nama}" data-score="${item.nilai||0}" data-notes="${item.catatan||''}" data-kategori="${item.kategori}" data-rubric="${rubricDataStr}" title="${btnText}">
+                        ${btnIcon} ${scoreVal > 0 ? 'Edit' : 'Nilai'}
+                    </button>
+                    ${btnReset}
+                </td>
+            </tr>`;
         }).join('');
         document.querySelectorAll('.btn-score').forEach(b => b.addEventListener('click', (e) => {
             const d = e.currentTarget.dataset;
-            // Check if video watched or previously scored
             if (!watchedSubmissions.has(d.id) && (!d.score || d.score == '0')) {
                 showToast("Anda wajib menonton video peserta ini terlebih dahulu sebelum memberikan nilai.", 'warning');
                 return;
             }
-            
             document.getElementById('score-doc-id').value = d.id;
             document.getElementById('score-participant-name').innerText = d.name;
             document.getElementById('score-participant-cat').innerText = d.kategori;
             document.getElementById('score-notes').value = d.notes;
+            const prevRubric = d.rubric ? JSON.parse(d.rubric) : {};
+
             const container = document.getElementById('rubric-container');
             container.innerHTML = '';
             if(RUBRIC_DATA[d.kategori]) {
@@ -554,11 +610,16 @@ body{font-family:'Inter',sans-serif;display:flex;flex-direction:column;min-heigh
                     const labels = ["Kurang (1)", "Cukup (2)", "Baik (3)", "Sangat Baik (4)"];
                     aspect.i.forEach((indicator, i) => {
                        const val = i + 1;
-                       html += `<label class="rubric-option"><input type="radio" name="aspect_${idx}" value="${val}" class="rubric-radio text-indigo-600 focus:ring-indigo-500"><div><span class="block rubric-label">${labels[i]}</span><span class="rubric-desc">${indicator}</span></div></label>`;
+                       const isChecked = prevRubric[`aspect_${idx}`] == val ? 'checked' : '';
+                       html += `<label class="rubric-option ${isChecked ? 'selected' : ''}"><input type="radio" name="aspect_${idx}" value="${val}" class="rubric-radio text-indigo-600 focus:ring-indigo-500" ${isChecked}><div><span class="block rubric-label">${labels[i]}</span><span class="rubric-desc">${indicator}</span></div></label>`;
                     });
                     html += `</div></div>`;
                     container.innerHTML += html;
                 });
+                // Recalculate if editing
+                if(d.score && d.score != '0') document.getElementById('calculated-score').innerText = d.score;
+                else document.getElementById('calculated-score').innerText = '0';
+
                 document.querySelectorAll('.rubric-radio').forEach(r => {
                     r.addEventListener('change', () => {
                         let currentTotal = 0;
@@ -574,13 +635,26 @@ body{font-family:'Inter',sans-serif;display:flex;flex-direction:column;min-heigh
             } else { container.innerHTML = '<p class="text-sm text-red-500">Rubrik belum tersedia untuk kategori ini.</p>'; }
             document.getElementById('score-modal').classList.remove('hidden');
         }));
+        document.querySelectorAll('.btn-reset').forEach(b => b.addEventListener('click', async (e) => {
+            if(confirm("Apakah Anda yakin ingin mereset nilai peserta ini kembali ke 0?")) {
+                try {
+                    await updateDoc(doc(db, "submissions", e.currentTarget.dataset.id), {
+                        nilai: 0,
+                        catatan: "",
+                        rubricDetails: {}
+                    });
+                    showToast("Nilai berhasil di-reset.", 'success');
+                } catch(err) {
+                    showToast("Gagal reset: " + err.message, 'error');
+                }
+            }
+        }));
         document.querySelectorAll('.btn-video').forEach(b => b.addEventListener('click', (e) => {
             const url = e.currentTarget.dataset.url;
             const id = e.currentTarget.dataset.id;
             if(id) watchedSubmissions.add(id);
             showVideoOptions(url);
         }));
-        updateSortIcons('#juri-table', juriSort);
     }
     function showVideoOptions(url) {
         currentVideoUrl = url;
@@ -606,16 +680,81 @@ body{font-family:'Inter',sans-serif;display:flex;flex-direction:column;min-heigh
              document.getElementById('video-frame').src = "";
          }
     });
+    // SORT DATA HELPER FOR USERS
+    function sortUserData(data, col, dir) {
+        return [...data].sort((a, b) => {
+            let valA = a[col] ? String(a[col]).toLowerCase() : '';
+            let valB = b[col] ? String(b[col]).toLowerCase() : '';
+            if (valA < valB) return dir === 'asc' ? -1 : 1;
+            if (valA > valB) return dir === 'asc' ? 1 : -1;
+            return 0;
+        });
+    }
     function renderUserManagementTable(users) {
         const tbody = document.querySelector('#users-table tbody');
-        tbody.innerHTML = users.map(u => `<tr class="hover:bg-gray-50 border-b border-gray-100"><td class="px-4 py-2 font-medium text-gray-900">${u.username}</td><td class="px-4 py-2 text-gray-500"><span class="px-2 py-1 bg-gray-200 rounded text-xs font-bold">${u.role.toUpperCase()}</span> ${u.kategoriSpesifik && u.kategoriSpesifik !== 'all' ? `<br><span class="text-xs text-indigo-600">(${u.kategoriSpesifik})</span>` : ''}</td><td class="px-4 py-2">${u.role !== 'superadmin' ? `<button class="btn-delete-user text-red-600 hover:text-red-800 text-xs font-bold" data-id="${u.id}" title="Hapus Akun Pengguna Ini">Hapus</button>` : '<span class="text-gray-400 text-xs">Locked</span>'}</td></tr>`).join('');
-        document.querySelectorAll('.btn-delete-user').forEach(btn => { btn.addEventListener('click', async (e) => { if(confirm("Hapus user ini?")) await deleteDoc(doc(db, "users", e.target.dataset.id)); }); });
+        let sortedUsers = sortUserData(users, userSort.col, userSort.dir);
+        
+        // Update Icons
+        document.querySelectorAll('#users-table .sort-icon').forEach(el => el.innerHTML = '');
+        const ah = document.querySelector(`#users-table .sortable-header[data-col="${userSort.col}"] .sort-icon`);
+        if (ah) ah.innerHTML = userSort.dir === 'asc' ? '▲' : '▼';
+
+        tbody.innerHTML = sortedUsers.map((u, index) => `
+            <tr class="hover:bg-gray-50 border-b border-gray-100">
+                <td class="px-2 py-1 text-center font-medium">${index + 1}</td>
+                <td class="px-2 py-1 font-medium text-gray-900">${u.username}</td>
+                <td class="px-2 py-1 text-center"><span class="px-2 py-0.5 bg-gray-100 rounded text-xs font-bold border border-gray-300">${u.role.toUpperCase()}</span></td>
+                <td class="px-2 py-1 text-center text-xs text-indigo-600">${u.kategoriSpesifik && u.kategoriSpesifik !== 'all' ? u.kategoriSpesifik : '-'}</td>
+                <td class="px-2 py-1 text-center">
+                    ${u.role !== 'superadmin' ? `<button class="btn-delete-user text-red-600 hover:text-red-800 p-1 rounded hover:bg-red-50" data-id="${u.id}" title="Hapus"><svg class="w-4 h-4 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg></button>` : '<span class="text-gray-300 text-xs"><svg class="w-4 h-4 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/></svg></span>'}
+                </td>
+            </tr>
+        `).join('');
+        document.querySelectorAll('.btn-delete-user').forEach(btn => { btn.addEventListener('click', async (e) => { if(confirm("Hapus user ini?")) await deleteDoc(doc(db, "users", e.currentTarget.dataset.id)); }); });
     }
+    // EXPORT USERS (DIPERBARUI: Filename & Sort Order)
+    document.getElementById('btn-export-users').addEventListener('click', () => {
+        if (userData.length === 0) { showToast("Belum ada data akun.", 'warning'); return; }
+        
+        // 1. Gunakan helper sort agar urutan di Excel SAMA dengan di Tabel UI
+        let sortedDataForExport = sortUserData(userData, userSort.col, userSort.dir);
+
+        // 2. Filter superadmin & Map data
+        const usersToExport = sortedDataForExport.filter(u => u.role !== 'superadmin').map((u, i) => ({
+            "No": i + 1,
+            "Username": u.username,
+            "Password": u.password, 
+            "Role": u.role,
+            "Kategori Spesifik": u.kategoriSpesifik || '-'
+        }));
+        
+        if (usersToExport.length === 0) { showToast("Tidak ada akun selain Superadmin.", 'warning'); return; }
+
+        const wb = XLSX.utils.book_new();
+        const ws = XLSX.utils.json_to_sheet(usersToExport);
+        XLSX.utils.book_append_sheet(wb, ws, "Daftar Akun");
+        
+        // 3. Generate Filename: Data_Akun_Juri_Admin yyyymmdd hh.mm
+        const now = new Date();
+        const YYYY = now.getFullYear();
+        const MM = String(now.getMonth() + 1).padStart(2, '0');
+        const DD = String(now.getDate()).padStart(2, '0');
+        const HH = String(now.getHours()).padStart(2, '0');
+        const MIN = String(now.getMinutes()).padStart(2, '0');
+        const SS = String(now.getSeconds()).padStart(2, '0');
+
+        // Menggunakan spasi dan titik agar valid sebagai nama file
+        const filename = `Data_Akun_Juri_Admin ${YYYY}${MM}${DD} ${HH}.${MIN}.${SS}.xlsx`;
+        
+        XLSX.writeFile(wb, filename);
+    });
+
     document.getElementById('create-user-form').addEventListener('submit', async (e) => {
         e.preventDefault();
         const u = document.getElementById('new-username').value, p = document.getElementById('new-password').value, r = document.getElementById('new-role').value;
         const k = document.getElementById('new-kategori-spesifik').value;
         if(p.length < 6) { showToast("Password minimal 6 karakter", 'error'); return; }
+        if(r === 'juri' && (!k || k === '')) { showToast("Pilih kategori untuk Juri!", 'error'); return; } 
         try {
             const q = query(collection(db, "users"), where("username", "==", u));
             const snap = await getDocs(q);
@@ -629,7 +768,18 @@ body{font-family:'Inter',sans-serif;display:flex;flex-direction:column;min-heigh
         try {
             const score = document.getElementById('calculated-score').innerText;
             if(score === '0') { showToast("Mohon lengkapi penilaian rubrik.", 'warning'); return; }
-            await updateDoc(doc(db, "submissions", document.getElementById('score-doc-id').value), { nilai: score, catatan: document.getElementById('score-notes').value });
+            
+            // Collect radio states
+            const rubricDetails = {};
+            document.querySelectorAll('.rubric-radio:checked').forEach(r => {
+                rubricDetails[r.name] = r.value;
+            });
+
+            await updateDoc(doc(db, "submissions", document.getElementById('score-doc-id').value), { 
+                nilai: score, 
+                catatan: document.getElementById('score-notes').value,
+                rubricDetails: rubricDetails 
+            });
             document.getElementById('score-modal').classList.add('hidden');
             showToast("Nilai berhasil disimpan", 'success');
         } catch (e) { showToast(e.message, 'error'); }
@@ -657,7 +807,6 @@ body{font-family:'Inter',sans-serif;display:flex;flex-direction:column;min-heigh
         document.getElementById('video-warning-modal').classList.remove('hidden');
     });
     document.getElementById('btn-hero-daftar').addEventListener('click', () => {
-        // Use the mobile select to trigger change or manually switch
         const mobileSelect = document.getElementById('main-tabs-mobile');
         if(mobileSelect) mobileSelect.value = 'form';
         switchTabVisuals('form');
@@ -750,10 +899,9 @@ body{font-family:'Inter',sans-serif;display:flex;flex-direction:column;min-heigh
                 localStorage.setItem('pgri_user_session', JSON.stringify({role:role, username:u, kategoriSpesifik: currentJuriKategori})); 
                 window.hideLoginModal(); 
                 updateLoginUI();
-                switchTabVisuals(role);
+                switchTabVisuals(role); // Logic to redirect away from 'form' tab happens here
                 showToast(`Login berhasil sebagai ${role}`, 'success');
                 if(role === 'admin' || role === 'superadmin') renderAdminTable(submissionData);
-                // IMPORTANT: Allow Admin/Superadmin to see Juri Table
                 if(role === 'juri' || role === 'admin' || role === 'superadmin') renderJuriTable(submissionData);
             }
         } catch(e) { 
@@ -770,7 +918,6 @@ body{font-family:'Inter',sans-serif;display:flex;flex-direction:column;min-heigh
         document.getElementById('login-role-display').innerText = roleDisplay.charAt(0).toUpperCase() + roleDisplay.slice(1);
         document.getElementById('logout-btn').classList.remove('hidden');
         
-        // Check Dashboard visibility
         const dashBtn = document.querySelector('button[data-tab="dashboard"]');
         const dashOpt = document.querySelector('option[value="dashboard"]');
         const showDash = isLoggedIn && ['juri', 'admin', 'superadmin'].includes(currentRole);
@@ -783,23 +930,36 @@ body{font-family:'Inter',sans-serif;display:flex;flex-direction:column;min-heigh
             if(showDash) dashOpt.classList.remove('hidden');
             else dashOpt.classList.add('hidden');
         }
+
+        // HIDE FORM TAB FOR JURI/ADMIN ONLY (Superadmin still sees it)
+        const formBtn = document.querySelector('button[data-tab="form"]');
+        const formOpt = document.querySelector('option[value="form"]');
+        // Only hide if logged in AND role is juri or admin. Superadmin is excluded.
+        const hideForm = isLoggedIn && ['juri', 'admin'].includes(currentRole);
+        
+        if(formBtn) {
+             if(hideForm) formBtn.classList.add('hidden');
+             else formBtn.classList.remove('hidden');
+        }
+        if(formOpt) {
+            if(hideForm) formOpt.classList.add('hidden');
+            else formOpt.classList.remove('hidden');
+        }
     }
     document.querySelectorAll('.main-tab-btn').forEach(btn => {
         btn.addEventListener('click', (e) => {
             const targetTab = e.currentTarget.dataset.tab; 
-            // Dashboard, Juri, Admin, Superadmin require login
             if(['juri', 'admin', 'superadmin', 'dashboard'].includes(targetTab)) {
                  const hasAccess = isLoggedIn && (
                     (targetTab === 'dashboard' && ['juri','admin','superadmin'].includes(currentRole)) ||
-                    (targetTab === 'juri' && ['juri','superadmin','admin'].includes(currentRole)) || // Admin allowed
+                    (targetTab === 'juri' && ['juri','superadmin','admin'].includes(currentRole)) || 
                     (targetTab === 'admin' && ['admin','superadmin'].includes(currentRole)) ||
                     (targetTab === 'superadmin' && currentRole === 'superadmin')
                  );
 
                  if (!hasAccess) {
-                    // Determine which role to show in modal based on clicked tab
                     let roleToLogin = targetTab;
-                    if(targetTab === 'dashboard') roleToLogin = 'juri'; // Default for dashboard click
+                    if(targetTab === 'dashboard') roleToLogin = 'juri'; 
                     window.showLoginModal(roleToLogin);
                     return;
                  }
@@ -815,7 +975,6 @@ body{font-family:'Inter',sans-serif;display:flex;flex-direction:column;min-heigh
         const content = document.getElementById(`main-content-${tabName}`);
         if(content) content.classList.remove('hidden');
         
-        // Trigger render logic
         if(tabName === 'home') renderHomeCategories();
         if(tabName === 'dashboard' && isLoggedIn) initChart(submissionData);
         if(tabName === 'juri') {
@@ -835,7 +994,6 @@ body{font-family:'Inter',sans-serif;display:flex;flex-direction:column;min-heigh
     });
     document.getElementById('main-tabs-mobile').addEventListener('change', (e) => {
          const target = e.target.value;
-         // Simple check for protected tabs on mobile
          if(['juri', 'admin', 'superadmin', 'dashboard'].includes(target)) {
              if (!isLoggedIn) {
                  let r = target === 'dashboard' ? 'juri' : target;
@@ -893,23 +1051,38 @@ body{font-family:'Inter',sans-serif;display:flex;flex-direction:column;min-heigh
         submitBtn.classList.toggle('hidden', currentStep !== 6);
     }
     
-    // FUNGSI EKSPOR EXCEL DIPERBARUI (FORMAT SESUAI GAMBAR)
+    // FUNGSI EKSPOR EXCEL DIPERBARUI
     const handleExport = () => {
         if (submissionData.length === 0) { 
             showToast("Belum ada data untuk diekspor.", 'warning'); 
             return; 
         }
 
+        // PRE-CALCULATE RANKS BY CATEGORY
+        const rankedData = [...submissionData];
+        // Group by category
+        const catGroups = {};
+        rankedData.forEach(d => {
+            if(!catGroups[d.kategori]) catGroups[d.kategori] = [];
+            catGroups[d.kategori].push(d);
+        });
+        // Sort each group and assign rank map
+        const idToRank = {};
+        Object.keys(catGroups).forEach(cat => {
+            catGroups[cat].sort((a, b) => (Number(b.nilai)||0) - (Number(a.nilai)||0));
+            catGroups[cat].forEach((d, i) => {
+                idToRank[d.id] = (Number(d.nilai) > 0) ? (i + 1) : '-';
+            });
+        });
+
         const wb = XLSX.utils.book_new();
 
         // Helper untuk memformat baris data
         const formatDataForSheet = (data, sortBy = 'timestamp') => {
-            // Urutkan data terlebih dahulu
             const sorted = [...data].sort((a, b) => {
                 if (sortBy === 'nilai') {
-                    return (Number(b.nilai) || 0) - (Number(a.nilai) || 0); // Nilai tertinggi di atas
+                    return (Number(b.nilai) || 0) - (Number(a.nilai) || 0); 
                 }
-                // Default: Timestamp terbaru di atas
                 const tA = a.timestamp ? a.timestamp.seconds : 0;
                 const tB = b.timestamp ? b.timestamp.seconds : 0;
                 return tB - tA;
@@ -922,7 +1095,7 @@ body{font-family:'Inter',sans-serif;display:flex;flex-direction:column;min-heigh
                 "Nama Lengkap": item.nama,
                 "Tempat Lahir": item.tempatLahir || '-',
                 "Tanggal Lahir": item.tglLahir || '-',
-                "NIK": "'"+(item.nik || ''), // Force string
+                "NIK": "'"+(item.nik || ''), 
                 "Status Kepegawaian": item.status,
                 "NIP": "'"+(item.nip || '-'),
                 "NUPTK": "'"+(item.nuptk || '-'),
@@ -940,32 +1113,23 @@ body{font-family:'Inter',sans-serif;display:flex;flex-direction:column;min-heigh
                 "Deskripsi Inovasi": item.deskripsi || '-',
                 "Video URL/ID": item.videoUrl,
                 "Nilai Akhir": Number(item.nilai) || 0,
-                "Catatan Juri": item.catatan || '-'
+                "Catatan Juri": item.catatan || '-',
+                "Peringkat": idToRank[item.id] || '-' 
             }));
         };
 
-        // 1. BUAT SHEET 1: REKAP LENGKAP (Semua Data)
         const allDataSheet = formatDataForSheet(submissionData, 'timestamp');
         const wsAll = XLSX.utils.json_to_sheet(allDataSheet);
         XLSX.utils.book_append_sheet(wb, wsAll, "REKAP LENGKAP");
 
-        // 2. BUAT SHEET 2-8: PER KATEGORI
         KATEGORI_LIST.forEach((kategori) => {
-            // Filter data sesuai kategori
             const catData = submissionData.filter(item => item.kategori === kategori);
-            
-            // Format data (Urutkan berdasarkan Nilai Tertinggi untuk per kategori)
             const catSheetData = formatDataForSheet(catData, 'nilai');
-
-            // Buat Sheet jika ada datanya (atau buat sheet kosong jika mau tetap 8 sheet fix)
             const wsCat = catSheetData.length > 0 ? XLSX.utils.json_to_sheet(catSheetData) : XLSX.utils.json_to_sheet([{"Info": "Belum ada pendaftar kategori ini"}]);
-            
-            // Nama sheet (Excel max 31 karakter, kita persingkat 'Guru ' agar rapi)
             const sheetName = kategori.replace("Guru ", ""); 
             XLSX.utils.book_append_sheet(wb, wsCat, sheetName);
         });
 
-        // Generate Nama File & Download
         const now = new Date();
         const ts = `${now.getFullYear()}${String(now.getMonth()+1).padStart(2,'0')}${String(now.getDate()).padStart(2,'0')}_${String(now.getHours()).padStart(2,'0')}${String(now.getMinutes()).padStart(2,'0')}`;
         XLSX.writeFile(wb, `Rekap_Nilai_PGRI_Award_2025_${ts}.xlsx`);
