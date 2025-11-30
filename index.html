@@ -892,28 +892,87 @@ body{font-family:'Inter',sans-serif;display:flex;flex-direction:column;min-heigh
         btnNext.classList.toggle('hidden', currentStep === 6);
         submitBtn.classList.toggle('hidden', currentStep !== 6);
     }
-    const handleExport = (role) => {
-        if (submissionData.length === 0) { showToast("Belum ada data.", 'warning'); return; }
-        let dataToExport = submissionData;
-        let catLabel = "Seluruh Kategori";
-        if (role === 'admin' && currentAdminFilter !== 'all') {
-            dataToExport = submissionData.filter(item => item.kategori === currentAdminFilter);
-            catLabel = currentAdminFilter;
+    
+    // FUNGSI EKSPOR EXCEL DIPERBARUI (FORMAT SESUAI GAMBAR)
+    const handleExport = () => {
+        if (submissionData.length === 0) { 
+            showToast("Belum ada data untuk diekspor.", 'warning'); 
+            return; 
         }
-        const mapped = dataToExport.map(item => ({
-            "Timestamp": item.timestamp ? new Date(item.timestamp.seconds * 1000).toLocaleString('id-ID') : '-',
-            "Nama": item.nama, "Kategori": item.kategori, "Sekolah": item.sekolah, "Kecamatan": item.kecSekolah, "Nilai": item.nilai||0, "Catatan": item.catatan||'-',
-            "NIK": item.nik, "NIP": item.nip, "NUPTK": item.nuptk, "Pangkat": item.pangkatGol, "Jabatan": item.jabatan, "Jenjang": item.jenjang,
-            "Alamat Rumah": item.alamatRumah, "WA": item.wa, "Email": item.email, "Video": item.videoUrl
-        }));
+
         const wb = XLSX.utils.book_new();
-        const ws = XLSX.utils.json_to_sheet(mapped);
-        XLSX.utils.book_append_sheet(wb, ws, "Data");
+
+        // Helper untuk memformat baris data
+        const formatDataForSheet = (data, sortBy = 'timestamp') => {
+            // Urutkan data terlebih dahulu
+            const sorted = [...data].sort((a, b) => {
+                if (sortBy === 'nilai') {
+                    return (Number(b.nilai) || 0) - (Number(a.nilai) || 0); // Nilai tertinggi di atas
+                }
+                // Default: Timestamp terbaru di atas
+                const tA = a.timestamp ? a.timestamp.seconds : 0;
+                const tB = b.timestamp ? b.timestamp.seconds : 0;
+                return tB - tA;
+            });
+
+            return sorted.map((item, index) => ({
+                "No": index + 1,
+                "Waktu Submit": item.timestamp ? new Date(item.timestamp.seconds * 1000).toLocaleString('id-ID') : '-',
+                "Kategori Lomba": item.kategori,
+                "Nama Lengkap": item.nama,
+                "Tempat Lahir": item.tempatLahir || '-',
+                "Tanggal Lahir": item.tglLahir || '-',
+                "NIK": "'"+(item.nik || ''), // Force string
+                "Status Kepegawaian": item.status,
+                "NIP": "'"+(item.nip || '-'),
+                "NUPTK": "'"+(item.nuptk || '-'),
+                "Pangkat/ Golongan": item.pangkatGol || '-',
+                "Jabatan Fungsional": item.jabatan || '-',
+                "Jenjang Pendidikan": item.jenjang || '-',
+                "Nama Satuan Pendidikan": item.sekolah,
+                "Alamat Satuan Pendidikan": item.alamatSekolah || '-',
+                "Kecamatan Satuan Pendidikan": item.kecSekolah || '-',
+                "Alamat Tempat Tinggal": item.alamatRumah || '-',
+                "Kecamatan Tempat Tinggal": item.kecRumah || '-',
+                "Kabupaten/Kota Tempat Tinggal": item.kabKotaRumah || '-',
+                "Nomor WhatsApp": "'"+(item.wa || ''),
+                "Email Personal": item.email,
+                "Deskripsi Inovasi": item.deskripsi || '-',
+                "Video URL/ID": item.videoUrl,
+                "Nilai Akhir": Number(item.nilai) || 0,
+                "Catatan Juri": item.catatan || '-'
+            }));
+        };
+
+        // 1. BUAT SHEET 1: REKAP LENGKAP (Semua Data)
+        const allDataSheet = formatDataForSheet(submissionData, 'timestamp');
+        const wsAll = XLSX.utils.json_to_sheet(allDataSheet);
+        XLSX.utils.book_append_sheet(wb, wsAll, "REKAP LENGKAP");
+
+        // 2. BUAT SHEET 2-8: PER KATEGORI
+        KATEGORI_LIST.forEach((kategori) => {
+            // Filter data sesuai kategori
+            const catData = submissionData.filter(item => item.kategori === kategori);
+            
+            // Format data (Urutkan berdasarkan Nilai Tertinggi untuk per kategori)
+            const catSheetData = formatDataForSheet(catData, 'nilai');
+
+            // Buat Sheet jika ada datanya (atau buat sheet kosong jika mau tetap 8 sheet fix)
+            const wsCat = catSheetData.length > 0 ? XLSX.utils.json_to_sheet(catSheetData) : XLSX.utils.json_to_sheet([{"Info": "Belum ada pendaftar kategori ini"}]);
+            
+            // Nama sheet (Excel max 31 karakter, kita persingkat 'Guru ' agar rapi)
+            const sheetName = kategori.replace("Guru ", ""); 
+            XLSX.utils.book_append_sheet(wb, wsCat, sheetName);
+        });
+
+        // Generate Nama File & Download
         const now = new Date();
-        const ts = `${now.getFullYear()}${String(now.getMonth()+1).padStart(2,'0')}${String(now.getDate()).padStart(2,'0')} ${String(now.getHours()).padStart(2,'0')}${String(now.getMinutes()).padStart(2,'0')}`;
-        XLSX.writeFile(wb, `PGRI Award 2025_Data Pendaftar_${catLabel}_${ts}.xlsx`);
+        const ts = `${now.getFullYear()}${String(now.getMonth()+1).padStart(2,'0')}${String(now.getDate()).padStart(2,'0')}_${String(now.getHours()).padStart(2,'0')}${String(now.getMinutes()).padStart(2,'0')}`;
+        XLSX.writeFile(wb, `Rekap_Nilai_PGRI_Award_2025_${ts}.xlsx`);
     };
-    document.getElementById('btn-export').addEventListener('click', () => handleExport('admin'));
+
+    document.getElementById('btn-export').addEventListener('click', handleExport);
+    
     async function generatePDF(data) {
         const { jsPDF } = window.jspdf;
         const doc = new jsPDF();
