@@ -14,42 +14,25 @@ body{font-family:'Inter',sans-serif;display:flex;flex-direction:column;min-heigh
 .main-tab-btn.active{border-color:#4f46e5;color:#4f46e5;background-color:#eef2ff}.main-tab-btn:hover:not(.active){border-color:#d1d5db;color:#374151}
 .form-section-header{background-color:#eff6ff;border-left:4px solid #4f46e5;padding:.75rem 1rem;margin:1.5rem 0 1rem 0;border-radius:.25rem;display:flex;align-items:center}
 .form-section-header h3{font-size:1.1rem;font-weight:700;color:#1e3a8a;margin-left:.5rem}
-
-/* STEPPER STYLES */
-.stepper-wrapper { display: flex; justify-content: space-between; margin-bottom: 2rem; position: relative; }
-.stepper-wrapper::before { content: ''; position: absolute; top: 20px; left: 0; width: 100%; height: 4px; background-color: #e5e7eb; z-index: 0; transform: translateY(-50%); }
-.stepper-item { position: relative; z-index: 1; display: flex; flex-direction: column; align-items: center; flex: 1; }
-.stepper-circle { width: 40px; height: 40px; border-radius: 50%; background-color: #e5e7eb; color: #6b7280; display: flex; justify-content: center; align-items: center; font-weight: 700; font-size: 1.1rem; border: 4px solid #fff; transition: all 0.3s ease; }
-.stepper-item.active .stepper-circle { background-color: #4f46e5; color: #fff; box-shadow: 0 0 0 4px #e0e7ff; border-color: #4f46e5; }
-.stepper-item.completed .stepper-circle { background-color: #4f46e5; color: #fff; }
-.stepper-label { margin-top: 0.75rem; font-size: 0.75rem; font-weight: 600; color: #9ca3af; text-align: center; text-transform: uppercase; letter-spacing: 0.025em; }
-.stepper-item.active .stepper-label { color: #4f46e5; font-weight: 700; }
-.stepper-item.completed .stepper-label { color: #4f46e5; }
-
-.form-input-field{background-color:#f9fafb;border:1px solid #d1d5db;color:#111827;border-radius:.5rem;padding:.75rem 1rem;width:100%;transition:all .2s; font-size: 0.95rem;}
-.form-input-field:focus{background-color:#fff;border-color:#4f46e5;box-shadow:0 0 0 4px rgba(79,70,229,.1);outline:none}::placeholder{color:#9ca3af;opacity:1}
-
-.input-error { border-color: #ef4444 !important; background-color: #fef2f2 !important; box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.1) !important; }
-.error-msg { font-size: 0.75rem; color: #ef4444; margin-top: 0.4rem; font-weight: 600; display: none; }
-.input-error + .error-msg { display: block; animation: fadeIn 0.3s ease; }
-@keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-@keyframes shake { 0%, 100% { transform: translateX(0); } 10%, 30%, 50%, 70%, 90% { transform: translateX(-5px); } 20%, 40%, 60%, 80% { transform: translateX(5px); } }
-.animate-shake { animation: shake 0.5s cubic-bezier(.36,.07,.19,.97) both; }
-
+.stepper-step{display:flex;flex-direction:column;align-items:center;position:relative;flex:1}
+.stepper-circle{width:2.25rem;height:2.25rem;border-radius:9999px;background-color:#e5e7eb;color:#6b7280;display:flex;align-items:center;justify-content:center;font-weight:600;font-size:.9rem;transition:all .3s ease;border:2px solid #f3f4f6}
+.stepper-label{font-size:.75rem;font-weight:600;color:#6b7280;margin-top:.25rem;text-align:center}.stepper-line{flex-grow:1;height:3px;background-color:#e5e7eb;margin:0 .25rem;margin-bottom:1.7rem}
+.stepper-step.active .stepper-circle{background-color:#eef2ff;color:#4f46e5;border-color:#4f46e5}.stepper-step.active .stepper-label{color:#4f46e5}
+.stepper-step.completed .stepper-circle{background-color:#10b981;color:#fff;border-color:#f0fdf4}.stepper-step.completed .stepper-line{background-color:#10b981}
+.form-input-field{background-color:#f9fafb;border:1px solid #d1d5db;color:#111827;border-radius:.5rem;padding:.625rem 1rem;width:100%;transition:all .2s}
+.form-input-field:focus{background-color:#fff;border-color:#4f46e5;box-shadow:0 0 0 3px rgba(79,70,229,.1);outline:none}::placeholder{color:#9ca3af;opacity:1}
 .sortable-header{cursor:pointer;user-select:none;transition:background-color .2s}.sortable-header:hover{background-color:#f3f4f6}
 .sort-icon{display:inline-block;width:12px;height:12px;margin-left:4px;vertical-align:middle}
 .table-container{max-height:550px;overflow-y:auto;border:1px solid #e5e7eb;border-radius:.5rem;min-height:200px;}
 .table-container thead th{position:sticky;top:0;background-color:#f9fafb;z-index:10;box-shadow:0 1px 2px rgba(0,0,0,.05)}
 .video-container { position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; max-width: 100%; background: #000; border-radius: 0.5rem; }
 .video-container iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; }
-
+@keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 .fade-in-up { animation: fadeIn 0.5s ease-out forwards; }
-@media(max-width:640px){
-    .stepper-label{display:none}
-    .stepper-circle{width:32px;height:32px;font-size:0.9rem;border-width:2px}
-    .stepper-wrapper::before { top: 16px; }
-}
-
+@media(max-width:640px){.stepper-line,.stepper-label{display:none}.stepper-circle{width:2rem;height:2rem;font-size:.8rem;border-width:2px}#stepper-container ol{gap:.25rem}}
+.input-error { border-color: #ef4444 !important; background-color: #fef2f2 !important; box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.1) !important; }
+.error-msg { font-size: 0.75rem; color: #ef4444; margin-top: 0.25rem; font-weight: 500; display: none; }
+.input-error + .error-msg { display: block; }
 #toast-container { position: fixed; top: 1rem; right: 1rem; z-index: 100; display: flex; flex-direction: column; gap: 0.5rem; pointer-events: none; }
 .toast { pointer-events: auto; padding: 1rem 1.5rem; border-radius: 0.5rem; color: white; font-weight: 500; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1); opacity: 0; transform: translateX(20px); transition: all 0.3s ease; display: flex; items-center; gap: 0.75rem; max-width: 24rem; }
 .toast.show { opacity: 1; transform: translateX(0); }
@@ -57,8 +40,7 @@ body{font-family:'Inter',sans-serif;display:flex;flex-direction:column;min-heigh
 .toast-warning { background-color: #d97706; }
 .toast-success { background-color: #16a34a; }
 #custom-tooltip { position: fixed; background: rgba(17, 24, 39, 0.95); color: #fff; padding: 6px 10px; border-radius: 6px; font-size: 12px; pointer-events: none; z-index: 10000; display: none; backdrop-filter: blur(4px); box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1); white-space: nowrap; border: 1px solid rgba(255, 255, 255, 0.1); transition: opacity 0.15s ease; }
-
-/* Rubric Styles */
+/* Rubric Full Card Styles (New) */
 .aspect-container { border: 1px solid #e5e7eb; border-radius: 0.75rem; padding: 1rem; background-color: #fff; margin-bottom: 1.5rem; }
 .aspect-header { font-size: 1rem; font-weight: 800; color: #111827; margin-bottom: 0.75rem; border-bottom: 1px dashed #e5e7eb; padding-bottom: 0.5rem; }
 .rubric-grid { display: grid; grid-template-columns: 1fr; gap: 0.75rem; }
@@ -77,6 +59,12 @@ body{font-family:'Inter',sans-serif;display:flex;flex-direction:column;min-heigh
 .rubric-score-badge { font-size: 0.9rem; font-weight: 700; color: #6b7280; }
 .rubric-card-text { font-size: 0.85rem; color: #4b5563; line-height: 1.4; flex-grow: 1; }
 .rubric-full-card.selected .rubric-card-text { color: #1f2937; font-weight: 500; }
+.timeline-item { position: relative; padding-left: 2rem; padding-bottom: 2rem; border-left: 2px solid #e5e7eb; }
+.timeline-item:last-child { border-left: 0; }
+.timeline-dot { position: absolute; left: -0.4rem; top: 0; height: 0.8rem; width: 0.8rem; border-radius: 50%; background-color: #4f46e5; ring: 4px solid #e0e7ff; }
+.category-card { transition: all 0.3s ease; }
+.category-card:hover { transform: translateY(-5px); box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05); }
+.progress-bar { transition: width 0.5s ease-in-out; }
 </style>
 </head>
 <body class="text-gray-800 antialiased text-sm">
@@ -108,102 +96,18 @@ body{font-family:'Inter',sans-serif;display:flex;flex-direction:column;min-heigh
 <div id="main-content-form" class="main-content-div hidden">
 <div id="registration-status-message" class="hidden max-w-4xl mx-auto"><div class="bg-gradient-to-r from-blue-600 to-indigo-700 rounded-xl shadow-lg overflow-hidden text-white mb-8 fade-in-up"><div class="px-6 py-10 text-center"><div class="mx-auto flex items-center justify-center h-16 w-16 rounded-full bg-white bg-opacity-20 mb-6 backdrop-blur-sm"><svg class="h-8 w-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg></div><h2 id="reg-status-title" class="text-2xl md:text-3xl font-extrabold tracking-tight mb-2">Pendaftaran Belum Dibuka</h2><p id="reg-status-desc" class="text-blue-100 text-lg md:text-xl font-medium mx-auto leading-relaxed mb-6">Mohon bersabar, formulir akan dibuka pada 1 Desember 2025 pukul 00:01 WIB.</p><div id="reg-status-period" class="inline-flex items-center px-4 py-2 rounded-full bg-white bg-opacity-10 border border-white border-opacity-20 backdrop-filter backdrop-blur-sm"><svg class="w-4 h-4 mr-2 text-blue-200" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg><span class="font-mono text-sm md:text-base text-blue-50">Periode: 1 Des 2025 (00:01) - 4 Des 2025 (23:59)</span></div></div></div></div>
 <div id="view-pendaftar-select" class="hidden"><div class="max-w-xl mx-auto bg-white rounded-lg shadow-sm border border-gray-200 p-6 text-center mt-4"><h3 class="text-lg font-bold text-gray-900 mb-1">Mulai Pendaftaran</h3><div class="mb-4 text-left"><label class="block text-sm font-semibold text-gray-700 mb-2">Pilih Kategori Lomba</label><select id="kategori-select" class="block w-full text-base sm:text-lg p-3 sm:p-4 rounded-xl border-2 border-indigo-200 shadow-md bg-white text-gray-900 focus:border-indigo-600 focus:ring-4 focus:ring-indigo-100 transition-all cursor-pointer" title="Silakan pilih kategori lomba yang ingin Anda ikuti"><option value="" disabled selected>-- Ketuk Disini Untuk Memilih Kategori --</option></select></div><button id="btn-pilih-kategori" class="w-full flex justify-center items-center py-3 px-4 rounded-xl shadow-lg text-base font-bold text-white bg-indigo-600 hover:bg-indigo-700 hover:shadow-xl transition-all transform hover:-translate-y-0.5">Lanjutkan Mengisi Formulir</button></div></div>
-<div id="view-pendaftar-form" class="hidden">
-<div id="form-card" class="max-w-4xl mx-auto bg-white rounded-2xl shadow-lg border border-gray-200 overflow-hidden">
-<div class="p-4 sm:p-8">
-    <!-- HEADER FORMULIR BARU -->
-    <div class="mb-8">
-        <button id="btn-kembali" class="text-sm font-bold text-gray-500 hover:text-indigo-600 flex items-center mb-4 transition-colors">
-            <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/></svg> 
-            Kembali Pilih Kategori
-        </button>
-        <h2 id="form-title" class="text-4xl font-extrabold text-gray-900 tracking-tight">Formulir Pendaftaran</h2>
-        <p id="form-subtitle" class="text-gray-500 mt-2 text-lg">Mengajukan untuk kategori yang dipilih.</p>
-    </div>
-
-    <!-- NEW HORIZONTAL STEPPER -->
-    <div id="stepper-container" class="stepper-wrapper">
-        <div id="stepper-step-1" class="stepper-item active"><div class="stepper-circle">1</div><span class="stepper-label">Identitas</span></div>
-        <div id="stepper-step-2" class="stepper-item"><div class="stepper-circle">2</div><span class="stepper-label">Kepegawaian</span></div>
-        <div id="stepper-step-3" class="stepper-item"><div class="stepper-circle">3</div><span class="stepper-label">Unit Kerja</span></div>
-        <div id="stepper-step-4" class="stepper-item"><div class="stepper-circle">4</div><span class="stepper-label">Domisili</span></div>
-        <div id="stepper-step-5" class="stepper-item"><div class="stepper-circle">5</div><span class="stepper-label">Kontak</span></div>
-        <div id="stepper-step-6" class="stepper-item"><div class="stepper-circle">6</div><span class="stepper-label">Materi</span></div>
-    </div>
-
-    <form id="form-pendaftaran" class="space-y-6" novalidate>
-        <!-- Form Steps Content (Sama seperti sebelumnya, tapi dengan validasi ketat) -->
-        <div id="form-step-1" class="form-step space-y-5">
-            <div class="form-section-header"><h3>Identitas Diri</h3></div>
-            <div><label class="block text-sm font-bold text-gray-700 mb-1">Nama Lengkap (disertai gelar)</label><input type="text" id="nama-lengkap" class="form-input-field" placeholder="Contoh: Dr. Budi Santoso, M.Pd." required><p class="error-msg">Nama lengkap wajib diisi</p></div>
-            <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
-                <div><label class="block text-sm font-bold text-gray-700 mb-1">Tempat Lahir</label><input type="text" id="tempat-lahir" class="form-input-field" required><p class="error-msg">Tempat lahir wajib diisi</p></div>
-                <div><label class="block text-sm font-bold text-gray-700 mb-1">Tanggal Lahir</label><input type="date" id="tanggal-lahir" class="form-input-field" required><p class="error-msg">Tanggal lahir wajib diisi</p></div>
-            </div>
-            <div><label class="block text-sm font-bold text-gray-700 mb-1">NIK (16 Digit)</label><input type="text" id="nik" pattern="\d{16}" class="form-input-field" placeholder="16 digit angka sesuai KTP" required><p class="error-msg">NIK harus 16 digit angka</p></div>
-        </div>
-
-        <div id="form-step-2" class="form-step hidden space-y-5">
-            <div class="form-section-header"><h3>Data Kepegawaian</h3></div>
-            <div><label class="block text-sm font-bold text-gray-700 mb-1">Status Kepegawaian</label><select id="status-kepegawaian" class="form-input-field" required><option value="" disabled selected>-- Pilih --</option><option value="ASN PNS">ASN PNS</option><option value="ASN PPPK">ASN PPPK</option><option value="Non ASN">Non ASN</option></select><p class="error-msg">Pilih status kepegawaian</p></div>
-            <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
-                <div><label class="block text-sm font-bold text-gray-700 mb-1">NIP</label><input type="text" id="nip" class="form-input-field" placeholder="Isi - jika tidak ada" required><p class="error-msg">NIP wajib diisi</p></div>
-                <div><label class="block text-sm font-bold text-gray-700 mb-1">NUPTK</label><input type="text" id="nuptk" class="form-input-field" placeholder="16 digit angka"></div>
-            </div>
-            <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
-                <div><label class="block text-sm font-bold text-gray-700 mb-1">Pangkat/Gol</label><select id="pangkat-gol" class="form-input-field"><option value="" disabled selected>-- Pilih --</option><option value="Pengatur Muda, II/a">Pengatur Muda, II/a</option><option value="Pengatur Muda Tingkat I, II/b">Pengatur Muda Tingkat I, II/b</option><option value="Pengatur Muda, II/c">Pengatur Muda, II/c</option><option value="Pengatur Muda, II/d">Pengatur Muda, II/d</option><option value="Penata Muda, III/a">Penata Muda, III/a</option><option value="Penata Muda Tingkat I, III/b">Penata Muda Tingkat I, III/b</option><option value="Penata, III/c">Penata, III/c</option><option value="Penata Tingkat I, III/d">Penata Tingkat I, III/d</option><option value="Pembina, IV/a">Pembina, IV/a</option><option value="Pembina Tingkat I, IV/b">Pembina Tingkat I, IV/b</option><option value="Pembina Utama Muda, IV/c">Pembina Utama Muda, IV/c</option><option value="Pembina Utama Madya, IV/d">Pembina Utama Madya, IV/d</option><option value="Pembina Utama, IV/e">Pembina Utama, IV/e</option><option value="-">-</option></select></div>
-                <div><label class="block text-sm font-bold text-gray-700 mb-1">Jabatan Fungsional</label><select id="jabatan-fungsional" class="form-input-field"><option value="" disabled selected>-- Pilih --</option><option value="Guru Ahli Pertama">Guru Ahli Pertama</option><option value="Guru Ahli Muda">Guru Ahli Muda</option><option value="Guru Ahli Madya">Guru Ahli Madya</option><option value="Guru Ahli Utama">Guru Ahli Utama</option><option value="-">-</option></select></div>
-            </div>
-        </div>
-
-        <div id="form-step-3" class="form-step hidden space-y-5">
-            <div class="form-section-header"><h3>Unit Kerja</h3></div>
-            <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
-                <div><label class="block text-sm font-bold text-gray-700 mb-1">Jenjang</label><select id="jenjang" class="form-input-field" required><option value="" disabled selected>-- Pilih --</option><option value="PAUD">PAUD</option><option value="SD">SD</option><option value="SMP">SMP</option><option value="SMA/SMK">SMA/SMK</option></select><p class="error-msg">Pilih jenjang pendidikan</p></div>
-                <div><label class="block text-sm font-bold text-gray-700 mb-1">Nama Sekolah</label><input type="text" id="nama-satuan-pendidikan" class="form-input-field" placeholder="Contoh: SDN 1 Pandeglang" required><p class="error-msg">Nama sekolah wajib diisi</p></div>
-            </div>
-            <div><label class="block text-sm font-bold text-gray-700 mb-1">Alamat Sekolah</label><input type="text" id="alamat-satuan-pendidikan" class="form-input-field" placeholder="Jl. Raya Labuan Km 5..." required><p class="error-msg">Alamat sekolah wajib diisi</p></div>
-            <div><label class="block text-sm font-bold text-gray-700 mb-1">Kecamatan Tempat Tugas</label><select id="kecamatan-satuan-pendidikan" class="form-input-field" required><option value="" disabled selected>-- Pilih --</option><option value="Angsana">Angsana</option><option value="Banjar">Banjar</option><option value="Bojong">Bojong</option><option value="Cadasari">Cadasari</option><option value="Carita">Carita</option><option value="Cibaliung">Cibaliung</option><option value="Cibitung">Cibitung</option><option value="Cigeulis">Cigeulis</option><option value="Cikedal">Cikedal</option><option value="Cikeusik">Cikeusik</option><option value="Cimanggu">Cimanggu</option><option value="Cimanuk">Cimanuk</option><option value="Cipeucang">Cipeucang</option><option value="Cisata">Cisata</option><option value="Jiput">Jiput</option><option value="Kaduhejo">Kaduhejo</option><option value="Karang Tanjung">Karang Tanjung</option><option value="Koroncong">Koroncong</option><option value="Labuan">Labuan</option><option value="Majasari">Majasari</option><option value="Mandalawangi">Mandalawangi</option><option value="Mekarjaya">Mekarjaya</option><option value="Menes">Menes</option><option value="Munjul">Munjul</option><option value="Pagelaran">Pagelaran</option><option value="Pandeglang">Pandeglang</option><option value="Panimbang">Panimbang</option><option value="Patia">Patia</option><option value="Picung">Picung</option><option value="Pulosari">Pulosari</option><option value="Saketi">Saketi</option><option value="Sindangresmi">Sindangresmi</option><option value="Sobang">Sobang</option><option value="Sukaresmi">Sukaresmi</option><option value="Sumur">Sumur</option></select><p class="error-msg">Pilih kecamatan tempat tugas</p></div>
-        </div>
-
-        <div id="form-step-4" class="form-step hidden space-y-5">
-            <div class="form-section-header"><h3>Tempat Tinggal</h3></div>
-            <div><label class="block text-sm font-bold text-gray-700 mb-1">Alamat Rumah</label><input type="text" id="alamat-tempat-tinggal" class="form-input-field" placeholder="Kp. Ciekek..." required><p class="error-msg">Alamat rumah wajib diisi</p></div>
-            <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
-                <div><label class="block text-sm font-bold text-gray-700 mb-1">Kecamatan</label><input type="text" id="kecamatan-tempat-tinggal" class="form-input-field" placeholder="Contoh: Majasari" required><p class="error-msg">Kecamatan wajib diisi</p></div>
-                <div><label class="block text-sm font-bold text-gray-700 mb-1">Kota/Kabupaten</label><input type="text" id="kabupaten-kota-tempat-tinggal" class="form-input-field" placeholder="Contoh: Kabupaten Pandeglang" required><p class="error-msg">Kota/Kabupaten wajib diisi</p></div>
-            </div>
-        </div>
-
-        <div id="form-step-5" class="form-step hidden space-y-5">
-            <div class="form-section-header"><h3>Kontak</h3></div>
-            <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
-                <div><label class="block text-sm font-bold text-gray-700 mb-1">WhatsApp</label><input type="tel" id="nomor-whatsapp" class="form-input-field" placeholder="08xxx" required><p class="error-msg">Nomor WhatsApp wajib diisi</p></div>
-                <div><label class="block text-sm font-bold text-gray-700 mb-1">Email</label><input type="email" id="email-personal" class="form-input-field" placeholder="nama@email.com" required><p class="error-msg">Format email tidak valid</p></div>
-            </div>
-        </div>
-
-        <div id="form-step-6" class="form-step hidden space-y-5">
-            <div class="form-section-header"><h3>Materi Lomba</h3></div>
-            <div><label class="block text-sm font-bold text-gray-700 mb-1">Deskripsi Singkat Inovasi</label><textarea id="deskripsi" rows="4" class="form-input-field" placeholder="Jelaskan secara singkat..." required></textarea><p class="error-msg">Deskripsi inovasi wajib diisi</p></div>
-            <div class="bg-yellow-50 border-l-4 border-yellow-400 p-4 mt-2"><div class="flex items-start"><div class="flex-shrink-0"><svg class="h-5 w-5 text-yellow-600" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clip-rule="evenodd"/></svg></div><div class="ml-3"><p class="text-sm font-medium text-yellow-800">PENTING: Pastikan Link Video Google Drive diset ke <strong>Public/Anyone with the link</strong>.</p></div></div></div>
-            <div class="mt-4"><label class="block text-sm font-bold text-gray-700 mb-1 flex items-center">Link Video Karya <button type="button" id="btn-info-rubrik" class="ml-2 text-indigo-600 hover:text-indigo-800 focus:outline-none" title="Lihat Kriteria Penilaian"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg></button></label><input type="url" id="tautan-video" class="form-input-field" placeholder="https://drive.google.com/..." required><p class="error-msg">Masukkan Link Google Drive yang valid</p></div>
-            <div id="checkbox-container" class="flex items-center mt-4 p-4 bg-indigo-50 rounded-lg border border-indigo-100 transition-all duration-200"><input id="persetujuan" type="checkbox" class="h-5 w-5 text-indigo-600 border-gray-300 rounded focus:ring-indigo-500"><label for="persetujuan" class="ml-3 block text-sm font-medium text-gray-800">Saya menyatakan data benar & karya ini asli buatan saya, memakai batik PGRI Kusuma Bangsa dalam video.</label></div>
-            <p id="checkbox-error" class="text-xs text-red-600 mt-1 font-bold hidden">Anda wajib menyetujui pernyataan di atas!</p>
-        </div>
-
-        <div class="mt-8 pt-6 border-t border-gray-200 flex justify-between gap-4">
-            <button type="button" id="btn-prev" class="hidden px-6 py-3 rounded-xl border border-gray-300 bg-white text-gray-700 font-bold hover:bg-gray-50 flex items-center shadow-sm" title="Kembali">Kembali</button>
-            <div class="flex-grow"></div>
-            <button type="button" id="btn-next" class="px-8 py-3 rounded-xl bg-indigo-600 text-white font-bold hover:bg-indigo-700 flex items-center shadow-lg transform transition hover:-translate-y-0.5" title="Lanjut">Selanjutnya</button>
-            <button type="submit" id="submit-form-btn" class="hidden px-8 py-3 rounded-xl bg-green-600 text-white font-bold hover:bg-green-700 flex items-center shadow-lg transform transition hover:-translate-y-0.5" title="Kirim">Kirim Pendaftaran</button>
-        </div>
-    </form>
-</div>
-</div>
-</div>
+<div id="view-pendaftar-form" class="hidden"><div id="form-card" class="max-w-3xl mx-auto bg-white rounded-lg shadow-sm border border-gray-200"><div class="p-4 sm:p-6"><button id="btn-kembali" class="mb-4 text-xs font-medium text-gray-500 hover:text-indigo-600 flex items-center" title="Kembali untuk mengubah pilihan kategori"><svg class="w-3 h-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/></svg> Kembali Pilih Kategori</button><div class="text-center mb-8"><h2 id="form-title" class="text-3xl font-bold text-gray-900">Formulir Pendaftaran</h2><p id="form-subtitle" class="text-gray-500 mt-2 text-sm">Mengajukan untuk kategori yang dipilih.</p></div><div id="stepper-container" class="mb-6 px-1"><ol class="flex items-center w-full justify-between relative"><li id="stepper-step-1" class="stepper-step active" title="Langkah 1: Identitas"><span class="stepper-circle">1</span><div class="stepper-line"></div><span class="stepper-label">Identitas</span></li><li id="stepper-step-2" class="stepper-step" title="Langkah 2: Kepegawaian"><span class="stepper-circle">2</span><div class="stepper-line"></div><span class="stepper-label">Kepegawaian</span></li><li id="stepper-step-3" class="stepper-step" title="Langkah 3: Unit Kerja"><span class="stepper-circle">3</span><div class="stepper-line"></div><span class="stepper-label">Unit Kerja</span></li><li id="stepper-step-4" class="stepper-step" title="Langkah 4: Domisili"><span class="stepper-circle">4</span><div class="stepper-line"></div><span class="stepper-label">Domisili</span></li><li id="stepper-step-5" class="stepper-step" title="Langkah 5: Kontak"><span class="stepper-circle">5</span><div class="stepper-line"></div><span class="stepper-label">Kontak</span></li><li id="stepper-step-6" class="stepper-step" title="Langkah 6: Materi Lomba"><span class="stepper-circle">6</span><span class="stepper-label">Materi</span></li></ol></div>
+<form id="form-pendaftaran" class="space-y-6" novalidate>
+<div id="form-step-1" class="form-step space-y-4"><div class="form-section-header"><h3>Identitas Diri</h3></div><div><label class="block text-sm font-semibold text-gray-700 mb-1">Nama Lengkap (disertai gelar)</label><input type="text" id="nama-lengkap" class="form-input-field" placeholder="Contoh: Dr. Budi Santoso, M.Pd." required><p class="error-msg">Nama lengkap wajib diisi</p></div><div class="grid grid-cols-1 sm:grid-cols-2 gap-4"><div><label class="block text-sm font-semibold text-gray-700 mb-1">Tempat Lahir</label><input type="text" id="tempat-lahir" class="form-input-field" placeholder="Contoh: Pandeglang" required><p class="error-msg">Tempat lahir wajib diisi</p></div><div><label class="block text-sm font-semibold text-gray-700 mb-1">Tanggal Lahir</label><input type="date" id="tanggal-lahir" class="form-input-field" required><p class="error-msg">Tanggal lahir wajib diisi</p></div></div><div><label class="block text-sm font-semibold text-gray-700 mb-1">NIK (16 Digit)</label><input type="text" id="nik" pattern="\d{16}" class="form-input-field" placeholder="16 digit angka sesuai KTP" required><p class="error-msg">Masukkan 16 digit NIK yang valid</p></div></div>
+<div id="form-step-2" class="form-step hidden space-y-4"><div class="form-section-header"><h3>Data Kepegawaian</h3></div><div><label class="block text-sm font-semibold text-gray-700 mb-1">Status Kepegawaian</label><select id="status-kepegawaian" class="form-input-field" required><option value="" disabled selected>-- Pilih --</option><option value="ASN PNS">ASN PNS</option><option value="ASN PPPK">ASN PPPK</option><option value="Non ASN">Non ASN</option></select><p class="error-msg">Pilih status kepegawaian</p></div><div class="grid grid-cols-1 sm:grid-cols-2 gap-4"><div><label class="block text-sm font-semibold text-gray-700 mb-1">NIP</label><input type="text" id="nip" class="form-input-field" placeholder="Isi - jika tidak ada" required><p class="error-msg">NIP wajib diisi (isi - jika tidak ada)</p></div><div><label class="block text-sm font-semibold text-gray-700 mb-1">NUPTK</label><input type="text" id="nuptk" class="form-input-field" placeholder="16 digit angka" title="Nomor Unik Pendidik dan Tenaga Kependidikan"></div></div><div class="grid grid-cols-1 sm:grid-cols-2 gap-4"><div><label class="block text-sm font-semibold text-gray-700 mb-1">Pangkat/Gol</label><select id="pangkat-gol" class="form-input-field"><option value="" disabled selected>-- Pilih --</option><option value="Pengatur Muda, II/a">Pengatur Muda, II/a</option><option value="Pengatur Muda Tingkat I, II/b">Pengatur Muda Tingkat I, II/b</option><option value="Pengatur Muda, II/c">Pengatur Muda, II/c</option><option value="Pengatur Muda, II/d">Pengatur Muda, II/d</option><option value="Penata Muda, III/a">Penata Muda, III/a</option><option value="Penata Muda Tingkat I, III/b">Penata Muda Tingkat I, III/b</option><option value="Penata, III/c">Penata, III/c</option><option value="Penata Tingkat I, III/d">Penata Tingkat I, III/d</option><option value="Pembina, IV/a">Pembina, IV/a</option><option value="Pembina Tingkat I, IV/b">Pembina Tingkat I, IV/b</option><option value="Pembina Utama Muda, IV/c">Pembina Utama Muda, IV/c</option><option value="Pembina Utama Madya, IV/d">Pembina Utama Madya, IV/d</option><option value="Pembina Utama, IV/e">Pembina Utama, IV/e</option><option value="-">-</option></select></div><div><label class="block text-sm font-semibold text-gray-700 mb-1">Jabatan Fungsional</label><select id="jabatan-fungsional" class="form-input-field"><option value="" disabled selected>-- Pilih --</option><option value="Guru Ahli Pertama">Guru Ahli Pertama</option><option value="Guru Ahli Muda">Guru Ahli Muda</option><option value="Guru Ahli Madya">Guru Ahli Madya</option><option value="Guru Ahli Utama">Guru Ahli Utama</option><option value="-">-</option></select></div></div></div>
+<div id="form-step-3" class="form-step hidden space-y-4"><div class="form-section-header"><h3>Unit Kerja</h3></div><div class="grid grid-cols-1 sm:grid-cols-2 gap-4"><div><label class="block text-sm font-semibold text-gray-700 mb-1">Jenjang</label><select id="jenjang" class="form-input-field" required><option value="" disabled selected>-- Pilih --</option><option value="PAUD">PAUD</option><option value="SD">SD</option><option value="SMP">SMP</option><option value="SMA/SMK">SMA/SMK</option></select><p class="error-msg">Pilih jenjang pendidikan</p></div><div><label class="block text-sm font-semibold text-gray-700 mb-1">Nama Sekolah</label><input type="text" id="nama-satuan-pendidikan" class="form-input-field" placeholder="Contoh: SDN 1 Pandeglang" required><p class="error-msg">Nama sekolah wajib diisi</p></div></div><div><label class="block text-sm font-semibold text-gray-700 mb-1">Alamat Sekolah</label><input type="text" id="alamat-satuan-pendidikan" class="form-input-field" placeholder="Jl. Raya Labuan Km 5..." required><p class="error-msg">Alamat sekolah wajib diisi</p></div><div><label class="block text-sm font-semibold text-gray-700 mb-1">Kecamatan Tempat Tugas</label><select id="kecamatan-satuan-pendidikan" class="form-input-field" required><option value="" disabled selected>-- Pilih --</option><option value="Angsana">Angsana</option><option value="Banjar">Banjar</option><option value="Bojong">Bojong</option><option value="Cadasari">Cadasari</option><option value="Carita">Carita</option><option value="Cibaliung">Cibaliung</option><option value="Cibitung">Cibitung</option><option value="Cigeulis">Cigeulis</option><option value="Cikedal">Cikedal</option><option value="Cikeusik">Cikeusik</option><option value="Cimanggu">Cimanggu</option><option value="Cimanuk">Cimanuk</option><option value="Cipeucang">Cipeucang</option><option value="Cisata">Cisata</option><option value="Jiput">Jiput</option><option value="Kaduhejo">Kaduhejo</option><option value="Karang Tanjung">Karang Tanjung</option><option value="Koroncong">Koroncong</option><option value="Labuan">Labuan</option><option value="Majasari">Majasari</option><option value="Mandalawangi">Mandalawangi</option><option value="Mekarjaya">Mekarjaya</option><option value="Menes">Menes</option><option value="Munjul">Munjul</option><option value="Pagelaran">Pagelaran</option><option value="Pandeglang">Pandeglang</option><option value="Panimbang">Panimbang</option><option value="Patia">Patia</option><option value="Picung">Picung</option><option value="Pulosari">Pulosari</option><option value="Saketi">Saketi</option><option value="Sindangresmi">Sindangresmi</option><option value="Sobang">Sobang</option><option value="Sukaresmi">Sukaresmi</option><option value="Sumur">Sumur</option></select><p class="error-msg">Pilih kecamatan tempat tugas</p></div></div>
+<div id="form-step-4" class="form-step hidden space-y-4"><div class="form-section-header"><h3>Tempat Tinggal</h3></div><div><label class="block text-sm font-semibold text-gray-700 mb-1">Alamat Rumah</label><input type="text" id="alamat-tempat-tinggal" class="form-input-field" placeholder="Kp. Ciekek..." required><p class="error-msg">Alamat rumah wajib diisi</p></div><div class="grid grid-cols-1 sm:grid-cols-2 gap-4"><div><label class="block text-sm font-semibold text-gray-700 mb-1">Kecamatan</label><input type="text" id="kecamatan-tempat-tinggal" class="form-input-field" placeholder="Contoh: Majasari" required><p class="error-msg">Kecamatan wajib diisi</p></div><div><label class="block text-sm font-semibold text-gray-700 mb-1">Kota/Kabupaten</label><input type="text" id="kabupaten-kota-tempat-tinggal" class="form-input-field" placeholder="Contoh: Kabupaten Pandeglang" required><p class="error-msg">Kota/Kabupaten wajib diisi</p></div></div></div>
+<div id="form-step-5" class="form-step hidden space-y-4"><div class="form-section-header"><h3>Kontak</h3></div><div class="grid grid-cols-1 sm:grid-cols-2 gap-4"><div><label class="block text-sm font-semibold text-gray-700 mb-1">WhatsApp</label><input type="tel" id="nomor-whatsapp" class="form-input-field" placeholder="08xxx" required><p class="error-msg">Nomor WhatsApp wajib diisi</p></div><div><label class="block text-sm font-semibold text-gray-700 mb-1">Email</label><input type="email" id="email-personal" class="form-input-field" placeholder="nama@email.com" required><p class="error-msg">Format email tidak valid</p></div></div></div>
+<div id="form-step-6" class="form-step hidden space-y-4"><div class="form-section-header"><h3>Materi Lomba</h3></div><div><label class="block text-sm font-semibold text-gray-700 mb-1">Deskripsi Singkat Inovasi</label><textarea id="deskripsi" rows="4" class="form-input-field" placeholder="Jelaskan secara singkat..." required></textarea><p class="error-msg">Deskripsi inovasi wajib diisi</p></div><div class="bg-yellow-50 border-l-4 border-yellow-400 p-4 mt-2"><div class="flex items-start"><div class="flex-shrink-0"><svg class="h-5 w-5 text-yellow-600" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clip-rule="evenodd"/></svg></div><div class="ml-3"><p class="text-sm font-medium text-yellow-800">PENTING: Pastikan Link Video Google Drive diset ke <strong>Public/Anyone with the link</strong>.</p></div></div></div><div class="mt-4"><label class="block text-sm font-semibold text-gray-700 mb-1 flex items-center">Link Video Karya <button type="button" id="btn-info-rubrik" class="ml-2 text-indigo-600 hover:text-indigo-800 focus:outline-none" title="Lihat Kriteria Penilaian"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg></button></label><input type="url" id="tautan-video" class="form-input-field" placeholder="https://drive.google.com/..." required><p class="error-msg">Masukkan Link Google Drive yang valid</p></div><div class="flex items-center mt-4 p-3 bg-indigo-50 rounded-lg"><input id="persetujuan" type="checkbox" class="h-5 w-5 text-indigo-600 border-gray-300 rounded focus:ring-indigo-500" required><label for="persetujuan" class="ml-2 block text-sm font-medium text-gray-800">Saya menyatakan data benar & karya ini asli buatan saya, memakai batik PGRI Kusuma Bangsa dalam video.</label></div></div>
+<div class="mt-8 pt-6 border-t flex justify-between gap-4"><button type="button" id="btn-prev" class="hidden px-6 py-2.5 rounded-lg border border-gray-300 bg-white text-gray-700 font-medium hover:bg-gray-50 flex items-center" title="Kembali">Kembali</button><div class="flex-grow"></div><button type="button" id="btn-next" class="px-6 py-2.5 rounded-lg bg-indigo-600 text-white font-medium hover:bg-indigo-700 flex items-center" title="Lanjut">Selanjutnya</button><button type="submit" id="submit-form-btn" class="hidden px-6 py-2.5 rounded-lg bg-green-600 text-white font-bold hover:bg-green-700 flex items-center" title="Kirim">Kirim Pendaftaran</button></div>
+</form></div></div></div></div>
 <div id="main-content-juri" class="main-content-div hidden">
-    <div id="juri-content-wrapper">
+    <div id="juri-content-wrapper" class="hidden">
         <div class="flex flex-wrap justify-between items-center mb-4 gap-3">
             <div class="flex items-center space-x-2 flex-grow sm:flex-grow-0">
                 <div class="relative">
@@ -247,7 +151,7 @@ body{font-family:'Inter',sans-serif;display:flex;flex-direction:column;min-heigh
     </div>
 </div>
 <div id="main-content-admin" class="main-content-div hidden">
-<div id="admin-content-wrapper">
+<div id="admin-content-wrapper" class="hidden">
 <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
 <div class="bg-white p-4 rounded-lg shadow-sm border border-gray-200"><div class="flex justify-between items-center mb-2"><h4 class="font-bold text-gray-700">Juri 1</h4><span id="prog-j1-pct" class="text-xs font-bold text-blue-600 bg-blue-50 px-2 py-1 rounded">0%</span></div><div class="w-full bg-gray-200 rounded-full h-2.5"><div id="prog-j1-bar" class="bg-blue-600 h-2.5 rounded-full progress-bar" style="width: 0%"></div></div><p id="prog-j1-text" class="text-xs text-gray-500 mt-2">0/0 Selesai</p></div>
 <div class="bg-white p-4 rounded-lg shadow-sm border border-gray-200"><div class="flex justify-between items-center mb-2"><h4 class="font-bold text-gray-700">Juri 2</h4><span id="prog-j2-pct" class="text-xs font-bold text-green-600 bg-green-50 px-2 py-1 rounded">0%</span></div><div class="w-full bg-gray-200 rounded-full h-2.5"><div id="prog-j2-bar" class="bg-green-600 h-2.5 rounded-full progress-bar" style="width: 0%"></div></div><p id="prog-j2-text" class="text-xs text-gray-500 mt-2">0/0 Selesai</p></div>
@@ -268,8 +172,7 @@ body{font-family:'Inter',sans-serif;display:flex;flex-direction:column;min-heigh
     <th id="th-peringkat" class="px-4 py-2 text-center font-bold text-gray-500 sortable-header hidden" data-col="rank_calculated">Peringkat <span class="sort-icon"></span></th>
     <th class="px-4 py-2 text-center font-bold text-gray-500">Aksi</th>
 </tr></thead><tbody class="bg-white divide-y divide-gray-200 text-xs sm:text-sm"></tbody></table></div></div></div></div>
-<div id="main-content-superadmin" class="main-content-div hidden"><div id="superadmin-content-wrapper">
-<div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6"><div class="bg-white p-6 rounded-lg shadow-sm border border-gray-200"><h3 class="text-lg font-bold text-gray-900 mb-4 border-b pb-2">Pengaturan Sistem</h3><div class="bg-gray-50 p-4 rounded-lg border border-gray-200 space-y-4"><div><label class="block text-sm font-bold text-gray-700 mb-1">Mode Pendaftaran</label><select id="registration-mode" class="w-full border border-gray-300 rounded-md p-2 text-sm focus:ring-indigo-500"><option value="auto">Otomatis (1-4 Des 2025)</option><option value="open">Paksa Buka (Manual)</option><option value="closed">Paksa Tutup (Manual)</option></select></div><div class="flex items-center justify-between pt-2"><span class="text-xs text-gray-500">Status Aktual saat ini:</span><span id="system-status-text" class="text-xs font-bold text-gray-700">Memeriksa...</span></div><button id="btn-save-config" class="w-full mt-2 bg-indigo-600 text-white text-sm font-bold py-2 rounded hover:bg-indigo-700 transition-colors">Simpan Konfigurasi</button></div></div><div class="bg-white p-6 rounded-lg shadow-sm border border-gray-200"><h3 class="text-lg font-bold text-gray-900 mb-4 border-b pb-2">Tambah Pengguna</h3><form id="create-user-form" class="space-y-3"><div><label class="block text-xs font-semibold text-gray-700 mb-1">Username/Email</label><input type="text" id="new-username" class="w-full border rounded p-2 text-sm" required></div><div><label class="block text-xs font-semibold text-gray-700 mb-1">Password (Hanya Catatan)</label><input type="text" id="new-password" class="w-full border rounded p-2 text-sm"></div><div><label class="block text-xs font-semibold text-gray-700 mb-1">Role</label><select id="new-role" class="w-full border rounded p-2 text-sm"><option value="admin">Admin</option><option value="juri">Juri</option></select></div><div id="kategori-spesifik-container" class="hidden"><label class="block text-xs font-semibold text-gray-700 mb-1">Posisi Juri (Wajib)</label><select id="new-juri-posisi" class="w-full border rounded p-2 text-sm"><option value="" disabled selected>-- Pilih Posisi --</option><option value="juri1">Juri 1</option><option value="juri2">Juri 2</option><option value="juri3">Juri 3</option></select></div><button type="submit" id="btn-create-user" class="w-full bg-blue-600 text-white font-bold py-2 rounded hover:bg-blue-700 text-sm mt-2">+ Tambah User</button></form></div></div><div class="bg-white shadow-sm rounded-lg overflow-hidden border border-gray-200 mb-8"><div class="px-4 py-3 bg-gray-50 border-b border-gray-200 font-bold text-sm text-gray-700 flex justify-between items-center"><span>Daftar Akun</span><button id="btn-export-users" class="text-xs bg-green-600 text-white px-3 py-1 rounded hover:bg-green-700 flex items-center"><svg class="w-3 h-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>Ekspor Akun</button></div><div class="table-container" style="max-height: 400px; overflow-y: auto;"><table class="min-w-full divide-y divide-gray-200 text-sm" id="users-table"><thead class="bg-gray-50 sticky top-0 z-10"><tr><th class="px-2 py-2 text-center font-bold text-gray-700 w-12">No</th><th class="px-2 py-2 text-center font-bold text-gray-700 sortable-header cursor-pointer" data-col="username">Username <span class="sort-icon"></span></th><th class="px-2 py-2 text-center font-bold text-gray-700 sortable-header cursor-pointer" data-col="role">Role <span class="sort-icon"></span></th><th class="px-2 py-2 text-center font-bold text-gray-700">Posisi Juri</th><th class="px-2 py-2 text-center font-bold text-gray-700 w-20">Aksi</th></tr></thead><tbody class="bg-white divide-y divide-gray-200 text-xs text-gray-700"></tbody></table></div></div></div></div>
+<div id="main-content-superadmin" class="main-content-div hidden"><div id="superadmin-content-wrapper" class="hidden"><div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6"><div class="bg-white p-6 rounded-lg shadow-sm border border-gray-200"><h3 class="text-lg font-bold text-gray-900 mb-4 border-b pb-2">Pengaturan Sistem</h3><div class="bg-gray-50 p-4 rounded-lg border border-gray-200 space-y-4"><div><label class="block text-sm font-bold text-gray-700 mb-1">Mode Pendaftaran</label><select id="registration-mode" class="w-full border border-gray-300 rounded-md p-2 text-sm focus:ring-indigo-500"><option value="auto">Otomatis (1-4 Des 2025)</option><option value="open">Paksa Buka (Manual)</option><option value="closed">Paksa Tutup (Manual)</option></select></div><div class="flex items-center justify-between pt-2"><span class="text-xs text-gray-500">Status Aktual saat ini:</span><span id="system-status-text" class="text-xs font-bold text-gray-700">Memeriksa...</span></div><button id="btn-save-config" class="w-full mt-2 bg-indigo-600 text-white text-sm font-bold py-2 rounded hover:bg-indigo-700 transition-colors">Simpan Konfigurasi</button></div></div><div class="bg-white p-6 rounded-lg shadow-sm border border-gray-200"><h3 class="text-lg font-bold text-gray-900 mb-4 border-b pb-2">Tambah Pengguna</h3><form id="create-user-form" class="space-y-3"><div><label class="block text-xs font-semibold text-gray-700 mb-1">Username/Email</label><input type="text" id="new-username" class="w-full border rounded p-2 text-sm" required></div><div><label class="block text-xs font-semibold text-gray-700 mb-1">Password (Hanya Catatan)</label><input type="text" id="new-password" class="w-full border rounded p-2 text-sm"></div><div><label class="block text-xs font-semibold text-gray-700 mb-1">Role</label><select id="new-role" class="w-full border rounded p-2 text-sm"><option value="admin">Admin</option><option value="juri">Juri</option></select></div><div id="kategori-spesifik-container" class="hidden"><label class="block text-xs font-semibold text-gray-700 mb-1">Posisi Juri (Wajib)</label><select id="new-juri-posisi" class="w-full border rounded p-2 text-sm"><option value="" disabled selected>-- Pilih Posisi --</option><option value="juri1">Juri 1</option><option value="juri2">Juri 2</option><option value="juri3">Juri 3</option></select></div><button type="submit" id="btn-create-user" class="w-full bg-blue-600 text-white font-bold py-2 rounded hover:bg-blue-700 text-sm mt-2">+ Tambah User</button></form></div></div><div class="bg-white shadow-sm rounded-lg overflow-hidden border border-gray-200 mb-8"><div class="px-4 py-3 bg-gray-50 border-b border-gray-200 font-bold text-sm text-gray-700 flex justify-between items-center"><span>Daftar Akun</span><button id="btn-export-users" class="text-xs bg-green-600 text-white px-3 py-1 rounded hover:bg-green-700 flex items-center"><svg class="w-3 h-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>Ekspor Akun</button></div><div class="table-container" style="max-height: 400px; overflow-y: auto;"><table class="min-w-full divide-y divide-gray-200 text-sm" id="users-table"><thead class="bg-gray-50 sticky top-0 z-10"><tr><th class="px-2 py-2 text-center font-bold text-gray-700 w-12">No</th><th class="px-2 py-2 text-center font-bold text-gray-700 sortable-header cursor-pointer" data-col="username">Username <span class="sort-icon"></span></th><th class="px-2 py-2 text-center font-bold text-gray-700 sortable-header cursor-pointer" data-col="role">Role <span class="sort-icon"></span></th><th class="px-2 py-2 text-center font-bold text-gray-700">Posisi Juri</th><th class="px-2 py-2 text-center font-bold text-gray-700 w-20">Aksi</th></tr></thead><tbody class="bg-white divide-y divide-gray-200 text-xs text-gray-700"></tbody></table></div></div></div></div>
 <div id="video-choice-modal" class="hidden fixed inset-0 bg-gray-900 bg-opacity-60 flex items-center justify-center z-[85] p-4 backdrop-blur-sm"><div class="bg-white rounded-lg shadow-xl max-w-sm w-full p-6 text-center"><h3 class="text-lg font-bold mb-4">Putar Video</h3><div class="flex flex-col gap-3"><button id="btn-play-popup" class="w-full py-2 bg-indigo-600 text-white rounded hover:bg-indigo-700">Putar di Sini (Popup)</button><button id="btn-play-newtab" class="w-full py-2 border border-gray-300 text-gray-700 rounded hover:bg-gray-50">Buka di Tab Baru</button><button onclick="document.getElementById('video-choice-modal').classList.add('hidden')" class="text-sm text-gray-500 hover:underline mt-2">Batal</button></div></div></div>
 <div id="video-player-modal" class="hidden fixed inset-0 bg-black bg-opacity-90 flex items-center justify-center z-[90] p-4"><div class="w-full max-w-4xl bg-black rounded-lg overflow-hidden relative" style="height:80vh"><button onclick="document.getElementById('video-player-modal').classList.add('hidden')" class="absolute top-4 right-4 text-white hover:text-gray-300 z-50"><svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg></button><iframe id="video-frame" class="w-full h-full" frameborder="0" allow="autoplay; fullscreen"></iframe></div></div>
 <div id="video-warning-modal" class="hidden fixed inset-0 bg-gray-900 bg-opacity-60 flex items-center justify-center z-[80] p-4 backdrop-blur-sm"><div class="bg-white rounded-lg shadow-xl max-w-lg w-full overflow-hidden transform transition-all"><div class="p-6"><div class="flex items-start"><div class="flex-shrink-0 flex items-center justify-center h-12 w-12 rounded-full bg-yellow-100"><svg class="h-6 w-6 text-yellow-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg></div><div class="ml-4"><h3 class="text-lg font-bold text-gray-900">PERHATIAN PENTING</h3><div class="mt-2 text-sm text-gray-600 space-y-2"><p>Anda harus mengunggah video karya Anda ke Google Drive pribadi dan menyalin tautan (link) ke dalam formulir.</p><p class="font-medium bg-yellow-50 p-2 rounded border border-yellow-200 text-yellow-800">Pastikan SEBELUM MENGISI tautan, akses tautan video Anda sudah disetel ke "Siapa saja yang memiliki tautan dapat melihat" (Anyone with the link).</p></div></div></div></div><div class="bg-gray-50 px-6 py-3 sm:flex sm:flex-row-reverse"><button onclick="closeVideoModal(true)" class="w-full inline-flex justify-center rounded-md border border-transparent px-4 py-2 bg-indigo-600 text-base font-medium text-white hover:bg-indigo-700 focus:outline-none sm:ml-3 sm:w-auto sm:text-sm">OK, saya mengerti</button><button onclick="closeVideoModal(false)" class="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm">Batal</button></div></div></div>
@@ -280,7 +183,7 @@ body{font-family:'Inter',sans-serif;display:flex;flex-direction:column;min-heigh
 </div>
 <div class="flex justify-end items-center gap-2"><button onclick="document.getElementById('score-modal').classList.add('hidden')" class="px-4 py-2 text-sm border rounded hover:bg-gray-50">Batal</button><button id="save-score-btn" class="px-4 py-2 bg-green-600 text-white text-sm font-bold rounded hover:bg-green-700">Simpan Penilaian</button></div></div></div>
 <div id="info-modal" class="hidden fixed inset-0 bg-gray-900 bg-opacity-60 flex items-center justify-center z-[85] p-4 backdrop-blur-sm"><div class="bg-white rounded-lg shadow-xl max-w-md w-full p-6"><div class="flex justify-between items-center mb-4"><h3 class="text-lg font-bold text-gray-900">Kriteria Penilaian</h3><button onclick="document.getElementById('info-modal').classList.add('hidden')" class="text-gray-400 hover:text-gray-600"><svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg></button></div><div id="info-modal-content" class="space-y-3 text-sm text-gray-600"></div><div class="mt-6 text-center"><button onclick="document.getElementById('info-modal').classList.add('hidden')" class="px-4 py-2 bg-indigo-600 text-white rounded hover:bg-indigo-700 text-sm font-medium">Tutup</button></div></div></div>
-<div id="success-modal" class="hidden fixed inset-0 bg-gray-900 bg-opacity-50 flex items-center justify-center z-[70] p-4"><div class="bg-white rounded-lg p-6 text-center shadow-lg max-w-sm w-full"><div class="mx-auto flex items-center justify-center h-16 w-16 rounded-full bg-green-100 mb-4"><svg class="h-8 w-8 text-green-600" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg></div><h3 class="text-xl font-bold text-gray-900 mb-2">Pendaftaran Berhasil!</h3><p class="text-sm text-gray-600 mb-4">Data Anda telah tersimpan. Bukti pendaftaran (PDF) telah diunduh otomatis ke perangkat Anda.</p><button onclick="location.reload()" class="mt-4 w-full px-4 py-2 bg-indigo-600 text-white text-sm font-bold rounded-lg hover:bg-indigo-700">Tutup & Kembali</button></div></div>
+<div id="success-modal" class="hidden fixed inset-0 bg-gray-900 bg-opacity-50 flex items-center justify-center z-[70] p-4"><div class="bg-white rounded-lg p-6 text-center shadow-lg max-w-xs w-full"><div class="mx-auto flex items-center justify-center h-12 w-12 rounded-full bg-green-100 mb-4"><svg class="h-6 w-6 text-green-600" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg></div><h3 class="text-lg font-bold text-gray-900 mb-2">Pendaftaran Berhasil!</h3><p class="text-sm text-gray-600 mb-4">Bukti pendaftaran (PDF) akan terunduh otomatis.</p><button onclick="location.reload()" class="mt-4 w-full px-4 py-2 bg-indigo-600 text-white text-sm rounded">Tutup</button></div></div>
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
 import { getAuth, signInAnonymously, signInWithEmailAndPassword, signOut } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
@@ -358,6 +261,7 @@ async function initApp(){
         isLoggedIn=true; 
         currentRole=s.role; 
         currentJuriPosisi=s.posisi||null; 
+        // FIX: Jika login tapi posisi null (versi lama), coba fetch lagi
         if(currentRole === 'juri' && !currentJuriPosisi) {
             try {
                 const q = query(collection(db, "users"), where("email", "==", s.email));
@@ -393,15 +297,17 @@ document.getElementById('juri-search').addEventListener('input', (e)=>{ juriSear
 // SUPER ADMIN JURI SELECTOR LOGIC
 document.getElementById('impersonate-juri').addEventListener('change', (e) => {
     currentJuriPosisi = e.target.value;
-    renderJuriTable(submissionData); 
+    renderJuriTable(submissionData); // Re-render table with new perspective
     showToast(`Mode: ${e.target.options[e.target.selectedIndex].text}`, 'success');
 });
 
+// EXCEL EXPORT UPDATE
 document.getElementById('btn-export').addEventListener('click', () => {
     if (submissionData.length === 0) { showToast("Belum ada data.", 'warning'); return; }
 
     const wb = XLSX.utils.book_new();
 
+    // Helper to calculate ranks per category or globally
     const calculateRanks = (data) => {
         const sorted = [...data].sort((a, b) => {
              const nA = Number(a.totalNilai) || 0;
@@ -415,6 +321,7 @@ document.getElementById('btn-export').addEventListener('click', () => {
     };
 
     const formatDataForSheet = (data, rankMap) => {
+        // Sort by rank for export readability
         const sorted = [...data].sort((a, b) => {
             const rA = rankMap.get(a.id) || 9999;
             const rB = rankMap.get(b.id) || 9999;
@@ -426,10 +333,10 @@ document.getElementById('btn-export').addEventListener('click', () => {
              const total = item.totalNilai || 0;
              const avg = (total / 3).toFixed(2);
              const rank = rankMap.get(item.id);
-             const note = item.catatan || ""; 
+             const note = item.catatan || ""; // Generic note
 
              return {
-                "No.": rank,
+                "No.": rank, // Using Rank as No. effectively or index + 1
                 "Waktu Daftar": item.timestamp ? new Date(item.timestamp.seconds * 1000).toLocaleString('id-ID') : '-',
                 "Kategori Lomba": item.kategori,
                 "Nama Lengkap": item.nama,
@@ -451,7 +358,9 @@ document.getElementById('btn-export').addEventListener('click', () => {
                 "Kota/Kab Rumah": item.kabKotaRumah || '-',
                 "Deskripsi Inovasi": item.deskripsi || '-',
                 "Link Video": item.videoUrl,
-                "Catatan Juri": note,
+                "Catatan Juri 1": note, // Placeholder/Shared note currently
+                "Catatan Juri 2": note, // Placeholder/Shared note currently
+                "Catatan Juri 3": note, // Placeholder/Shared note currently
                 "Nilai Juri 1": scores.juri1 || 0,
                 "Nilai Juri 2": scores.juri2 || 0,
                 "Nilai Juri 3": scores.juri3 || 0,
@@ -462,6 +371,9 @@ document.getElementById('btn-export').addEventListener('click', () => {
         });
     };
 
+    // 1. Sheet Rekap Lengkap
+    // Calculate global ranks? Or separate ranks per category in one big sheet? Usually rekap lengkap just dumps data.
+    // Let's calculate ranks per category even in the main sheet to be useful.
     const globalRankMap = new Map();
     KATEGORI_LIST.forEach(cat => {
         const catData = submissionData.filter(d => d.kategori === cat);
@@ -470,11 +382,13 @@ document.getElementById('btn-export').addEventListener('click', () => {
     });
     
     const allData = formatDataForSheet(submissionData, globalRankMap);
+    // Re-sort all data by category then rank
     allData.sort((a,b) => a["Kategori Lomba"].localeCompare(b["Kategori Lomba"]) || a["Peringkat"] - b["Peringkat"]);
 
     const wsAll = XLSX.utils.json_to_sheet(allData);
     XLSX.utils.book_append_sheet(wb, wsAll, "REKAP LENGKAP");
 
+    // 2. Sheet Per Kategori
     KATEGORI_LIST.forEach(cat => {
         const catData = submissionData.filter(d => d.kategori === cat);
         const catRanks = calculateRanks(catData);
@@ -486,6 +400,7 @@ document.getElementById('btn-export').addEventListener('click', () => {
         XLSX.utils.book_append_sheet(wb, wsCat, sheetName);
     });
 
+    // Filename: PGRI Award 2025_Rekap yyyymmdd hh:mm
     const now = new Date();
     const yyyy = now.getFullYear();
     const mm = String(now.getMonth() + 1).padStart(2, '0');
@@ -504,32 +419,42 @@ function renderAdminTable(data) {
     const thPeringkat = document.getElementById('th-peringkat');
     if(!tbody) return; 
 
-    let filteredData = [...data]; 
+    // 1. Filter Data
+    let filteredData = [...data]; // Copy data
     if (currentAdminFilter !== 'all') filteredData = data.filter(item => item.kategori === currentAdminFilter); 
     if (adminSearch) filteredData = filteredData.filter(item => (item.nama && item.nama.toLowerCase().includes(adminSearch)) || (item.sekolah && item.sekolah.toLowerCase().includes(adminSearch))); 
     document.getElementById('admin-total-count').innerText = filteredData.length; 
     
+    // 2. Hitung Peringkat (Hanya jika Kategori Spesifik dipilih)
     if (currentAdminFilter !== 'all') {
         thPeringkat.classList.remove('hidden');
+        // Buat salinan untuk perhitungan ranking (berdasarkan nilai tertinggi)
         const sortedForRank = [...filteredData].sort((a, b) => {
             const sA = Number(a.totalNilai) || 0;
             const sB = Number(b.totalNilai) || 0;
             if (sB !== sA) return sB - sA;
-            return (a.timestamp?.seconds || 0) - (b.timestamp?.seconds || 0); 
+            return (a.timestamp?.seconds || 0) - (b.timestamp?.seconds || 0); // Jika seri, yang daftar duluan menang
         });
+        
+        // Map ID ke Rank
         const rankMap = new Map();
         sortedForRank.forEach((item, idx) => rankMap.set(item.id, idx + 1));
+
+        // Inject rank ke filteredData agar bisa disortir/ditampilkan
         filteredData = filteredData.map(item => ({...item, rank_calculated: rankMap.get(item.id)}));
     } else {
         thPeringkat.classList.add('hidden');
+        // Bersihkan rank jika ada sisa
         filteredData = filteredData.map(item => ({...item, rank_calculated: null}));
     }
 
+    // 3. Sorting Tampilan (Default: Timestamp/Waktu Daftar)
     filteredData = sortData(filteredData, adminSort.col, adminSort.dir); 
     updateAdminDashboard(data);
 
     if(filteredData.length === 0) { tbody.innerHTML = '<tr><td colspan="12" class="px-4 py-8 text-center text-gray-500 italic">Belum ada data pendaftar.</td></tr>'; return; }
     
+    // 4. Render HTML
     tbody.innerHTML = filteredData.map((item, index) => { 
         const scores = item.penilaian || { juri1:0, juri2:0, juri3:0 }; 
         const total = item.totalNilai || 0; 
@@ -538,6 +463,7 @@ function renderAdminTable(data) {
         const statusIcon = complete ? '<span title="Lengkap">✅</span>' : '<span title="Belum Lengkap">⚠️</span>';
         const dateStr = item.timestamp ? new Date(item.timestamp.seconds * 1000).toLocaleString('id-ID', {day:'numeric', month:'short', hour:'2-digit', minute:'2-digit'}) : '-';
         
+        // Logika Tampilan Sel Peringkat
         let rankCell = '';
         if (currentAdminFilter !== 'all' && item.rank_calculated) {
             let rankColor = 'text-gray-700';
@@ -546,8 +472,10 @@ function renderAdminTable(data) {
             else if(item.rank_calculated === 3) rankColor = 'text-orange-600 font-bold';
             rankCell = `<td class="px-4 py-2 text-center ${rankColor}">#${item.rank_calculated}</td>`;
         } else {
-            rankCell = `<td class="hidden"></td>`; 
+            rankCell = `<td class="hidden"></td>`; // Hidden cell to maintain structure if needed, or controlled by th visibility
         }
+
+        // Tampilkan Cell Peringkat hanya jika header tidak hidden (agar kolom pas)
         const isRankVisible = currentAdminFilter !== 'all';
         const rankCellHtml = isRankVisible ? rankCell : '';
 
@@ -764,6 +692,9 @@ window.selectRubricCard = (card, aspectIdx, val, kategori) => {
     document.getElementById('calculated-score').innerText = count === rData.length ? Math.round((total/max)*100) : 0; 
     
     const notesField = document.getElementById('score-notes');
+    // ALWAYS regenerate unless manually edited to blank which is rare, 
+    // prioritizes adaptiveness over manual edits if conflicts arise, but respects edit flag if robust.
+    // Given user request "deskripsi mengikuti berubah", we force update if it's not manually flagged.
     if(notesField.dataset.manualEdit !== "true" || notesField.value.trim() === "") {
         notesField.value = window.generateAutoScoreNotes(kategori, currentSelections);
     }
@@ -875,13 +806,11 @@ function switchTabVisuals(tab) {
     document.querySelector(`.main-tab-btn[data-tab="${tab}"]`)?.classList.add('active');
     document.querySelectorAll('.main-content-div').forEach(d => d.classList.add('hidden'));
     document.getElementById(`main-content-${tab}`).classList.remove('hidden');
-    
-    // HAPUSKAN SEMUA KELAS HIDDEN PADA WRAPPER
-    if(tab === 'juri') renderJuriTable(submissionData); 
-    if(tab === 'admin') renderAdminTable(submissionData); 
-    if(tab === 'superadmin') renderUserManagementTable(userData); 
-    if(tab === 'dashboard' && isLoggedIn) initChart(submissionData);
-    if(tab === 'form') checkRegistrationWindow(); 
+    if(tab === 'juri') { document.getElementById('juri-content-wrapper').classList.remove('hidden'); renderJuriTable(submissionData); }
+    if(tab === 'admin') { document.getElementById('admin-content-wrapper').classList.remove('hidden'); renderAdminTable(submissionData); }
+    if(tab === 'superadmin') { document.getElementById('superadmin-content-wrapper').classList.remove('hidden'); renderUserManagementTable(userData); }
+    if(tab === 'dashboard' && isLoggedIn) { initChart(submissionData); }
+    if(tab === 'form') { checkRegistrationWindow(); }
 }
 function updateLoginUI() { 
     const r = currentRole ? currentRole.toUpperCase() : 'PENDAFTAR'; 
@@ -927,136 +856,9 @@ showToast(`Login: ${currentRole.toUpperCase()}`, 'success'); } catch (error) { d
 document.getElementById('login-btn-header').addEventListener('click', () => window.showLoginModal()); 
 document.getElementById('login-btn-action').addEventListener('click', window.handleLogin);
 document.getElementById('logout-btn').addEventListener('click', async () => { await signOut(auth); localStorage.removeItem('pgri_user_session'); location.reload(); });
-// STRICT VALIDATION ON SUBMIT
-document.getElementById('form-pendaftaran').addEventListener('submit', async (e) => { 
-    e.preventDefault(); 
-    if(!isRegistrationOpen) { showToast("Pendaftaran Tutup", 'error'); return; } 
-    
-    // CHECKBOX VALIDATION - SUPER STRICT
-    const persetujuan = document.getElementById('persetujuan');
-    if (!persetujuan.checked) {
-        // ANIMASI ERROR
-        const container = document.getElementById('checkbox-container');
-        const errMsg = document.getElementById('checkbox-error');
-        
-        container.classList.add('ring-2', 'ring-red-500', 'bg-red-50', 'animate-shake');
-        errMsg.classList.remove('hidden');
-        
-        // Scroll to element
-        container.scrollIntoView({behavior: 'smooth', block: 'center'});
-        showToast("ANDA HARUS MENYETUJUI PERNYATAAN!", 'error');
-        
-        setTimeout(() => {
-            container.classList.remove('animate-shake');
-        }, 500);
-        
-        return; // STOP PROCESS
-    } else {
-        // Clear error styles
-        document.getElementById('checkbox-container').classList.remove('ring-2', 'ring-red-500', 'bg-red-50');
-        document.getElementById('checkbox-error').classList.add('hidden');
-    }
-
-    // Final strict check on all fields in form
-    const allInputs = document.querySelectorAll('#form-pendaftaran input[required], #form-pendaftaran select[required], #form-pendaftaran textarea[required]');
-    let isValid = true;
-    let firstInvalid = null;
-    allInputs.forEach(input => {
-        if(!input.value.trim()) {
-            isValid = false;
-            input.classList.add('input-error');
-            if(!firstInvalid) firstInvalid = input;
-        } else {
-            input.classList.remove('input-error');
-        }
-    });
-
-    if(!isValid) {
-        showToast("Mohon lengkapi semua data yang bertanda merah!", 'warning');
-        if(firstInvalid) firstInvalid.scrollIntoView({behavior: 'smooth', block: 'center'});
-        return;
-    }
-
-    const btn = document.getElementById('submit-form-btn'); 
-    btn.innerText = "Mengirim..."; 
-    btn.disabled = true; 
-    
-    try { 
-        const data = { kategori: currentKategori, nama: document.getElementById('nama-lengkap').value, tempatLahir: document.getElementById('tempat-lahir').value, tglLahir: document.getElementById('tanggal-lahir').value, nik: document.getElementById('nik').value, status: document.getElementById('status-kepegawaian').value, nip: document.getElementById('nip').value, nuptk: document.getElementById('nuptk').value, pangkatGol: document.getElementById('pangkat-gol').value, jabatan: document.getElementById('jabatan-fungsional').value, jenjang: document.getElementById('jenjang').value, sekolah: document.getElementById('nama-satuan-pendidikan').value, alamatSekolah: document.getElementById('alamat-satuan-pendidikan').value, kecSekolah: document.getElementById('kecamatan-satuan-pendidikan').value, alamatRumah: document.getElementById('alamat-tempat-tinggal').value, kecRumah: document.getElementById('kecamatan-tempat-tinggal').value, kabKotaRumah: document.getElementById('kabupaten-kota-tempat-tinggal').value, wa: document.getElementById('nomor-whatsapp').value, email: document.getElementById('email-personal').value, deskripsi: document.getElementById('deskripsi').value, videoUrl: document.getElementById('tautan-video').value, timestamp: serverTimestamp(), penilaian: { juri1: 0, juri2: 0, juri3: 0 }, totalNilai: 0 }; 
-        
-        await addDoc(collection(db, "submissions"), data); 
-        
-        // GENERATE PDF
-        const { jsPDF } = window.jspdf;
-        const doc = new jsPDF();
-        
-        doc.setFont("helvetica", "bold");
-        doc.setFontSize(16);
-        doc.text("TANDA TERIMA PENDAFTARAN", 105, 20, null, null, "center");
-        doc.text("PGRI PANDEGLANG AWARD 2025", 105, 30, null, null, "center");
-        
-        doc.setLineWidth(0.5);
-        doc.line(20, 35, 190, 35);
-        
-        doc.setFontSize(12);
-        doc.setFont("helvetica", "normal");
-        doc.text(`Nomor Registrasi: ${Date.now().toString().slice(-6)}`, 20, 50);
-        doc.text(`Tanggal: ${new Date().toLocaleString('id-ID')}`, 20, 58);
-        
-        doc.setFont("helvetica", "bold");
-        doc.text("DATA PESERTA", 20, 70);
-        doc.setFont("helvetica", "normal");
-        doc.text(`Nama Lengkap: ${data.nama}`, 20, 80);
-        doc.text(`NIK: ${data.nik}`, 20, 88);
-        doc.text(`Instansi: ${data.sekolah}`, 20, 96);
-        doc.text(`Kategori Lomba: ${data.kategori}`, 20, 104);
-        doc.text(`No. WhatsApp: ${data.wa}`, 20, 112);
-        
-        doc.setFontSize(10);
-        doc.text("Simpan dokumen ini sebagai bukti pendaftaran yang sah.", 20, 130);
-        doc.text("Panitia PGRI Pandeglang Award 2025", 20, 135);
-        
-        doc.save(`Bukti_Pendaftaran_${data.nama.replace(/\s+/g, '_')}.pdf`);
-        
-        clearDraft(); 
-        document.getElementById('success-modal').classList.remove('hidden'); 
-    } catch (error) { 
-        showToast("Gagal mengirim pendaftaran. Coba lagi.", 'error'); 
-    } finally { 
-        btn.innerText = "Kirim Pendaftaran"; 
-        btn.disabled = false; 
-    } 
-});
+document.getElementById('form-pendaftaran').addEventListener('submit', async (e) => { e.preventDefault(); if(!isRegistrationOpen) { showToast("Tutup", 'error'); return; } const btn = document.getElementById('submit-form-btn'); btn.innerText = "..."; btn.disabled = true; try { const data = { kategori: currentKategori, nama: document.getElementById('nama-lengkap').value, tempatLahir: document.getElementById('tempat-lahir').value, tglLahir: document.getElementById('tanggal-lahir').value, nik: document.getElementById('nik').value, status: document.getElementById('status-kepegawaian').value, nip: document.getElementById('nip').value, nuptk: document.getElementById('nuptk').value, pangkatGol: document.getElementById('pangkat-gol').value, jabatan: document.getElementById('jabatan-fungsional').value, jenjang: document.getElementById('jenjang').value, sekolah: document.getElementById('nama-satuan-pendidikan').value, alamatSekolah: document.getElementById('alamat-satuan-pendidikan').value, kecSekolah: document.getElementById('kecamatan-satuan-pendidikan').value, alamatRumah: document.getElementById('alamat-tempat-tinggal').value, kecRumah: document.getElementById('kecamatan-tempat-tinggal').value, kabKotaRumah: document.getElementById('kabupaten-kota-tempat-tinggal').value, wa: document.getElementById('nomor-whatsapp').value, email: document.getElementById('email-personal').value, deskripsi: document.getElementById('deskripsi').value, videoUrl: document.getElementById('tautan-video').value, timestamp: serverTimestamp(), penilaian: { juri1: 0, juri2: 0, juri3: 0 }, totalNilai: 0 }; await addDoc(collection(db, "submissions"), data); clearDraft(); document.getElementById('success-modal').classList.remove('hidden'); } catch (error) { showToast("Gagal", 'error'); } finally { btn.innerText = "Kirim"; btn.disabled = false; } });
 const btnNext = document.getElementById('btn-next'); const btnPrev = document.getElementById('btn-prev'); let step = 1;
-
-// STRICT VALIDATION ON NEXT
-btnNext.addEventListener('click', () => { 
-    const currentDiv = document.getElementById(`form-step-${step}`); 
-    const inputs = currentDiv.querySelectorAll('input[required], select[required], textarea[required]');
-    let stepValid = true;
-    
-    inputs.forEach(input => {
-        if (!input.value.trim() || !input.checkValidity()) {
-            stepValid = false;
-            input.classList.add('input-error');
-        } else {
-            input.classList.remove('input-error');
-        }
-    });
-
-    if(!stepValid) { 
-        showToast("Mohon lengkapi isian yang berwarna merah!", 'warning'); 
-        return; 
-    } 
-    
-    document.getElementById(`form-step-${step}`).classList.add('hidden'); 
-    document.getElementById(`stepper-step-${step}`).classList.remove('active'); 
-    document.getElementById(`stepper-step-${step}`).classList.add('completed'); 
-    step++; 
-    document.getElementById(`form-step-${step}`).classList.remove('hidden'); 
-    document.getElementById(`stepper-step-${step}`).classList.add('active'); 
-    updateBtn(); 
-});
+btnNext.addEventListener('click', () => { const currentDiv = document.getElementById(`form-step-${step}`); if(currentDiv.querySelectorAll(':invalid').length > 0) { showToast("Lengkapi data!", 'warning'); return; } document.getElementById(`form-step-${step}`).classList.add('hidden'); document.getElementById(`stepper-step-${step}`).classList.remove('active'); document.getElementById(`stepper-step-${step}`).classList.add('completed'); step++; document.getElementById(`form-step-${step}`).classList.remove('hidden'); document.getElementById(`stepper-step-${step}`).classList.add('active'); updateBtn(); });
 btnPrev.addEventListener('click', () => { document.getElementById(`form-step-${step}`).classList.add('hidden'); document.getElementById(`stepper-step-${step}`).classList.remove('active'); step--; document.getElementById(`form-step-${step}`).classList.remove('hidden'); document.getElementById(`stepper-step-${step}`).classList.remove('completed'); document.getElementById(`stepper-step-${step}`).classList.add('active'); updateBtn(); });
 function updateBtn() { btnPrev.classList.toggle('hidden', step === 1); btnNext.classList.toggle('hidden', step === 6); document.getElementById('submit-form-btn').classList.toggle('hidden', step !== 6); }
 document.getElementById('btn-hero-daftar').addEventListener('click', ()=>{ switchTabVisuals('form'); });
