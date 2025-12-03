@@ -8,8 +8,8 @@
 <style>
 body{font-family:'Inter',sans-serif;display:flex;flex-direction:column;min-height:100vh;background-color:#f9fafb}main{flex:1}
 ::-webkit-scrollbar{width:6px;height:6px}::-webkit-scrollbar-track{background:#f1f1f1}::-webkit-scrollbar-thumb{background:#c4c4c4;border-radius:3px}::-webkit-scrollbar-thumb:hover{background:#a1a1a1}
-.d-none { display: none !important; } 
-.hidden { display: none; } 
+.d-none { display: none !important; }
+.hidden { display: none; }
 .main-tab-btn{border-bottom-width:2px;border-color:transparent;transition:all .2s;color:#6b7280}
 .main-tab-btn.active{border-color:#4f46e5;color:#4f46e5;background-color:#eef2ff}.main-tab-btn:hover:not(.active){border-color:#d1d5db;color:#374151}
 .form-section-header{background-color:#eff6ff;border-left:4px solid #4f46e5;padding:.75rem 1rem;margin:1.5rem 0 1rem 0;border-radius:.25rem;display:flex;align-items:center}
@@ -45,13 +45,13 @@ body{font-family:'Inter',sans-serif;display:flex;flex-direction:column;min-heigh
 .aspect-header { font-size: 1rem; font-weight: 800; color: #111827; margin-bottom: 0.75rem; border-bottom: 1px dashed #e5e7eb; padding-bottom: 0.5rem; }
 .rubric-grid { display: grid; grid-template-columns: 1fr; gap: 0.75rem; }
 @media (min-width: 640px) { .rubric-grid { grid-template-columns: repeat(2, 1fr); } }
-.rubric-full-card { 
-    border: 1px solid #d1d5db; border-radius: 0.5rem; padding: 0.75rem; cursor: pointer; transition: all 0.2s ease; 
-    display: flex; flex-direction: column; height: 100%; background-color: #f9fafb;
+.rubric-full-card {
+border: 1px solid #d1d5db; border-radius: 0.5rem; padding: 0.75rem; cursor: pointer; transition: all 0.2s ease;
+display: flex; flex-direction: column; height: 100%; background-color: #f9fafb;
 }
 .rubric-full-card:hover { border-color: #6366f1; background-color: #eef2ff; }
-.rubric-full-card.selected { 
-    border-color: #4f46e5; background-color: #eef2ff; ring: 2px solid #4f46e5; box-shadow: 0 4px 6px -1px rgba(79, 70, 229, 0.1);
+.rubric-full-card.selected {
+border-color: #4f46e5; background-color: #eef2ff; ring: 2px solid #4f46e5; box-shadow: 0 4px 6px -1px rgba(79, 70, 229, 0.1);
 }
 .rubric-card-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem; }
 .rubric-level-badge { font-size: 0.7rem; font-weight: 800; text-transform: uppercase; padding: 2px 8px; border-radius: 9999px; background-color: #e5e7eb; color: #374151; }
@@ -66,6 +66,92 @@ body{font-family:'Inter',sans-serif;display:flex;flex-direction:column;min-heigh
 .category-card:hover { transform: translateY(-5px); box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05); }
 .progress-bar { transition: width 0.5s ease-in-out; }
 </style>
+<style>
+.stepper-circle{
+width:3.2rem!important;
+height:3.2rem!important;
+border-radius:9999px;
+background-color:#eef2ff;
+color:#6b7280;
+display:flex;
+align-items:center;
+justify-content:center;
+font-weight:700;
+font-size:1rem;
+transition:all .25s ease;
+border:3px solid rgba(243,244,246,1);
+}
+.stepper-step .stepper-label{ margin-top:0.6rem; font-weight:700; color:#6b7280; font-size:0.875rem; }
+.stepper-step.active .stepper-circle{
+background-color:#ffffff!important;
+color:#4f46e5!important;
+border-color:#4f46e5!important;
+box-shadow: 0 6px 18px rgba(79,70,229,0.08);
+transform: translateY(-6px);
+}
+.stepper-step.completed .stepper-circle{
+background-color:#4f46e5!important;
+color:#ffffff!important;
+border-color:#4f46e5!important;
+}
+.stepper-line { height:4px; background-color:#eceff8; margin:0 .5rem; }
+#form-title{ font-size:2.25rem; line-height:1.05; }
+#form-subtitle{ font-size:1.05rem; color:#6b7280; margin-top:0.25rem; }
+</style>
+<!-- FIREBASE (compat) SDKs for Firestore write (injected) -->
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+<script>
+// Firestore config injected by assistant (from user-provided)
+window.FIREBASE_CONFIG = {
+apiKey: "AIzaSyD2sIYPwmaFjElNiiaJNSqCooEzsVOX62I",
+authDomain: "pgri-award-2025.firebaseapp.com",
+projectId: "pgri-award-2025",
+storageBucket: "pgri-award-2025.firebasestorage.app",
+messagingSenderId: "550141365998",
+appId: "1:550141365998:web:a936cd15f2951497e32dff"
+};
+try {
+if(!window.firebase || !window.firebase.apps || window.firebase.apps.length === 0){
+firebase.initializeApp(window.FIREBASE_CONFIG);
+window._PGRI_FIRESTORE = firebase.firestore();
+console.log('Firebase initialized (compat).');
+} else {
+console.log('Firebase already initialized.');
+window._PGRI_FIRESTORE = firebase.firestore();
+}
+} catch(e){
+console.warn('Firebase init failed', e);
+}
+</script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+<script>
+// Perform anonymous sign-in so that writes allowed by Firestore rules (isSignedIn() => request.auth != null).
+(function(){
+try {
+if(window.firebase && firebase.auth){
+// sign in anonymously if not already signed in
+firebase.auth().onAuthStateChanged(function(user){
+if(user){
+console.log('Firebase auth state: signed in. uid=', user.uid, 'isAnonymous=', user.isAnonymous);
+window._PGRI_FIREBASE_USER = user;
+} else {
+firebase.auth().signInAnonymously().then(function(cred){
+console.log('Signed in anonymously:', cred && cred.user && cred.user.uid);
+window._PGRI_FIREBASE_USER = cred.user;
+}).catch(function(err){
+console.warn('Anonymous sign-in failed', err);
+});
+}
+});
+} else {
+console.warn('firebase or firebase.auth not available for anonymous sign-in.');
+}
+} catch(e){
+console.warn('Anonymous sign-in exception', e);
+}
+})();
+</script>
 </head>
 <body class="text-gray-800 antialiased text-sm">
 <div id="toast-container"></div>
@@ -73,11 +159,11 @@ body{font-family:'Inter',sans-serif;display:flex;flex-direction:column;min-heigh
 <header class="bg-white shadow-sm sticky top-0 z-40 border-b border-gray-200"><div class="container mx-auto px-4 lg:px-6"><div class="flex justify-between items-center h-20">
 <div class="flex items-center space-x-4 overflow-hidden"><div class="w-14 h-14 rounded-full overflow-hidden flex-shrink-0 bg-white cursor-help" title="Logo Resmi PGRI Pandeglang"><img class="w-full h-full object-contain" src="https://raw.githubusercontent.com/edibrata/image/main/Logo%20PGRI%20Official.png" alt="Logo"></div><div class="min-w-0 flex-1 flex flex-col justify-center"><h1 class="text-xl sm:text-2xl font-bold text-gray-900 leading-tight truncate">PGRI PANDEGLANG AWARD 2025</h1><p class="text-sm font-semibold text-indigo-600 truncate">Anugerah Guru BerAKHLAK</p><p class="text-xs text-gray-500 truncate mt-0.5">Dalam Rangka Memperingati Hari Guru Nasional dan HUT Ke-80 PGRI Tahun 2025</p></div></div>
 <div class="flex items-center gap-2 flex-shrink-0 ml-4">
-    <button id="login-btn-header" class="text-sm font-bold text-white bg-indigo-600 hover:bg-indigo-700 px-4 py-2 rounded-lg transition-colors shadow-sm flex items-center"><svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1"></path></svg>Login Panitia</button>
-    <div id="user-info-header" class="hidden flex items-center gap-3">
-        <div class="text-right hidden sm:block"><p class="text-xs text-gray-500">Anda masuk sebagai:</p><p id="login-role-display" class="text-sm font-bold text-indigo-600">Pendaftar</p></div>
-        <button id="logout-btn" title="Keluar" class="text-xs font-medium text-white bg-red-600 hover:bg-red-700 px-3 py-2 rounded-lg transition-colors flex items-center"><svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/></svg></button>
-    </div>
+<button id="login-btn-header" class="text-sm font-bold text-white bg-indigo-600 hover:bg-indigo-700 px-4 py-2 rounded-lg transition-colors shadow-sm flex items-center"><svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1"></path></svg>Login Panitia</button>
+<div id="user-info-header" class="hidden flex items-center gap-3">
+<div class="text-right hidden sm:block"><p class="text-xs text-gray-500">Anda masuk sebagai:</p><p id="login-role-display" class="text-sm font-bold text-indigo-600">Pendaftar</p></div>
+<button id="logout-btn" title="Keluar" class="text-xs font-medium text-white bg-red-600 hover:bg-red-700 px-3 py-2 rounded-lg transition-colors flex items-center"><svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/></svg></button>
+</div>
 </div>
 </div></div></header>
 <main class="container mx-auto p-3 sm:p-4 lg:p-6 max-w-7xl">
@@ -89,8 +175,8 @@ body{font-family:'Inter',sans-serif;display:flex;flex-direction:column;min-heigh
 <button class="main-tab-btn whitespace-nowrap py-2 px-3 border-b-2 font-medium text-sm hover:text-gray-700 flex items-center" data-tab="admin"><svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>Admin</button>
 <button class="main-tab-btn whitespace-nowrap py-2 px-3 border-b-2 font-medium text-sm text-red-500 hover:text-red-700 flex items-center" data-tab="superadmin"><svg class="w-4 h-4 mr-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 7a2 2 0 012 2m4 0a6 6 0 01-7.743 5.743L11 17H9v2H7v2H4a1 1 0 01-1-1v-2.586a1 1 0 01.293-.707l5.964-5.964A6 6 0 1121 9z"/></svg>Super Admin</button></nav></div></div></div>
 <div id="main-content-home" class="main-content-div">
- <div class="bg-gradient-to-br from-indigo-600 to-purple-700 rounded-2xl text-white p-8 md:p-12 mb-10 shadow-xl text-center relative overflow-hidden"><div class="relative z-10"><h2 class="text-3xl md:text-5xl font-extrabold mb-4 leading-tight tracking-tight">PGRI PANDEGLANG<br>AWARD 2025</h2><p class="text-lg md:text-xl text-indigo-100 mb-8 font-light max-w-2xl mx-auto">Ajang penghargaan bergengsi bagi Guru yang menunjukkan dedikasi, inovasi, dan implementasi nilai-nilai BerAKHLAK dalam pelayanan pendidikan.</p><button id="btn-hero-daftar" class="px-8 py-3 bg-white text-indigo-600 font-bold rounded-full shadow-lg hover:bg-indigo-50 hover:scale-105 transition-transform text-base">Daftar Sekarang</button></div><div class="absolute top-0 left-0 w-full h-full opacity-10"><svg class="w-full h-full" fill="currentColor" viewBox="0 0 100 100" preserveAspectRatio="none"><path d="M0 100 C 20 0 50 0 100 100 Z"></path></svg></div></div>
- <div class="mb-12"><h3 class="text-2xl font-bold text-gray-900 text-center mb-8">Kategori Lomba</h3><div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5" id="home-categories-grid"></div></div>
+<div class="bg-gradient-to-br from-indigo-600 to-purple-700 rounded-2xl text-white p-8 md:p-12 mb-10 shadow-xl text-center relative overflow-hidden"><div class="relative z-10"><h2 class="text-3xl md:text-5xl font-extrabold mb-4 leading-tight tracking-tight">PGRI PANDEGLANG<br>AWARD 2025</h2><p class="text-lg md:text-xl text-indigo-100 mb-8 font-light max-w-2xl mx-auto">Ajang penghargaan bergengsi bagi Guru yang menunjukkan dedikasi, inovasi, dan implementasi nilai-nilai BerAKHLAK dalam pelayanan pendidikan.</p><button id="btn-hero-daftar" class="px-8 py-3 bg-white text-indigo-600 font-bold rounded-full shadow-lg hover:bg-indigo-50 hover:scale-105 transition-transform text-base">Daftar Sekarang</button></div><div class="absolute top-0 left-0 w-full h-full opacity-10"><svg class="w-full h-full" fill="currentColor" viewBox="0 0 100 100" preserveAspectRatio="none"><path d="M0 100 C 20 0 50 0 100 100 Z"></path></svg></div></div>
+<div class="mb-12"><h3 class="text-2xl font-bold text-gray-900 text-center mb-8">Kategori Lomba</h3><div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5" id="home-categories-grid"></div></div>
 </div>
 <div id="main-content-dashboard" class="main-content-div hidden"><div id="public-registration-status" class="hidden mb-4 p-4 rounded-lg border shadow-sm transition-all" title="Status Pendaftaran Saat Ini"></div><div class="bg-white rounded-lg shadow-sm border border-gray-200 p-4 mb-4" title="Grafik Statistik Pendaftar"><div class="flex justify-between items-center mb-2"><h3 class="text-sm font-semibold text-gray-800">Statistik Sebaran</h3><div class="text-xs bg-indigo-50 text-indigo-700 px-2 py-1 rounded-md font-bold" title="Total Seluruh Pendaftar">Total: <span id="stat-total">0</span></div></div><div class="relative h-40 w-full"><canvas id="submissionChart"></canvas></div></div><h3 class="text-sm font-bold text-gray-900 mb-3 uppercase tracking-wide">Rincian Per Kategori</h3><div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3" id="dashboard-cards-container"></div></div>
 <div id="main-content-form" class="main-content-div hidden">
@@ -107,48 +193,48 @@ body{font-family:'Inter',sans-serif;display:flex;flex-direction:column;min-heigh
 <div class="mt-8 pt-6 border-t flex justify-between gap-4"><button type="button" id="btn-prev" class="hidden px-6 py-2.5 rounded-lg border border-gray-300 bg-white text-gray-700 font-medium hover:bg-gray-50 flex items-center" title="Kembali">Kembali</button><div class="flex-grow"></div><button type="button" id="btn-next" class="px-6 py-2.5 rounded-lg bg-indigo-600 text-white font-medium hover:bg-indigo-700 flex items-center" title="Lanjut">Selanjutnya</button><button type="submit" id="submit-form-btn" class="hidden px-6 py-2.5 rounded-lg bg-green-600 text-white font-bold hover:bg-green-700 flex items-center" title="Kirim">Kirim Pendaftaran</button></div>
 </form></div></div></div></div>
 <div id="main-content-juri" class="main-content-div hidden">
-    <div id="juri-content-wrapper" class="hidden">
-        <div class="flex flex-wrap justify-between items-center mb-4 gap-3">
-            <div class="flex items-center space-x-2 flex-grow sm:flex-grow-0">
-                <div class="relative">
-                    <input type="text" id="juri-search" placeholder="Cari Nama/Sekolah..." class="border border-gray-300 text-sm rounded-lg pl-9 pr-4 py-2 focus:ring-indigo-500 focus:border-indigo-500 w-48 sm:w-64" title="Cari data peserta">
-                    <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
-                        <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
-                    </div>
-                </div>
-                <select id="juri-filter-kategori" class="border border-gray-300 text-sm rounded-lg p-2 bg-white focus:ring-indigo-500 focus:border-indigo-500" title="Filter tampilan berdasarkan kategori">
-                    <option value="all">Tampilkan Semua</option>
-                </select>
-                <span class="text-sm font-medium text-gray-500 bg-white px-3 py-2 rounded-lg border border-gray-200 whitespace-nowrap">Total: <span id="juri-total-count">0</span></span>
-            </div>
-            <!-- SUPER ADMIN JURI SELECTOR -->
-            <div id="superadmin-juri-selector" class="hidden flex items-center bg-yellow-50 px-3 py-1 rounded border border-yellow-200">
-                <span class="text-xs font-bold text-yellow-800 mr-2">Mode SuperAdmin:</span>
-                <select id="impersonate-juri" class="text-xs border border-yellow-300 rounded p-1">
-                    <option value="juri1">Juri 1</option>
-                    <option value="juri2">Juri 2</option>
-                    <option value="juri3">Juri 3</option>
-                </select>
-            </div>
-        </div>
-        <div class="bg-white shadow-sm rounded-lg overflow-hidden border border-gray-200">
-            <div class="table-container">
-                <table class="min-w-full divide-y divide-gray-200 text-sm" id="juri-table">
-                    <thead class="bg-gray-50">
-                        <tr>
-                            <th class="px-4 py-2 text-left font-bold text-gray-500 sortable-header" data-col="index" data-type="number" title="Klik untuk urutkan nomor">No</th>
-                            <th class="px-4 py-2 text-left font-bold text-gray-500 sortable-header" data-col="nama" data-type="string" title="Klik untuk urutkan nama">Nama <span class="sort-icon"></span></th>
-                            <th class="px-4 py-2 text-left font-bold text-gray-500 sortable-header" data-col="kategori" data-type="string" title="Klik untuk urutkan kategori">Kategori <span class="sort-icon"></span></th>
-                            <th class="px-4 py-2 text-center font-bold text-gray-500">Nilai Anda</th>
-                            <th id="th-juri-peringkat" class="px-4 py-2 text-center font-bold text-gray-500 sortable-header hidden" data-col="calculatedRank" data-type="number">Peringkat Sementara<span class="sort-icon"></span></th>
-                            <th class="px-4 py-2 text-center font-bold text-gray-500">Aksi</th>
-                        </tr>
-                    </thead>
-                    <tbody class="bg-white divide-y divide-gray-200 text-xs sm:text-sm"></tbody>
-                </table>
-            </div>
-        </div>
-    </div>
+<div id="juri-content-wrapper" class="hidden">
+<div class="flex flex-wrap justify-between items-center mb-4 gap-3">
+<div class="flex items-center space-x-2 flex-grow sm:flex-grow-0">
+<div class="relative">
+<input type="text" id="juri-search" placeholder="Cari Nama/Sekolah..." class="border border-gray-300 text-sm rounded-lg pl-9 pr-4 py-2 focus:ring-indigo-500 focus:border-indigo-500 w-48 sm:w-64" title="Cari data peserta">
+<div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
+<svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+</div>
+</div>
+<select id="juri-filter-kategori" class="border border-gray-300 text-sm rounded-lg p-2 bg-white focus:ring-indigo-500 focus:border-indigo-500" title="Filter tampilan berdasarkan kategori">
+<option value="all">Tampilkan Semua</option>
+</select>
+<span class="text-sm font-medium text-gray-500 bg-white px-3 py-2 rounded-lg border border-gray-200 whitespace-nowrap">Total: <span id="juri-total-count">0</span></span>
+</div>
+<!-- SUPER ADMIN JURI SELECTOR -->
+<div id="superadmin-juri-selector" class="hidden flex items-center bg-yellow-50 px-3 py-1 rounded border border-yellow-200">
+<span class="text-xs font-bold text-yellow-800 mr-2">Mode SuperAdmin:</span>
+<select id="impersonate-juri" class="text-xs border border-yellow-300 rounded p-1">
+<option value="juri1">Juri 1</option>
+<option value="juri2">Juri 2</option>
+<option value="juri3">Juri 3</option>
+</select>
+</div>
+</div>
+<div class="bg-white shadow-sm rounded-lg overflow-hidden border border-gray-200">
+<div class="table-container">
+<table class="min-w-full divide-y divide-gray-200 text-sm" id="juri-table">
+<thead class="bg-gray-50">
+<tr>
+<th class="px-4 py-2 text-left font-bold text-gray-500 sortable-header" data-col="index" data-type="number" title="Klik untuk urutkan nomor">No</th>
+<th class="px-4 py-2 text-left font-bold text-gray-500 sortable-header" data-col="nama" data-type="string" title="Klik untuk urutkan nama">Nama <span class="sort-icon"></span></th>
+<th class="px-4 py-2 text-left font-bold text-gray-500 sortable-header" data-col="kategori" data-type="string" title="Klik untuk urutkan kategori">Kategori <span class="sort-icon"></span></th>
+<th class="px-4 py-2 text-center font-bold text-gray-500">Nilai Anda</th>
+<th id="th-juri-peringkat" class="px-4 py-2 text-center font-bold text-gray-500 sortable-header hidden" data-col="calculatedRank" data-type="number">Peringkat Sementara<span class="sort-icon"></span></th>
+<th class="px-4 py-2 text-center font-bold text-gray-500">Aksi</th>
+</tr>
+</thead>
+<tbody class="bg-white divide-y divide-gray-200 text-xs sm:text-sm"></tbody>
+</table>
+</div>
+</div>
+</div>
 </div>
 <div id="main-content-admin" class="main-content-div hidden">
 <div id="admin-content-wrapper" class="hidden">
@@ -159,18 +245,18 @@ body{font-family:'Inter',sans-serif;display:flex;flex-direction:column;min-heigh
 </div>
 <div class="flex flex-wrap justify-between items-center mb-4 gap-3"><div class="flex items-center space-x-2 flex-grow sm:flex-grow-0"><div class="relative"><input type="text" id="admin-search" placeholder="Cari Nama/Sekolah..." class="border border-gray-300 text-sm rounded-lg pl-9 pr-4 py-2 focus:ring-indigo-500 focus:border-indigo-500 w-48 sm:w-64"><div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none"><svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg></div></div><select id="admin-filter-kategori" class="border border-gray-300 text-sm rounded-lg p-2 bg-white focus:ring-indigo-500 focus:border-indigo-500"><option value="all">Tampilkan Semua</option></select><span class="text-sm font-medium text-gray-500 bg-white px-3 py-2 rounded-lg border border-gray-200 whitespace-nowrap">Total: <span id="admin-total-count">0</span></span></div><button id="btn-export" class="inline-flex items-center px-4 py-2 border border-green-600 text-sm font-bold rounded-lg text-white bg-green-600 hover:bg-green-700 shadow-sm transition-colors"><svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>Ekspor ke Excel</button></div>
 <div class="bg-white shadow-sm rounded-lg overflow-hidden border border-gray-200"><div class="table-container"><table class="min-w-full divide-y divide-gray-200 text-sm" id="admin-table"><thead class="bg-gray-50"><tr>
-    <th class="px-4 py-2 text-center font-bold text-gray-500 sortable-header" data-col="index" title="Nomor Baris">No</th>
-    <th class="px-4 py-2 text-left font-bold text-gray-500 sortable-header" data-col="timestamp" title="Urutkan Waktu">Waktu Daftar <span class="sort-icon">▼</span></th>
-    <th class="px-4 py-2 text-left font-bold text-gray-500 sortable-header" data-col="nama" data-type="string">Nama <span class="sort-icon"></span></th>
-    <th class="px-4 py-2 text-left font-bold text-gray-500 sortable-header" data-col="kategori" data-type="string">Kategori <span class="sort-icon"></span></th>
-    <th class="px-2 py-2 text-center font-bold text-gray-500">Juri 1</th>
-    <th class="px-2 py-2 text-center font-bold text-gray-500">Juri 2</th>
-    <th class="px-2 py-2 text-center font-bold text-gray-500">Juri 3</th>
-    <th class="px-4 py-2 text-center font-bold text-gray-500 sortable-header" data-col="totalNilai" data-type="number">Total <span class="sort-icon"></span></th>
-    <th class="px-4 py-2 text-center font-bold text-gray-500">Rata2</th>
-    <th class="px-4 py-2 text-center font-bold text-gray-500">Status</th>
-    <th id="th-peringkat" class="px-4 py-2 text-center font-bold text-gray-500 sortable-header hidden" data-col="rank_calculated">Peringkat <span class="sort-icon"></span></th>
-    <th class="px-4 py-2 text-center font-bold text-gray-500">Aksi</th>
+<th class="px-4 py-2 text-center font-bold text-gray-500 sortable-header" data-col="index" title="Nomor Baris">No</th>
+<th class="px-4 py-2 text-left font-bold text-gray-500 sortable-header" data-col="timestamp" title="Urutkan Waktu">Waktu Daftar <span class="sort-icon">▼</span></th>
+<th class="px-4 py-2 text-left font-bold text-gray-500 sortable-header" data-col="nama" data-type="string">Nama <span class="sort-icon"></span></th>
+<th class="px-4 py-2 text-left font-bold text-gray-500 sortable-header" data-col="kategori" data-type="string">Kategori <span class="sort-icon"></span></th>
+<th class="px-2 py-2 text-center font-bold text-gray-500">Juri 1</th>
+<th class="px-2 py-2 text-center font-bold text-gray-500">Juri 2</th>
+<th class="px-2 py-2 text-center font-bold text-gray-500">Juri 3</th>
+<th class="px-4 py-2 text-center font-bold text-gray-500 sortable-header" data-col="totalNilai" data-type="number">Total <span class="sort-icon"></span></th>
+<th class="px-4 py-2 text-center font-bold text-gray-500">Rata2</th>
+<th class="px-4 py-2 text-center font-bold text-gray-500">Status</th>
+<th id="th-peringkat" class="px-4 py-2 text-center font-bold text-gray-500 sortable-header hidden" data-col="rank_calculated">Peringkat <span class="sort-icon"></span></th>
+<th class="px-4 py-2 text-center font-bold text-gray-500">Aksi</th>
 </tr></thead><tbody class="bg-white divide-y divide-gray-200 text-xs sm:text-sm"></tbody></table></div></div></div></div>
 <div id="main-content-superadmin" class="main-content-div hidden"><div id="superadmin-content-wrapper" class="hidden"><div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6"><div class="bg-white p-6 rounded-lg shadow-sm border border-gray-200"><h3 class="text-lg font-bold text-gray-900 mb-4 border-b pb-2">Pengaturan Sistem</h3><div class="bg-gray-50 p-4 rounded-lg border border-gray-200 space-y-4"><div><label class="block text-sm font-bold text-gray-700 mb-1">Mode Pendaftaran</label><select id="registration-mode" class="w-full border border-gray-300 rounded-md p-2 text-sm focus:ring-indigo-500"><option value="auto">Otomatis (1-4 Des 2025)</option><option value="open">Paksa Buka (Manual)</option><option value="closed">Paksa Tutup (Manual)</option></select></div><div class="flex items-center justify-between pt-2"><span class="text-xs text-gray-500">Status Aktual saat ini:</span><span id="system-status-text" class="text-xs font-bold text-gray-700">Memeriksa...</span></div><button id="btn-save-config" class="w-full mt-2 bg-indigo-600 text-white text-sm font-bold py-2 rounded hover:bg-indigo-700 transition-colors">Simpan Konfigurasi</button></div></div><div class="bg-white p-6 rounded-lg shadow-sm border border-gray-200"><h3 class="text-lg font-bold text-gray-900 mb-4 border-b pb-2">Tambah Pengguna</h3><form id="create-user-form" class="space-y-3"><div><label class="block text-xs font-semibold text-gray-700 mb-1">Username/Email</label><input type="text" id="new-username" class="w-full border rounded p-2 text-sm" required></div><div><label class="block text-xs font-semibold text-gray-700 mb-1">Password (Hanya Catatan)</label><input type="text" id="new-password" class="w-full border rounded p-2 text-sm"></div><div><label class="block text-xs font-semibold text-gray-700 mb-1">Role</label><select id="new-role" class="w-full border rounded p-2 text-sm"><option value="admin">Admin</option><option value="juri">Juri</option></select></div><div id="kategori-spesifik-container" class="hidden"><label class="block text-xs font-semibold text-gray-700 mb-1">Posisi Juri (Wajib)</label><select id="new-juri-posisi" class="w-full border rounded p-2 text-sm"><option value="" disabled selected>-- Pilih Posisi --</option><option value="juri1">Juri 1</option><option value="juri2">Juri 2</option><option value="juri3">Juri 3</option></select></div><button type="submit" id="btn-create-user" class="w-full bg-blue-600 text-white font-bold py-2 rounded hover:bg-blue-700 text-sm mt-2">+ Tambah User</button></form></div></div><div class="bg-white shadow-sm rounded-lg overflow-hidden border border-gray-200 mb-8"><div class="px-4 py-3 bg-gray-50 border-b border-gray-200 font-bold text-sm text-gray-700 flex justify-between items-center"><span>Daftar Akun</span><button id="btn-export-users" class="text-xs bg-green-600 text-white px-3 py-1 rounded hover:bg-green-700 flex items-center"><svg class="w-3 h-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>Ekspor Akun</button></div><div class="table-container" style="max-height: 400px; overflow-y: auto;"><table class="min-w-full divide-y divide-gray-200 text-sm" id="users-table"><thead class="bg-gray-50 sticky top-0 z-10"><tr><th class="px-2 py-2 text-center font-bold text-gray-700 w-12">No</th><th class="px-2 py-2 text-center font-bold text-gray-700 sortable-header cursor-pointer" data-col="username">Username <span class="sort-icon"></span></th><th class="px-2 py-2 text-center font-bold text-gray-700 sortable-header cursor-pointer" data-col="role">Role <span class="sort-icon"></span></th><th class="px-2 py-2 text-center font-bold text-gray-700">Posisi Juri</th><th class="px-2 py-2 text-center font-bold text-gray-700 w-20">Aksi</th></tr></thead><tbody class="bg-white divide-y divide-gray-200 text-xs text-gray-700"></tbody></table></div></div></div></div>
 <div id="video-choice-modal" class="hidden fixed inset-0 bg-gray-900 bg-opacity-60 flex items-center justify-center z-[85] p-4 backdrop-blur-sm"><div class="bg-white rounded-lg shadow-xl max-w-sm w-full p-6 text-center"><h3 class="text-lg font-bold mb-4">Putar Video</h3><div class="flex flex-col gap-3"><button id="btn-play-popup" class="w-full py-2 bg-indigo-600 text-white rounded hover:bg-indigo-700">Putar di Sini (Popup)</button><button id="btn-play-newtab" class="w-full py-2 border border-gray-300 text-gray-700 rounded hover:bg-gray-50">Buka di Tab Baru</button><button onclick="document.getElementById('video-choice-modal').classList.add('hidden')" class="text-sm text-gray-500 hover:underline mt-2">Batal</button></div></div></div>
@@ -179,7 +265,7 @@ body{font-family:'Inter',sans-serif;display:flex;flex-direction:column;min-heigh
 <div id="login-modal" class="hidden fixed inset-0 bg-gray-900 bg-opacity-50 flex items-center justify-center z-[90] p-4"><div class="bg-white rounded-lg shadow-lg p-6 w-full max-w-sm relative"><button onclick="hideLoginModal()" class="absolute top-4 right-4 text-gray-400 hover:text-gray-600"><svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg></button><div class="flex items-center mb-6"><div class="bg-indigo-100 p-2 rounded-full mr-3"><svg class="w-6 h-6 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path></svg></div><div><h3 class="text-xl font-bold text-gray-800" id="login-modal-title">Login</h3><p class="text-xs text-gray-500">Silakan masukkan Email dan Password Anda.</p></div></div><div class="mb-4"><label class="block text-sm font-medium text-gray-700 mb-1">Email</label><input type="email" id="login-email" class="w-full p-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 outline-none text-sm" placeholder="Contoh: admin@pgri.com"></div><div class="mb-6"><label class="block text-sm font-medium text-gray-700 mb-1">Password</label><div class="relative"><input type="password" id="login-password" class="w-full p-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 outline-none text-sm pr-10" placeholder="Password"><button type="button" id="toggle-password" class="absolute inset-y-0 right-0 px-3 flex items-center text-gray-500 hover:text-gray-700"><svg id="icon-eye" class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg><svg id="icon-eye-off" class="w-5 h-5 hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.542-7a9.956 9.956 0 012.563-4.263m3.57-2.29A9.956 9.956 0 0112 5c4.478 0 8.268 2.943 9.542 7a9.987 9.987 0 01-4.043 5.362M15 12a3 3 0 00-3-3m0 0a3 3 0 013 3m-3-3L3 3m9 9a3 3 0 01-3 3m0 0a3 3 0 003-3m-3 3l10 10"/></svg></button></div></div><p id="login-error" class="text-red-500 text-xs hidden mb-3 bg-red-50 p-2 rounded">Username/Password salah.</p><div class="flex justify-end gap-3"><button onclick="hideLoginModal()" class="px-4 py-2 text-gray-600 hover:bg-gray-50 border border-gray-300 rounded-lg text-sm font-medium">Batal</button><button id="login-btn-action" class="px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 text-sm font-medium flex items-center">Login</button></div></div></div>
 <div id="score-modal" class="hidden fixed inset-0 bg-gray-900 bg-opacity-50 flex items-center justify-center z-[60] p-4"><div class="bg-white rounded-lg shadow-lg p-5 w-full max-w-4xl max-h-[95vh] overflow-y-auto"><h3 class="text-lg font-bold mb-2">Penilaian Peserta</h3><p id="score-participant-name" class="text-sm text-gray-600 mb-1 font-semibold"></p><p id="score-participant-cat" class="text-xs text-indigo-600 mb-4 font-bold bg-indigo-50 inline-block px-2 py-1 rounded"></p><input type="hidden" id="score-doc-id"><div id="rubric-container" class="space-y-4 mb-4"></div><div class="flex justify-between items-center bg-gray-50 p-3 rounded-lg border border-gray-200 mb-4"><span class="text-sm font-bold text-gray-700">Total Nilai Anda:</span><span id="calculated-score" class="text-2xl font-bold text-indigo-600">0</span></div>
 <div class="relative">
-    <textarea id="score-notes" rows="4" class="w-full mb-3 p-3 border rounded text-sm focus:ring-2 focus:ring-indigo-500 outline-none" placeholder="Catatan penilaian..."></textarea>
+<textarea id="score-notes" rows="4" class="w-full mb-3 p-3 border rounded text-sm focus:ring-2 focus:ring-indigo-500 outline-none" placeholder="Catatan penilaian..."></textarea>
 </div>
 <div class="flex justify-end items-center gap-2"><button onclick="document.getElementById('score-modal').classList.add('hidden')" class="px-4 py-2 text-sm border rounded hover:bg-gray-50">Batal</button><button id="save-score-btn" class="px-4 py-2 bg-green-600 text-white text-sm font-bold rounded hover:bg-green-700">Simpan Penilaian</button></div></div></div>
 <div id="info-modal" class="hidden fixed inset-0 bg-gray-900 bg-opacity-60 flex items-center justify-center z-[85] p-4 backdrop-blur-sm"><div class="bg-white rounded-lg shadow-xl max-w-md w-full p-6"><div class="flex justify-between items-center mb-4"><h3 class="text-lg font-bold text-gray-900">Kriteria Penilaian</h3><button onclick="document.getElementById('info-modal').classList.add('hidden')" class="text-gray-400 hover:text-gray-600"><svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg></button></div><div id="info-modal-content" class="space-y-3 text-sm text-gray-600"></div><div class="mt-6 text-center"><button onclick="document.getElementById('info-modal').classList.add('hidden')" class="px-4 py-2 bg-indigo-600 text-white rounded hover:bg-indigo-700 text-sm font-medium">Tutup</button></div></div></div>
@@ -197,45 +283,45 @@ const KATEGORI_LIST = ['Guru Berorientasi Pelayanan', 'Guru Akuntabel', 'Guru Ko
 const KATEGORI_COLORS = ['rgba(59,130,246,0.7)', 'rgba(16,185,129,0.7)', 'rgba(139,92,246,0.7)', 'rgba(245,158,11,0.7)', 'rgba(107,114,128,0.7)', 'rgba(236,72,153,0.7)', 'rgba(20,184,166,0.7)'];
 // EXPOSE TO WINDOW FOR GLOBAL ACCESS
 window.RUBRIC_DATA = {
-    'Guru Berorientasi Pelayanan': [
-        { t: "Memahami Kebutuhan", i: ["Kurang: Belum mampu mengidentifikasi kebutuhan siswa/wali murid secara jelas.", "Cukup: Mampu mengidentifikasi sebagian kebutuhan namun solusinya standar.", "Baik: Mampu mengidentifikasi kebutuhan dengan baik dan memberikan solusi yang relevan.", "Sangat Baik: Proaktif mengidentifikasi kebutuhan tersembunyi dan memberikan solusi melebihi ekspektasi."] },
-        { t: "Ramah, Cekatan, Solutif", i: ["Kurang: Sering bersikap pasif atau kurang ramah dalam pelayanan.", "Cukup: Cukup ramah namun kurang cekatan dalam merespons masalah.", "Baik: Bersikap ramah, cepat tanggap, dan solutif dalam mengatasi masalah.", "Sangat Baik: Sangat ramah, sangat cekatan, dan solusinya tuntas serta memuaskan semua pihak."] },
-        { t: "Perbaikan Tiada Henti", i: ["Kurang: Tidak ada upaya perbaikan metode atau layanan.", "Cukup: Melakukan perbaikan hanya jika ada teguran atau instruksi.", "Baik: Secara berkala melakukan evaluasi dan perbaikan metode.", "Sangat Baik: Konsisten melakukan inovasi dan perbaikan berkelanjutan tanpa menunggu instruksi."] }
-    ],
-    'Guru Akuntabel': [
-        { t: "Integritas & Tanggung Jawab", i: ["Kurang: Sering lalai dalam tugas dan kurang disiplin.", "Cukup: Melaksanakan tugas standar namun kadang kurang teliti.", "Baik: Jujur, bertanggung jawab, dan disiplin dalam tugas.", "Sangat Baik: Menjadi teladan integritas, sangat disiplin, dan hasil kerjanya sempurna."] },
-        { t: "Efisiensi Sumber Daya", i: ["Kurang: Menggunakan fasilitas sekolah dengan boros/tidak terawat.", "Cukup: Menggunakan fasilitas seperlunya namun kurang merawat.", "Baik: Menggunakan fasilitas secara efektif dan efisien.", "Sangat Baik: Sangat efisien, menjaga aset sekolah, dan kreatif memanfaatkan sumber daya terbatas."] },
-        { t: "Penyalahgunaan Wewenang", i: ["Kurang: Ada indikasi menyalahgunakan posisi untuk kepentingan pribadi.", "Cukup: Kadang bertindak di luar wewenang namun tidak fatal.", "Baik: Bertindak sesuai kewenangan dan tupoksi.", "Sangat Baik: Sangat tegas menjaga integritas jabatan dan menolak gratifikasi/KKN."] }
-    ],
-    'Guru Kompeten': [
-        { t: "Meningkatkan Kompetensi", i: ["Kurang: Pasif dan tidak mau belajar hal baru.", "Cukup: Belajar hanya jika diwajibkan oleh dinas/sekolah.", "Baik: Aktif mengikuti pelatihan mandiri untuk upgrade skill.", "Sangat Baik: Pembelajar cepat, selalu update isu terkini, dan memiliki sertifikasi keahlian tambahan."] },
-        { t: "Membantu Orang Lain Belajar", i: ["Kurang: Pelit ilmu dan enggan berbagi dengan rekan.", "Cukup: Mau berbagi hanya jika ditanya.", "Baik: Aktif berbagi materi atau praktik baik di komunitas sekolah.", "Sangat Baik: Menjadi mentor/pelatih bagi guru lain dan aktif di komunitas pendidikan luas."] },
-        { t: "Kualitas Tugas", i: ["Kurang: Hasil kerja sering revisi dan asal-asalan.", "Cukup: Hasil kerja standar memenuhi kriteria minimal.", "Baik: Hasil kerja rapi, berkualitas, dan tepat waktu.", "Sangat Baik: Hasil kerja superior, melampaui standar, dan menjadi rujukan rekan lain."] }
-    ],
-    'Guru Harmonis': [
-        { t: "Menghargai Perbedaan", i: ["Kurang: Bersikap diskriminatif atau membeda-bedakan.", "Cukup: Bersikap netral namun kurang merangkul perbedaan.", "Baik: Menghargai perbedaan latar belakang siswa/rekan.", "Sangat Baik: Sangat inklusif, aktif mempromosikan toleransi dan keberagaman."] },
-        { t: "Suka Menolong", i: ["Kurang: Apatis terhadap kesulitan rekan/siswa.", "Cukup: Menolong jika diminta secara langsung.", "Baik: Ringan tangan membantu rekan yang kesulitan.", "Sangat Baik: Memiliki jiwa sosial tinggi, proaktif menggalang bantuan sosial."] },
-        { t: "Lingkungan Kondusif", i: ["Kurang: Sering memicu konflik atau gosip negatif.", "Cukup: Pasif dalam menjaga suasana kerja.", "Baik: Mampu menjaga hubungan baik dengan rekan kerja.", "Sangat Baik: Menjadi perekat tim, mampu memediasi konflik, dan membangun suasana ceria."] }
-    ],
-    'Guru Loyal': [
-        { t: "Setia pada NKRI", i: ["Kurang: Menunjukkan sikap/ucapan yang bertentangan dengan Pancasila.", "Cukup: Pasif dalam kegiatan kebangsaan.", "Baik: Setia pada NKRI dan aktif di kegiatan upacara/nasional.", "Sangat Baik: Menjadi role model nasionalisme dan menanamkan nilai kebangsaan secara kuat."] },
-        { t: "Menjaga Nama Baik", i: ["Kurang: Melakukan tindakan tercela yang mencoreng instansi.", "Cukup: Perilaku biasa saja, tidak ada catatan buruk.", "Baik: Menjaga perilaku baik di dalam dan luar sekolah.", "Sangat Baik: Berprestasi membawa nama harum sekolah/daerah di kancah nasional."] },
-        { t: "Menjaga Rahasia", i: ["Kurang: Sering membocorkan masalah internal/rahasia jabatan.", "Cukup: Kurang hati-hati menjaga dokumen/informasi.", "Baik: Amanah menjaga rahasia jabatan dan siswa.", "Sangat Baik: Sangat ketat menjaga kerahasiaan data dan privasi sesuai kode etik."] }
-    ],
-    'Guru Adaptif': [
-        { t: "Adaptasi Perubahan", i: ["Kurang: Menolak perubahan atau kaku terhadap hal baru.", "Cukup: Butuh waktu lama untuk menyesuaikan diri.", "Baik: Cepat menyesuaikan diri dengan kurikulum/sistem baru.", "Sangat Baik: Sangat fleksibel, antusias, dan menjadi agen perubahan di sekolah."] },
-        { t: "Inovasi", i: ["Kurang: Metode mengajar monoton dan konvensional.", "Cukup: Ada sedikit variasi namun kurang orisinal.", "Baik: Menerapkan inovasi pembelajaran yang menarik.", "Sangat Baik: Menghasilkan karya inovasi orisinal yang berdampak luas dan teruji."] },
-        { t: "Proaktif", i: ["Kurang: Pasif dan hanya menunggu instruksi.", "Cukup: Bertindak jika masalah sudah membesar.", "Baik: Memiliki inisiatif menyelesaikan masalah yang muncul.", "Sangat Baik: Antisipatif, mampu memprediksi masalah dan menyiapkan solusi mitigasi."] }
-    ],
-    'Guru Kolaboratif': [
-        { t: "Memberi Kesempatan Kontribusi", i: ["Kurang: Dominan dan tidak mau mendengar masukan.", "Cukup: Sesekali meminta pendapat orang lain.", "Baik: Mampu membagi peran dan menerima masukan tim.", "Sangat Baik: Partisipatif, memberdayakan potensi setiap anggota tim secara optimal."] },
-        { t: "Kerja Sama", i: ["Kurang: Tertutup dan sulit diajak kerja sama.", "Cukup: Bersedia kerja sama secara formal saja.", "Baik: Kooperatif dan mudah diajak bersinergi.", "Sangat Baik: Membangun sinergi lintas sektoral yang kuat dan saling menguntungkan."] },
-        { t: "Pemanfaatan Sumber Daya", i: ["Kurang: Selalu mengeluh kekurangan fasilitas.", "Cukup: Memanfaatkan sumber daya yang ada seadanya.", "Baik: Mampu mengoptimalkan sumber daya internal.", "Sangat Baik: Kreatif memobilisasi sumber daya eksternal untuk kemajuan sekolah."] }
-    ]
+'Guru Berorientasi Pelayanan': [
+{ t: "Memahami Kebutuhan", i: ["Kurang: Belum mampu mengidentifikasi kebutuhan siswa/wali murid secara jelas.", "Cukup: Mampu mengidentifikasi sebagian kebutuhan namun solusinya standar.", "Baik: Mampu mengidentifikasi kebutuhan dengan baik dan memberikan solusi yang relevan.", "Sangat Baik: Proaktif mengidentifikasi kebutuhan tersembunyi dan memberikan solusi melebihi ekspektasi."] },
+{ t: "Ramah, Cekatan, Solutif", i: ["Kurang: Sering bersikap pasif atau kurang ramah dalam pelayanan.", "Cukup: Cukup ramah namun kurang cekatan dalam merespons masalah.", "Baik: Bersikap ramah, cepat tanggap, dan solutif dalam mengatasi masalah.", "Sangat Baik: Sangat ramah, sangat cekatan, dan solusinya tuntas serta memuaskan semua pihak."] },
+{ t: "Perbaikan Tiada Henti", i: ["Kurang: Tidak ada upaya perbaikan metode atau layanan.", "Cukup: Melakukan perbaikan hanya jika ada teguran atau instruksi.", "Baik: Secara berkala melakukan evaluasi dan perbaikan metode.", "Sangat Baik: Konsisten melakukan inovasi dan perbaikan berkelanjutan tanpa menunggu instruksi."] }
+],
+'Guru Akuntabel': [
+{ t: "Integritas & Tanggung Jawab", i: ["Kurang: Sering lalai dalam tugas dan kurang disiplin.", "Cukup: Melaksanakan tugas standar namun kadang kurang teliti.", "Baik: Jujur, bertanggung jawab, dan disiplin dalam tugas.", "Sangat Baik: Menjadi teladan integritas, sangat disiplin, dan hasil kerjanya sempurna."] },
+{ t: "Efisiensi Sumber Daya", i: ["Kurang: Menggunakan fasilitas sekolah dengan boros/tidak terawat.", "Cukup: Menggunakan fasilitas seperlunya namun kurang merawat.", "Baik: Menggunakan fasilitas secara efektif dan efisien.", "Sangat Baik: Sangat efisien, menjaga aset sekolah, dan kreatif memanfaatkan sumber daya terbatas."] },
+{ t: "Penyalahgunaan Wewenang", i: ["Kurang: Ada indikasi menyalahgunakan posisi untuk kepentingan pribadi.", "Cukup: Kadang bertindak di luar wewenang namun tidak fatal.", "Baik: Bertindak sesuai kewenangan dan tupoksi.", "Sangat Baik: Sangat tegas menjaga integritas jabatan dan menolak gratifikasi/KKN."] }
+],
+'Guru Kompeten': [
+{ t: "Meningkatkan Kompetensi", i: ["Kurang: Pasif dan tidak mau belajar hal baru.", "Cukup: Belajar hanya jika diwajibkan oleh dinas/sekolah.", "Baik: Aktif mengikuti pelatihan mandiri untuk upgrade skill.", "Sangat Baik: Pembelajar cepat, selalu update isu terkini, dan memiliki sertifikasi keahlian tambahan."] },
+{ t: "Membantu Orang Lain Belajar", i: ["Kurang: Pelit ilmu dan enggan berbagi dengan rekan.", "Cukup: Mau berbagi hanya jika ditanya.", "Baik: Aktif berbagi materi atau praktik baik di komunitas sekolah.", "Sangat Baik: Menjadi mentor/pelatih bagi guru lain dan aktif di komunitas pendidikan luas."] },
+{ t: "Kualitas Tugas", i: ["Kurang: Hasil kerja sering revisi dan asal-asalan.", "Cukup: Hasil kerja standar memenuhi kriteria minimal.", "Baik: Hasil kerja rapi, berkualitas, dan tepat waktu.", "Sangat Baik: Hasil kerja superior, melampaui standar, dan menjadi rujukan rekan lain."] }
+],
+'Guru Harmonis': [
+{ t: "Menghargai Perbedaan", i: ["Kurang: Bersikap diskriminatif atau membeda-bedakan.", "Cukup: Bersikap netral namun kurang merangkul perbedaan.", "Baik: Menghargai perbedaan latar belakang siswa/rekan.", "Sangat Baik: Sangat inklusif, aktif mempromosikan toleransi dan keberagaman."] },
+{ t: "Suka Menolong", i: ["Kurang: Apatis terhadap kesulitan rekan/siswa.", "Cukup: Menolong jika diminta secara langsung.", "Baik: Ringan tangan membantu rekan yang kesulitan.", "Sangat Baik: Memiliki jiwa sosial tinggi, proaktif menggalang bantuan sosial."] },
+{ t: "Lingkungan Kondusif", i: ["Kurang: Sering memicu konflik atau gosip negatif.", "Cukup: Pasif dalam menjaga suasana kerja.", "Baik: Mampu menjaga hubungan baik dengan rekan kerja.", "Sangat Baik: Menjadi perekat tim, mampu memediasi konflik, dan membangun suasana ceria."] }
+],
+'Guru Loyal': [
+{ t: "Setia pada NKRI", i: ["Kurang: Menunjukkan sikap/ucapan yang bertentangan dengan Pancasila.", "Cukup: Pasif dalam kegiatan kebangsaan.", "Baik: Setia pada NKRI dan aktif di kegiatan upacara/nasional.", "Sangat Baik: Menjadi role model nasionalisme dan menanamkan nilai kebangsaan secara kuat."] },
+{ t: "Menjaga Nama Baik", i: ["Kurang: Melakukan tindakan tercela yang mencoreng instansi.", "Cukup: Perilaku biasa saja, tidak ada catatan buruk.", "Baik: Menjaga perilaku baik di dalam dan luar sekolah.", "Sangat Baik: Berprestasi membawa nama harum sekolah/daerah di kancah nasional."] },
+{ t: "Menjaga Rahasia", i: ["Kurang: Sering membocorkan masalah internal/rahasia jabatan.", "Cukup: Kurang hati-hati menjaga dokumen/informasi.", "Baik: Amanah menjaga rahasia jabatan dan siswa.", "Sangat Baik: Sangat ketat menjaga kerahasiaan data dan privasi sesuai kode etik."] }
+],
+'Guru Adaptif': [
+{ t: "Adaptasi Perubahan", i: ["Kurang: Menolak perubahan atau kaku terhadap hal baru.", "Cukup: Butuh waktu lama untuk menyesuaikan diri.", "Baik: Cepat menyesuaikan diri dengan kurikulum/sistem baru.", "Sangat Baik: Sangat fleksibel, antusias, dan menjadi agen perubahan di sekolah."] },
+{ t: "Inovasi", i: ["Kurang: Metode mengajar monoton dan konvensional.", "Cukup: Ada sedikit variasi namun kurang orisinal.", "Baik: Menerapkan inovasi pembelajaran yang menarik.", "Sangat Baik: Menghasilkan karya inovasi orisinal yang berdampak luas dan teruji."] },
+{ t: "Proaktif", i: ["Kurang: Pasif dan hanya menunggu instruksi.", "Cukup: Bertindak jika masalah sudah membesar.", "Baik: Memiliki inisiatif menyelesaikan masalah yang muncul.", "Sangat Baik: Antisipatif, mampu memprediksi masalah dan menyiapkan solusi mitigasi."] }
+],
+'Guru Kolaboratif': [
+{ t: "Memberi Kesempatan Kontribusi", i: ["Kurang: Dominan dan tidak mau mendengar masukan.", "Cukup: Sesekali meminta pendapat orang lain.", "Baik: Mampu membagi peran dan menerima masukan tim.", "Sangat Baik: Partisipatif, memberdayakan potensi setiap anggota tim secara optimal."] },
+{ t: "Kerja Sama", i: ["Kurang: Tertutup dan sulit diajak kerja sama.", "Cukup: Bersedia kerja sama secara formal saja.", "Baik: Kooperatif dan mudah diajak bersinergi.", "Sangat Baik: Membangun sinergi lintas sektoral yang kuat dan saling menguntungkan."] },
+{ t: "Pemanfaatan Sumber Daya", i: ["Kurang: Selalu mengeluh kekurangan fasilitas.", "Cukup: Memanfaatkan sumber daya yang ada seadanya.", "Baik: Mampu mengoptimalkan sumber daya internal.", "Sangat Baik: Kreatif memobilisasi sumber daya eksternal untuk kemajuan sekolah."] }
+]
 };
 const katSelect = document.getElementById('kategori-select'), adminFilter = document.getElementById('admin-filter-kategori'), juriFilter = document.getElementById('juri-filter-kategori'), newUserKat = document.getElementById('new-kategori-spesifik');
 KATEGORI_LIST.forEach(k => { [katSelect,adminFilter,juriFilter,newUserKat].forEach(el => { const opt=document.createElement('option'); opt.value=k; opt.textContent=k; if(el!==newUserKat) el.appendChild(opt); }); });
-if(newUserKat) KATEGORI_LIST.forEach(k => {const opt=document.createElement('option'); opt.value=k; opt.textContent=k; newUserKat.appendChild(opt); }); 
+if(newUserKat) KATEGORI_LIST.forEach(k => {const opt=document.createElement('option'); opt.value=k; opt.textContent=k; newUserKat.appendChild(opt); });
 document.getElementById('new-role').addEventListener('change', (e) => { document.getElementById('kategori-spesifik-container').classList.toggle('hidden', e.target.value !== 'juri'); });
 function showToast(message, type='error'){ const container=document.getElementById('toast-container'); const toast=document.createElement('div'); toast.className=`toast toast-${type}`; let icon=type==='error'?'<svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>':'<svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>'; toast.innerHTML=`${icon}<span>${message}</span>`; container.appendChild(toast); toast.offsetHeight; toast.classList.add('show'); setTimeout(()=>{ toast.classList.remove('show'); setTimeout(()=>toast.remove(),300); },3000); }
 const tooltip = document.createElement('div'); tooltip.id = 'custom-tooltip'; document.body.appendChild(tooltip);
@@ -249,546 +335,470 @@ function clearDraft() { const inputs = document.querySelectorAll('#form-pendafta
 function initChart(data) { const canvas = document.getElementById('submissionChart'); if (!canvas) return; const counts = KATEGORI_LIST.map(k => data.filter(s => s.kategori === k).length); const ctx = canvas.getContext('2d'); if (myChart) myChart.destroy(); myChart = new Chart(ctx, { type: 'bar', data: { labels: KATEGORI_LIST.map(k => k.replace('Guru ', '')), datasets: [{ label: 'Pendaftar', data: counts, backgroundColor: KATEGORI_COLORS, borderRadius: 4 }] }, options: { responsive: true, maintainAspectRatio: false, scales: { y: { beginAtZero: true, ticks: { stepSize: 1 } } }, plugins: { legend: { display: false } } } }); }
 function renderDashboardCards(data) { const container = document.getElementById('dashboard-cards-container'); container.innerHTML = ''; KATEGORI_LIST.forEach(cat => { const count = data.filter(s => s.kategori === cat).length; const icon = KATEGORI_ICONS[cat] || ''; container.innerHTML += `<div class="bg-white rounded-lg p-3 shadow-sm border border-gray-100 flex items-center justify-between hover:shadow-md transition-shadow"><div class="flex items-center space-x-3"><div class="text-indigo-600 bg-indigo-50 p-2 rounded-lg">${icon}</div><span class="text-xs font-medium text-gray-600">${cat.replace('Guru ', '')}</span></div><span class="text-lg font-bold text-gray-800">${count}</span></div>`; }); const statTotal = document.getElementById('stat-total'); if(statTotal) statTotal.innerText = data.length; if(document.querySelector('.main-tab-btn.active')?.dataset.tab === 'dashboard') initChart(data); }
 function renderHomeCategories() { const container = document.getElementById('home-categories-grid'); if(!container) return; container.innerHTML = ''; KATEGORI_LIST.forEach(cat => { const icon = KATEGORI_ICONS[cat] || ''; container.innerHTML += `<div class="bg-white p-6 rounded-xl shadow-sm border border-gray-100 flex flex-col items-center text-center category-card cursor-pointer" onclick="document.getElementById('btn-hero-daftar').click()"><div class="text-indigo-600 bg-indigo-50 p-4 rounded-full mb-4 w-16 h-16 flex items-center justify-center">${icon}</div><h4 class="font-bold text-gray-900">${cat}</h4></div>`; }); }
-function startListeners() { 
-    onSnapshot(collection(db, "submissions"), (snapshot) => { submissionData = []; snapshot.forEach((doc) => submissionData.push({ id: doc.id, ...doc.data() })); renderDashboardCards(submissionData); renderHomeCategories(); const activeTab = document.querySelector('.main-tab-btn.active')?.dataset.tab; if(activeTab === 'juri' && isLoggedIn) { renderJuriTable(submissionData); } if(activeTab === 'admin' && isLoggedIn) { renderAdminTable(submissionData); } if(activeTab === 'dashboard' && isLoggedIn) initChart(submissionData); }, (error) => { console.warn("Submissions Listener Error:", error.code); }); 
-    onSnapshot(collection(db, "users"), (snapshot) => { userData = []; snapshot.forEach((doc) => userData.push({ id: doc.id, ...doc.data() })); if(isLoggedIn && currentRole === 'superadmin') { renderUserManagementTable(userData); } }, (error) => { console.warn("Users Listener Error:", error.code); }); 
-    onSnapshot(doc(db, "settings", "global"), (doc) => { if (doc.exists()) { registrationConfig.status = doc.data().registrationStatus || 'open'; } checkRegistrationWindow(); }, (error) => { console.warn("Settings Listener Error:", error.code); }); 
+function startListeners() {
+onSnapshot(collection(db, "submissions"), (snapshot) => { submissionData = []; snapshot.forEach((doc) => submissionData.push({ id: doc.id, ...doc.data() })); renderDashboardCards(submissionData); renderHomeCategories(); const activeTab = document.querySelector('.main-tab-btn.active')?.dataset.tab; if(activeTab === 'juri' && isLoggedIn) { renderJuriTable(submissionData); } if(activeTab === 'admin' && isLoggedIn) { renderAdminTable(submissionData); } if(activeTab === 'dashboard' && isLoggedIn) initChart(submissionData); }, (error) => { console.warn("Submissions Listener Error:", error.code); });
+onSnapshot(collection(db, "users"), (snapshot) => { userData = []; snapshot.forEach((doc) => userData.push({ id: doc.id, ...doc.data() })); if(isLoggedIn && currentRole === 'superadmin') { renderUserManagementTable(userData); } }, (error) => { console.warn("Users Listener Error:", error.code); });
+onSnapshot(doc(db, "settings", "global"), (doc) => { if (doc.exists()) { registrationConfig.status = doc.data().registrationStatus || 'open'; } checkRegistrationWindow(); }, (error) => { console.warn("Settings Listener Error:", error.code); });
 }
-async function initApp(){ 
-    loadDraft(); 
-    const s = JSON.parse(localStorage.getItem('pgri_user_session')); 
-    if(s){ 
-        isLoggedIn=true; 
-        currentRole=s.role; 
-        currentJuriPosisi=s.posisi||null; 
-        // FIX: Jika login tapi posisi null (versi lama), coba fetch lagi
-        if(currentRole === 'juri' && !currentJuriPosisi) {
-            try {
-                const q = query(collection(db, "users"), where("email", "==", s.email));
-                const snap = await getDocs(q);
-                if(!snap.empty) {
-                    const u = snap.docs[0].data();
-                    currentJuriPosisi = u.posisi;
-                    localStorage.setItem('pgri_user_session', JSON.stringify({ role: currentRole, email: s.email, posisi: currentJuriPosisi }));
-                }
-            } catch(e) { console.log("Refresh user error", e); }
-        }
-    } 
-    try { await signInAnonymously(auth); } catch (e) {} 
-    updateLoginUI(); startListeners(); setInterval(checkRegistrationWindow, 60000); checkRegistrationWindow(); 
+async function initApp(){
+loadDraft();
+const s = JSON.parse(localStorage.getItem('pgri_user_session'));
+if(s){
+isLoggedIn=true;
+currentRole=s.role;
+currentJuriPosisi=s.posisi||null;
+// FIX: Jika login tapi posisi null (versi lama), coba fetch lagi
+if(currentRole === 'juri' && !currentJuriPosisi) {
+try {
+const q = query(collection(db, "users"), where("email", "==", s.email));
+const snap = await getDocs(q);
+if(!snap.empty) {
+const u = snap.docs[0].data();
+currentJuriPosisi = u.posisi;
+localStorage.setItem('pgri_user_session', JSON.stringify({ role: currentRole, email: s.email, posisi: currentJuriPosisi }));
+}
+} catch(e) { console.log("Refresh user error", e); }
+}
+}
+try { await signInAnonymously(auth); } catch (e) {}
+updateLoginUI(); startListeners(); setInterval(checkRegistrationWindow, 60000); checkRegistrationWindow();
 }
 initApp();
 function checkRegistrationWindow() { const now = new Date(); const start = new Date('2025-12-01T00:01:00'); const end = new Date('2025-12-04T23:59:59'); let activeStatus = 'open'; if (registrationConfig.status === 'open') activeStatus = 'open'; else if (registrationConfig.status === 'closed') activeStatus = 'closed'; else if (registrationConfig.status === 'auto') { if (now < start) activeStatus = 'upcoming'; else if (now > end) activeStatus = 'closed'; else activeStatus = 'open'; } const statusDiv = document.getElementById('registration-status-message'); const formDiv = document.getElementById('view-pendaftar-form'); const selectDiv = document.getElementById('view-pendaftar-select'); if(isLoggedIn && currentRole === 'superadmin') { document.getElementById('system-status-text').innerHTML = `Status: ${activeStatus.toUpperCase()} (Mode: ${registrationConfig.status})`; document.getElementById('registration-mode').value = registrationConfig.status; } if (activeStatus !== 'open') { statusDiv.classList.remove('hidden'); selectDiv.classList.add('hidden'); formDiv.classList.add('hidden'); document.getElementById('reg-status-title').innerText = activeStatus === 'upcoming' ? "Pendaftaran Belum Dibuka" : "Pendaftaran Ditutup"; isRegistrationOpen = false; } else { statusDiv.classList.add('hidden'); isRegistrationOpen = true; if (formDiv.classList.contains('hidden') && !currentKategori) selectDiv.classList.remove('hidden'); else if(currentKategori) formDiv.classList.remove('hidden'); } }
 document.getElementById('btn-save-config').addEventListener('click', async () => { const mode = document.getElementById('registration-mode').value; await setDoc(doc(db, "settings", "global"), { registrationStatus: mode }, { merge: true }); showToast("Konfigurasi sistem berhasil disimpan.", 'success'); });
-function sortData(data, col, dir) { return [...data].sort((a, b) => { let valA, valB; 
-    if(col==='totalNilai') { valA=a.totalNilai||0; valB=b.totalNilai||0; } 
-    else if(col==='timestamp') { valA=a.timestamp?.seconds||0; valB=b.timestamp?.seconds||0; } 
-    else if(col==='rank_calculated') { valA=a.rank_calculated||9999; valB=b.rank_calculated||9999; }
-    else { valA=String(a[col]||'').toLowerCase(); valB=String(b[col]||'').toLowerCase(); } 
-    if(col==='index') return 0; 
-    if (valA < valB) return dir === 'asc' ? -1 : 1; 
-    if (valA > valB) return dir === 'asc' ? 1 : -1; 
-    return 0; }); }
+function sortData(data, col, dir) { return [...data].sort((a, b) => { let valA, valB;
+if(col==='totalNilai') { valA=a.totalNilai||0; valB=b.totalNilai||0; }
+else if(col==='timestamp') { valA=a.timestamp?.seconds||0; valB=b.timestamp?.seconds||0; }
+else if(col==='rank_calculated') { valA=a.rank_calculated||9999; valB=b.rank_calculated||9999; }
+else { valA=String(a[col]||'').toLowerCase(); valB=String(b[col]||'').toLowerCase(); }
+if(col==='index') return 0;
+if (valA < valB) return dir === 'asc' ? -1 : 1;
+if (valA > valB) return dir === 'asc' ? 1 : -1;
+return 0; }); }
 adminFilter.addEventListener('change', (e)=>{ currentAdminFilter=e.target.value; renderAdminTable(submissionData); });
 juriFilter.addEventListener('change', (e)=>{ currentJuriFilter=e.target.value; renderJuriTable(submissionData); });
 document.getElementById('admin-search').addEventListener('input', (e)=>{ adminSearch=e.target.value.toLowerCase(); renderAdminTable(submissionData); });
 document.getElementById('juri-search').addEventListener('input', (e)=>{ juriSearch=e.target.value.toLowerCase(); renderJuriTable(submissionData); });
-
 // SUPER ADMIN JURI SELECTOR LOGIC
 document.getElementById('impersonate-juri').addEventListener('change', (e) => {
-    currentJuriPosisi = e.target.value;
-    renderJuriTable(submissionData); // Re-render table with new perspective
-    showToast(`Mode: ${e.target.options[e.target.selectedIndex].text}`, 'success');
+currentJuriPosisi = e.target.value;
+renderJuriTable(submissionData); // Re-render table with new perspective
+showToast(`Mode: ${e.target.options[e.target.selectedIndex].text}`, 'success');
 });
-
 // EXCEL EXPORT UPDATE
 document.getElementById('btn-export').addEventListener('click', () => {
-    if (submissionData.length === 0) { showToast("Belum ada data.", 'warning'); return; }
-
-    const wb = XLSX.utils.book_new();
-
-    // Helper to calculate ranks per category or globally
-    const calculateRanks = (data) => {
-        const sorted = [...data].sort((a, b) => {
-             const nA = Number(a.totalNilai) || 0;
-             const nB = Number(b.totalNilai) || 0;
-             if (nB !== nA) return nB - nA; 
-             return (a.timestamp?.seconds || 0) - (b.timestamp?.seconds || 0);
-        });
-        const rankMap = new Map();
-        sorted.forEach((item, idx) => rankMap.set(item.id, idx + 1));
-        return rankMap;
-    };
-
-    const formatDataForSheet = (data, rankMap) => {
-        // Sort by rank for export readability
-        const sorted = [...data].sort((a, b) => {
-            const rA = rankMap.get(a.id) || 9999;
-            const rB = rankMap.get(b.id) || 9999;
-            return rA - rB;
-        });
-
-        return sorted.map((item) => {
-             const scores = item.penilaian || { juri1:0, juri2:0, juri3:0 };
-             const total = item.totalNilai || 0;
-             const avg = (total / 3).toFixed(2);
-             const rank = rankMap.get(item.id);
-             const note = item.catatan || ""; // Generic note
-
-             return {
-                "No.": rank, // Using Rank as No. effectively or index + 1
-                "Waktu Daftar": item.timestamp ? new Date(item.timestamp.seconds * 1000).toLocaleString('id-ID') : '-',
-                "Kategori Lomba": item.kategori,
-                "Nama Lengkap": item.nama,
-                "Asal Sekolah": item.sekolah,
-                "Kecamatan": item.kecSekolah || '-',
-                "NIP": "'"+(item.nip || '-'),
-                "NIK": "'"+(item.nik || ''),
-                "NUPTK": "'"+(item.nuptk || '-'),
-                "Status Pegawai": item.status,
-                "Jabatan": item.jabatan || '-',
-                "Pangkat/Gol": item.pangkatGol || '-',
-                "Jenjang": item.jenjang || '-',
-                "Tempat Lahir": item.tempatLahir || '-',
-                "Tanggal Lahir": item.tglLahir || '-',
-                "No. WA": "'"+(item.wa || ''),
-                "Email": item.email,
-                "Alamat Rumah": item.alamatRumah || '-',
-                "Kecamatan Rumah": item.kecRumah || '-',
-                "Kota/Kab Rumah": item.kabKotaRumah || '-',
-                "Deskripsi Inovasi": item.deskripsi || '-',
-                "Link Video": item.videoUrl,
-                "Catatan Juri 1": note, // Placeholder/Shared note currently
-                "Catatan Juri 2": note, // Placeholder/Shared note currently
-                "Catatan Juri 3": note, // Placeholder/Shared note currently
-                "Nilai Juri 1": scores.juri1 || 0,
-                "Nilai Juri 2": scores.juri2 || 0,
-                "Nilai Juri 3": scores.juri3 || 0,
-                "Total Nilai": total,
-                "Rata-rata": avg,
-                "Peringkat": rank
-             };
-        });
-    };
-
-    // 1. Sheet Rekap Lengkap
-    // Calculate global ranks? Or separate ranks per category in one big sheet? Usually rekap lengkap just dumps data.
-    // Let's calculate ranks per category even in the main sheet to be useful.
-    const globalRankMap = new Map();
-    KATEGORI_LIST.forEach(cat => {
-        const catData = submissionData.filter(d => d.kategori === cat);
-        const catRanks = calculateRanks(catData);
-        catRanks.forEach((val, key) => globalRankMap.set(key, val));
-    });
-    
-    const allData = formatDataForSheet(submissionData, globalRankMap);
-    // Re-sort all data by category then rank
-    allData.sort((a,b) => a["Kategori Lomba"].localeCompare(b["Kategori Lomba"]) || a["Peringkat"] - b["Peringkat"]);
-
-    const wsAll = XLSX.utils.json_to_sheet(allData);
-    XLSX.utils.book_append_sheet(wb, wsAll, "REKAP LENGKAP");
-
-    // 2. Sheet Per Kategori
-    KATEGORI_LIST.forEach(cat => {
-        const catData = submissionData.filter(d => d.kategori === cat);
-        const catRanks = calculateRanks(catData);
-        const formattedCatData = formatDataForSheet(catData, catRanks);
-        
-        const wsData = formattedCatData.length > 0 ? formattedCatData : [{"Info": "Belum ada pendaftar"}];
-        const wsCat = XLSX.utils.json_to_sheet(wsData);
-        const sheetName = cat.replace("Guru ", "").substring(0, 31); 
-        XLSX.utils.book_append_sheet(wb, wsCat, sheetName);
-    });
-
-    // Filename: PGRI Award 2025_Rekap yyyymmdd hh:mm
-    const now = new Date();
-    const yyyy = now.getFullYear();
-    const mm = String(now.getMonth() + 1).padStart(2, '0');
-    const dd = String(now.getDate()).padStart(2, '0');
-    const hh = String(now.getHours()).padStart(2, '0');
-    const min = String(now.getMinutes()).padStart(2, '0');
-    const filename = `PGRI Award 2025_Rekap ${yyyy}${mm}${dd} ${hh}:${min}.xlsx`;
-    
-    XLSX.writeFile(wb, filename);
+if (submissionData.length === 0) { showToast("Belum ada data.", 'warning'); return; }
+const wb = XLSX.utils.book_new();
+// Helper to calculate ranks per category or globally
+const calculateRanks = (data) => {
+const sorted = [...data].sort((a, b) => {
+const nA = Number(a.totalNilai) || 0;
+const nB = Number(b.totalNilai) || 0;
+if (nB !== nA) return nB - nA;
+return (a.timestamp?.seconds || 0) - (b.timestamp?.seconds || 0);
 });
-
+const rankMap = new Map();
+sorted.forEach((item, idx) => rankMap.set(item.id, idx + 1));
+return rankMap;
+};
+const formatDataForSheet = (data, rankMap) => {
+// Sort by rank for export readability
+const sorted = [...data].sort((a, b) => {
+const rA = rankMap.get(a.id) || 9999;
+const rB = rankMap.get(b.id) || 9999;
+return rA - rB;
+});
+return sorted.map((item) => {
+const scores = item.penilaian || { juri1:0, juri2:0, juri3:0 };
+const total = item.totalNilai || 0;
+const avg = (total / 3).toFixed(2);
+const rank = rankMap.get(item.id);
+const note = item.catatan || ""; // Generic note
+return {
+"No.": rank, // Using Rank as No. effectively or index + 1
+"Waktu Daftar": item.timestamp ? new Date(item.timestamp.seconds * 1000).toLocaleString('id-ID') : '-',
+"Kategori Lomba": item.kategori,
+"Nama Lengkap": item.nama,
+"Asal Sekolah": item.sekolah,
+"Kecamatan": item.kecSekolah || '-',
+"NIP": "'"+(item.nip || '-'),
+"NIK": "'"+(item.nik || ''),
+"NUPTK": "'"+(item.nuptk || '-'),
+"Status Pegawai": item.status,
+"Jabatan": item.jabatan || '-',
+"Pangkat/Gol": item.pangkatGol || '-',
+"Jenjang": item.jenjang || '-',
+"Tempat Lahir": item.tempatLahir || '-',
+"Tanggal Lahir": item.tglLahir || '-',
+"No. WA": "'"+(item.wa || ''),
+"Email": item.email,
+"Alamat Rumah": item.alamatRumah || '-',
+"Kecamatan Rumah": item.kecRumah || '-',
+"Kota/Kab Rumah": item.kabKotaRumah || '-',
+"Deskripsi Inovasi": item.deskripsi || '-',
+"Link Video": item.videoUrl,
+"Catatan Juri 1": note, // Placeholder/Shared note currently
+"Catatan Juri 2": note, // Placeholder/Shared note currently
+"Catatan Juri 3": note, // Placeholder/Shared note currently
+"Nilai Juri 1": scores.juri1 || 0,
+"Nilai Juri 2": scores.juri2 || 0,
+"Nilai Juri 3": scores.juri3 || 0,
+"Total Nilai": total,
+"Rata-rata": avg,
+"Peringkat": rank
+};
+});
+};
+// 1. Sheet Rekap Lengkap
+// Calculate global ranks? Or separate ranks per category in one big sheet? Usually rekap lengkap just dumps data.
+// Let's calculate ranks per category even in the main sheet to be useful.
+const globalRankMap = new Map();
+KATEGORI_LIST.forEach(cat => {
+const catData = submissionData.filter(d => d.kategori === cat);
+const catRanks = calculateRanks(catData);
+catRanks.forEach((val, key) => globalRankMap.set(key, val));
+});
+const allData = formatDataForSheet(submissionData, globalRankMap);
+// Re-sort all data by category then rank
+allData.sort((a,b) => a["Kategori Lomba"].localeCompare(b["Kategori Lomba"]) || a["Peringkat"] - b["Peringkat"]);
+const wsAll = XLSX.utils.json_to_sheet(allData);
+XLSX.utils.book_append_sheet(wb, wsAll, "REKAP LENGKAP");
+// 2. Sheet Per Kategori
+KATEGORI_LIST.forEach(cat => {
+const catData = submissionData.filter(d => d.kategori === cat);
+const catRanks = calculateRanks(catData);
+const formattedCatData = formatDataForSheet(catData, catRanks);
+const wsData = formattedCatData.length > 0 ? formattedCatData : [{"Info": "Belum ada pendaftar"}];
+const wsCat = XLSX.utils.json_to_sheet(wsData);
+const sheetName = cat.replace("Guru ", "").substring(0, 31);
+XLSX.utils.book_append_sheet(wb, wsCat, sheetName);
+});
+// Filename: PGRI Award 2025_Rekap yyyymmdd hh:mm
+const now = new Date();
+const yyyy = now.getFullYear();
+const mm = String(now.getMonth() + 1).padStart(2, '0');
+const dd = String(now.getDate()).padStart(2, '0');
+const hh = String(now.getHours()).padStart(2, '0');
+const min = String(now.getMinutes()).padStart(2, '0');
+const filename = `PGRI Award 2025_Rekap ${yyyy}${mm}${dd} ${hh}:${min}.xlsx`;
+XLSX.writeFile(wb, filename);
+});
 document.querySelectorAll('.sortable-header').forEach(th => { th.addEventListener('click', () => { const col = th.dataset.col; const type = th.closest('table').id.includes('admin') ? 'admin' : (th.closest('table').id.includes('users') ? 'users' : 'juri'); let sortObj; if(type==='users') sortObj=userSort; else if(type==='admin') sortObj=adminSort; else sortObj=juriSort; if (sortObj.col === col) sortObj.dir = sortObj.dir === 'asc' ? 'desc' : 'asc'; else { sortObj.col = col; sortObj.dir = 'asc'; } if(type==='admin') renderAdminTable(submissionData); else if(type==='juri') renderJuriTable(submissionData); else renderUserManagementTable(userData); document.querySelectorAll('.sort-icon').forEach(el=>el.innerText=''); th.querySelector('.sort-icon').innerText=sortObj.dir==='asc'?'▲':'▼'; }); });
-
-function renderAdminTable(data) { 
-    const tbody = document.querySelector('#admin-table tbody'); 
-    const thPeringkat = document.getElementById('th-peringkat');
-    if(!tbody) return; 
-
-    // 1. Filter Data
-    let filteredData = [...data]; // Copy data
-    if (currentAdminFilter !== 'all') filteredData = data.filter(item => item.kategori === currentAdminFilter); 
-    if (adminSearch) filteredData = filteredData.filter(item => (item.nama && item.nama.toLowerCase().includes(adminSearch)) || (item.sekolah && item.sekolah.toLowerCase().includes(adminSearch))); 
-    document.getElementById('admin-total-count').innerText = filteredData.length; 
-    
-    // 2. Hitung Peringkat (Hanya jika Kategori Spesifik dipilih)
-    if (currentAdminFilter !== 'all') {
-        thPeringkat.classList.remove('hidden');
-        // Buat salinan untuk perhitungan ranking (berdasarkan nilai tertinggi)
-        const sortedForRank = [...filteredData].sort((a, b) => {
-            const sA = Number(a.totalNilai) || 0;
-            const sB = Number(b.totalNilai) || 0;
-            if (sB !== sA) return sB - sA;
-            return (a.timestamp?.seconds || 0) - (b.timestamp?.seconds || 0); // Jika seri, yang daftar duluan menang
-        });
-        
-        // Map ID ke Rank
-        const rankMap = new Map();
-        sortedForRank.forEach((item, idx) => rankMap.set(item.id, idx + 1));
-
-        // Inject rank ke filteredData agar bisa disortir/ditampilkan
-        filteredData = filteredData.map(item => ({...item, rank_calculated: rankMap.get(item.id)}));
-    } else {
-        thPeringkat.classList.add('hidden');
-        // Bersihkan rank jika ada sisa
-        filteredData = filteredData.map(item => ({...item, rank_calculated: null}));
-    }
-
-    // 3. Sorting Tampilan (Default: Timestamp/Waktu Daftar)
-    filteredData = sortData(filteredData, adminSort.col, adminSort.dir); 
-    updateAdminDashboard(data);
-
-    if(filteredData.length === 0) { tbody.innerHTML = '<tr><td colspan="12" class="px-4 py-8 text-center text-gray-500 italic">Belum ada data pendaftar.</td></tr>'; return; }
-    
-    // 4. Render HTML
-    tbody.innerHTML = filteredData.map((item, index) => { 
-        const scores = item.penilaian || { juri1:0, juri2:0, juri3:0 }; 
-        const total = item.totalNilai || 0; 
-        const avg = (total/3).toFixed(2); 
-        const complete = (scores.juri1>0 && scores.juri2>0 && scores.juri3>0); 
-        const statusIcon = complete ? '<span title="Lengkap">✅</span>' : '<span title="Belum Lengkap">⚠️</span>';
-        const dateStr = item.timestamp ? new Date(item.timestamp.seconds * 1000).toLocaleString('id-ID', {day:'numeric', month:'short', hour:'2-digit', minute:'2-digit'}) : '-';
-        
-        // Logika Tampilan Sel Peringkat
-        let rankCell = '';
-        if (currentAdminFilter !== 'all' && item.rank_calculated) {
-            let rankColor = 'text-gray-700';
-            if(item.rank_calculated === 1) rankColor = 'text-yellow-600 font-extrabold text-base';
-            else if(item.rank_calculated === 2) rankColor = 'text-gray-600 font-bold';
-            else if(item.rank_calculated === 3) rankColor = 'text-orange-600 font-bold';
-            rankCell = `<td class="px-4 py-2 text-center ${rankColor}">#${item.rank_calculated}</td>`;
-        } else {
-            rankCell = `<td class="hidden"></td>`; // Hidden cell to maintain structure if needed, or controlled by th visibility
-        }
-
-        // Tampilkan Cell Peringkat hanya jika header tidak hidden (agar kolom pas)
-        const isRankVisible = currentAdminFilter !== 'all';
-        const rankCellHtml = isRankVisible ? rankCell : '';
-
-        return `<tr class="hover:bg-gray-50 border-b border-gray-100">
-            <td class="px-4 py-2 font-medium text-gray-900 text-center">${index+1}</td>
-            <td class="px-4 py-2 text-gray-500 text-xs whitespace-nowrap">${dateStr}</td>
-            <td class="px-4 py-2 font-medium text-gray-900">${item.nama}</td>
-            <td class="px-4 py-2 text-gray-500 text-xs">${item.kategori.replace('Guru ','')}</td>
-            <td class="px-2 py-2 text-center text-xs font-mono">${scores.juri1||'-'}</td>
-            <td class="px-2 py-2 text-center text-xs font-mono">${scores.juri2||'-'}</td>
-            <td class="px-2 py-2 text-center text-xs font-mono">${scores.juri3||'-'}</td>
-            <td class="px-4 py-2 text-center font-bold text-indigo-700">${total}</td>
-            <td class="px-4 py-2 text-center text-xs">${avg}</td>
-            <td class="px-4 py-2 text-center">${statusIcon}</td>
-            ${rankCellHtml}
-            <td class="px-4 py-2 flex justify-center space-x-2">
-                <button class="btn-video text-indigo-600 bg-indigo-50 p-1.5 rounded-lg" data-url="${item.videoUrl}"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg></button>
-                <button class="btn-delete text-red-600 bg-red-50 p-1.5 rounded-lg" data-id="${item.id}"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg></button>
-            </td>
-        </tr>`; 
-    }).join('');
-    tbody.querySelectorAll('.btn-delete').forEach(b => b.addEventListener('click', async (e) => { if(confirm("Hapus data ini permanen?")) await deleteDoc(doc(db, "submissions", e.currentTarget.dataset.id)); }));
-    tbody.querySelectorAll('.btn-video').forEach(b => b.addEventListener('click', (e) => showVideoOptions(e.currentTarget.dataset.url))); 
+function renderAdminTable(data) {
+const tbody = document.querySelector('#admin-table tbody');
+const thPeringkat = document.getElementById('th-peringkat');
+if(!tbody) return;
+// 1. Filter Data
+let filteredData = [...data]; // Copy data
+if (currentAdminFilter !== 'all') filteredData = data.filter(item => item.kategori === currentAdminFilter);
+if (adminSearch) filteredData = filteredData.filter(item => (item.nama && item.nama.toLowerCase().includes(adminSearch)) || (item.sekolah && item.sekolah.toLowerCase().includes(adminSearch)));
+document.getElementById('admin-total-count').innerText = filteredData.length;
+// 2. Hitung Peringkat (Hanya jika Kategori Spesifik dipilih)
+if (currentAdminFilter !== 'all') {
+thPeringkat.classList.remove('hidden');
+// Buat salinan untuk perhitungan ranking (berdasarkan nilai tertinggi)
+const sortedForRank = [...filteredData].sort((a, b) => {
+const sA = Number(a.totalNilai) || 0;
+const sB = Number(b.totalNilai) || 0;
+if (sB !== sA) return sB - sA;
+return (a.timestamp?.seconds || 0) - (b.timestamp?.seconds || 0); // Jika seri, yang daftar duluan menang
+});
+// Map ID ke Rank
+const rankMap = new Map();
+sortedForRank.forEach((item, idx) => rankMap.set(item.id, idx + 1));
+// Inject rank ke filteredData agar bisa disortir/ditampilkan
+filteredData = filteredData.map(item => ({...item, rank_calculated: rankMap.get(item.id)}));
+} else {
+thPeringkat.classList.add('hidden');
+// Bersihkan rank jika ada sisa
+filteredData = filteredData.map(item => ({...item, rank_calculated: null}));
 }
-
+// 3. Sorting Tampilan (Default: Timestamp/Waktu Daftar)
+filteredData = sortData(filteredData, adminSort.col, adminSort.dir);
+updateAdminDashboard(data);
+if(filteredData.length === 0) { tbody.innerHTML = '<tr><td colspan="12" class="px-4 py-8 text-center text-gray-500 italic">Belum ada data pendaftar.</td></tr>'; return; }
+// 4. Render HTML
+tbody.innerHTML = filteredData.map((item, index) => {
+const scores = item.penilaian || { juri1:0, juri2:0, juri3:0 };
+const total = item.totalNilai || 0;
+const avg = (total/3).toFixed(2);
+const complete = (scores.juri1>0 && scores.juri2>0 && scores.juri3>0);
+const statusIcon = complete ? '<span title="Lengkap">✅</span>' : '<span title="Belum Lengkap">⚠️</span>';
+const dateStr = item.timestamp ? new Date(item.timestamp.seconds * 1000).toLocaleString('id-ID', {day:'numeric', month:'short', hour:'2-digit', minute:'2-digit'}) : '-';
+// Logika Tampilan Sel Peringkat
+let rankCell = '';
+if (currentAdminFilter !== 'all' && item.rank_calculated) {
+let rankColor = 'text-gray-700';
+if(item.rank_calculated === 1) rankColor = 'text-yellow-600 font-extrabold text-base';
+else if(item.rank_calculated === 2) rankColor = 'text-gray-600 font-bold';
+else if(item.rank_calculated === 3) rankColor = 'text-orange-600 font-bold';
+rankCell = `<td class="px-4 py-2 text-center ${rankColor}">#${item.rank_calculated}</td>`;
+} else {
+rankCell = `<td class="hidden"></td>`; // Hidden cell to maintain structure if needed, or controlled by th visibility
+}
+// Tampilkan Cell Peringkat hanya jika header tidak hidden (agar kolom pas)
+const isRankVisible = currentAdminFilter !== 'all';
+const rankCellHtml = isRankVisible ? rankCell : '';
+return `<tr class="hover:bg-gray-50 border-b border-gray-100">
+<td class="px-4 py-2 font-medium text-gray-900 text-center">${index+1}</td>
+<td class="px-4 py-2 text-gray-500 text-xs whitespace-nowrap">${dateStr}</td>
+<td class="px-4 py-2 font-medium text-gray-900">${item.nama}</td>
+<td class="px-4 py-2 text-gray-500 text-xs">${item.kategori.replace('Guru ','')}</td>
+<td class="px-2 py-2 text-center text-xs font-mono">${scores.juri1||'-'}</td>
+<td class="px-2 py-2 text-center text-xs font-mono">${scores.juri2||'-'}</td>
+<td class="px-2 py-2 text-center text-xs font-mono">${scores.juri3||'-'}</td>
+<td class="px-4 py-2 text-center font-bold text-indigo-700">${total}</td>
+<td class="px-4 py-2 text-center text-xs">${avg}</td>
+<td class="px-4 py-2 text-center">${statusIcon}</td>
+${rankCellHtml}
+<td class="px-4 py-2 flex justify-center space-x-2">
+<button class="btn-video text-indigo-600 bg-indigo-50 p-1.5 rounded-lg" data-url="${item.videoUrl}"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg></button>
+<button class="btn-delete text-red-600 bg-red-50 p-1.5 rounded-lg" data-id="${item.id}"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg></button>
+</td>
+</tr>`;
+}).join('');
+tbody.querySelectorAll('.btn-delete').forEach(b => b.addEventListener('click', async (e) => { if(confirm("Hapus data ini permanen?")) await deleteDoc(doc(db, "submissions", e.currentTarget.dataset.id)); }));
+tbody.querySelectorAll('.btn-video').forEach(b => b.addEventListener('click', (e) => showVideoOptions(e.currentTarget.dataset.url)));
+}
 function updateAdminDashboard(data) { const total = data.length; if(total===0) return; let j1=0, j2=0, j3=0; data.forEach(d => { const s = d.penilaian || {}; if(s.juri1>0) j1++; if(s.juri2>0) j2++; if(s.juri3>0) j3++; }); const p1 = Math.round((j1/total)*100), p2 = Math.round((j2/total)*100), p3 = Math.round((j3/total)*100);
 document.getElementById('prog-j1-bar').style.width = `${p1}%`; document.getElementById('prog-j1-pct').innerText = `${p1}%`; document.getElementById('prog-j1-text').innerText = `${j1}/${total} Selesai`;
 document.getElementById('prog-j2-bar').style.width = `${p2}%`; document.getElementById('prog-j2-pct').innerText = `${p2}%`; document.getElementById('prog-j2-text').innerText = `${j2}/${total} Selesai`;
 document.getElementById('prog-j3-bar').style.width = `${p3}%`; document.getElementById('prog-j3-pct').innerText = `${p3}%`; document.getElementById('prog-j3-text').innerText = `${j3}/${total} Selesai`; }
-
 function renderJuriTable(data) { const tbody = document.querySelector('#juri-table tbody'); if(!tbody) return; let filteredData = data; if (currentJuriFilter !== 'all') filteredData = data.filter(item => item.kategori === currentJuriFilter); if (juriSearch) filteredData = filteredData.filter(item => (item.nama && item.nama.toLowerCase().includes(juriSearch))); document.getElementById('juri-total-count').innerText = filteredData.length; filteredData.sort((a, b) => (Number(b.totalNilai)||0) - (Number(a.totalNilai)||0));
 if(filteredData.length === 0) { tbody.innerHTML = `<tr><td colspan="6" class="px-4 py-8 text-center text-gray-500 italic">Belum ada peserta.</td></tr>`; return; }
-
 const thRank = document.getElementById('th-juri-peringkat');
 if(currentJuriFilter === 'all') thRank.classList.add('hidden');
 else thRank.classList.remove('hidden');
-
 let rankMapJuri = new Map();
 if(currentJuriFilter !== 'all') {
-    const sortedByScore = [...filteredData].sort((a, b) => {
-        const sA = Number(a.totalNilai) || 0;
-        const sB = Number(b.totalNilai) || 0;
-        return sB - sA;
-    });
-    sortedByScore.forEach((item, idx) => rankMapJuri.set(item.id, idx + 1));
+const sortedByScore = [...filteredData].sort((a, b) => {
+const sA = Number(a.totalNilai) || 0;
+const sB = Number(b.totalNilai) || 0;
+return sB - sA;
+});
+sortedByScore.forEach((item, idx) => rankMapJuri.set(item.id, idx + 1));
 }
-
-tbody.innerHTML = filteredData.map((item, index) => { 
-    const date = item.timestamp ? new Date(item.timestamp.seconds * 1000).toLocaleString('id-ID') : '-'; 
-    const scores = item.penilaian || { juri1:0, juri2:0, juri3:0 }; 
-    const myScore = currentJuriPosisi ? scores[currentJuriPosisi] : 0; 
-    const isScored = myScore > 0; 
-    const btnClass = isScored ? 'text-yellow-600 bg-yellow-50' : 'text-indigo-600 bg-indigo-50'; 
-    const btnText = isScored ? 'Edit Nilai' : 'Nilai'; 
-    const rubricDataStr = item.rubricDetails ? JSON.stringify(item.rubricDetails).replace(/"/g, '&quot;') : '{}';
-    
-    let rankCell = '<td class="hidden"></td>';
-    if(currentJuriFilter !== 'all') {
-        const rankDisplay = (item.totalNilai && item.totalNilai > 0) ? rankMapJuri.get(item.id) : '-';
-        rankCell = `<td class="px-4 py-2 font-bold text-center text-indigo-700 text-lg">#${rankDisplay}</td>`;
-    }
-    
-    let resetButtonHtml = '';
-    if(isScored) {
-        resetButtonHtml = `<button class="btn-reset text-orange-500 bg-orange-50 p-1.5 px-2 rounded-lg ml-2 hover:bg-orange-100" title="Reset/Undo Nilai" data-id="${item.id}"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg></button>`;
-    }
-
-    return `<tr class="hover:bg-gray-50 border-b border-gray-100">
-        <td class="px-4 py-2 font-medium text-gray-900 text-center">${index + 1}</td>
-        <td class="px-4 py-2 font-medium text-gray-900">${item.nama}</td>
-        <td class="px-4 py-2 text-gray-500 text-xs">${item.kategori}</td>
-        <td class="px-4 py-2 font-bold text-center ${isScored?'text-green-600':'text-gray-300'}">${isScored?myScore:'Belum'}</td>
-        ${rankCell}
-        <td class="px-4 py-2 flex justify-center items-center space-x-2">
-            <button class="btn-video text-blue-600 bg-blue-50 p-1.5 rounded-lg" data-url="${item.videoUrl}" data-id="${item.id}"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg></button>
-            <button class="btn-score ${btnClass} p-1.5 px-2 rounded-lg flex items-center text-xs font-bold" data-id="${item.id}" data-name="${item.nama}" data-score="${myScore}" data-notes="${item.catatan||''}" data-kategori="${item.kategori}" data-rubric="${rubricDataStr}">${btnText}</button>
-            ${resetButtonHtml}
-        </td>
-    </tr>`; 
-    }).join('');
-    
-    tbody.querySelectorAll('.btn-video').forEach(b => b.addEventListener('click', (e) => { watchedSubmissions.add(e.currentTarget.dataset.id); showVideoOptions(e.currentTarget.dataset.url); }));
-    tbody.querySelectorAll('.btn-score').forEach(b => b.addEventListener('click', (e) => { const d = e.currentTarget.dataset; if (!watchedSubmissions.has(d.id) && d.score == '0') { showToast("Tonton video dulu!", 'warning'); return; } openScoreModal(d); })); 
-    tbody.querySelectorAll('.btn-reset').forEach(b => b.addEventListener('click', (e) => { resetScore(e.currentTarget.dataset.id); }));
+tbody.innerHTML = filteredData.map((item, index) => {
+const date = item.timestamp ? new Date(item.timestamp.seconds * 1000).toLocaleString('id-ID') : '-';
+const scores = item.penilaian || { juri1:0, juri2:0, juri3:0 };
+const myScore = currentJuriPosisi ? scores[currentJuriPosisi] : 0;
+const isScored = myScore > 0;
+const btnClass = isScored ? 'text-yellow-600 bg-yellow-50' : 'text-indigo-600 bg-indigo-50';
+const btnText = isScored ? 'Edit Nilai' : 'Nilai';
+const rubricDataStr = item.rubricDetails ? JSON.stringify(item.rubricDetails).replace(/"/g, '&quot;') : '{}';
+let rankCell = '<td class="hidden"></td>';
+if(currentJuriFilter !== 'all') {
+const rankDisplay = (item.totalNilai && item.totalNilai > 0) ? rankMapJuri.get(item.id) : '-';
+rankCell = `<td class="px-4 py-2 font-bold text-center text-indigo-700 text-lg">#${rankDisplay}</td>`;
 }
-
+let resetButtonHtml = '';
+if(isScored) {
+resetButtonHtml = `<button class="btn-reset text-orange-500 bg-orange-50 p-1.5 px-2 rounded-lg ml-2 hover:bg-orange-100" title="Reset/Undo Nilai" data-id="${item.id}"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg></button>`;
+}
+return `<tr class="hover:bg-gray-50 border-b border-gray-100">
+<td class="px-4 py-2 font-medium text-gray-900 text-center">${index + 1}</td>
+<td class="px-4 py-2 font-medium text-gray-900">${item.nama}</td>
+<td class="px-4 py-2 text-gray-500 text-xs">${item.kategori}</td>
+<td class="px-4 py-2 font-bold text-center ${isScored?'text-green-600':'text-gray-300'}">${isScored?myScore:'Belum'}</td>
+${rankCell}
+<td class="px-4 py-2 flex justify-center items-center space-x-2">
+<button class="btn-video text-blue-600 bg-blue-50 p-1.5 rounded-lg" data-url="${item.videoUrl}" data-id="${item.id}"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg></button>
+<button class="btn-score ${btnClass} p-1.5 px-2 rounded-lg flex items-center text-xs font-bold" data-id="${item.id}" data-name="${item.nama}" data-score="${myScore}" data-notes="${item.catatan||''}" data-kategori="${item.kategori}" data-rubric="${rubricDataStr}">${btnText}</button>
+${resetButtonHtml}
+</td>
+</tr>`;
+}).join('');
+tbody.querySelectorAll('.btn-video').forEach(b => b.addEventListener('click', (e) => { watchedSubmissions.add(e.currentTarget.dataset.id); showVideoOptions(e.currentTarget.dataset.url); }));
+tbody.querySelectorAll('.btn-score').forEach(b => b.addEventListener('click', (e) => { const d = e.currentTarget.dataset; if (!watchedSubmissions.has(d.id) && d.score == '0') { showToast("Tonton video dulu!", 'warning'); return; } openScoreModal(d); }));
+tbody.querySelectorAll('.btn-reset').forEach(b => b.addEventListener('click', (e) => { resetScore(e.currentTarget.dataset.id); }));
+}
 // EXPOSED TO WINDOW FOR GLOBAL ACCESS
 window.generateAutoScoreNotes = function(kategori, rubricData) {
-    const rData = window.RUBRIC_DATA[kategori];
-    if(!rData) return "";
-
-    let aspects4 = [];
-    let aspects3 = [];
-    let aspects2 = [];
-    let aspects1 = [];
-
-    rData.forEach((aspect, idx) => {
-        const key = `aspect_${idx}`;
-        if(rubricData[key]) {
-            const val = parseInt(rubricData[key]);
-            if(val === 4) aspects4.push(aspect.t);
-            else if(val === 3) aspects3.push(aspect.t);
-            else if(val === 2) aspects2.push(aspect.t);
-            else if(val === 1) aspects1.push(aspect.t);
-        }
-    });
-
-    let paragraphs = [];
-
-    // Kalimat Pembuka & Kekuatan
-    if (aspects4.length > 0 || aspects3.length > 0) {
-        let str = "Secara umum, peserta menunjukkan potensi yang baik. ";
-        if (aspects4.length > 0) {
-            str += `Kekuatan utama sangat menonjol pada aspek ${aspects4.join(", ")} yang sudah sangat optimal. `;
-        }
-        if (aspects3.length > 0) {
-            str += `Kemampuan pada aspek ${aspects3.join(", ")} juga sudah tergolong baik dan konsisten. `;
-        }
-        paragraphs.push(str);
-    }
-
-    // Kalimat Perbaikan
-    if (aspects2.length > 0 || aspects1.length > 0) {
-        let str = "";
-        if (paragraphs.length === 0) str = "Peserta perlu banyak melakukan evaluasi. ";
-        else str = "Meskipun demikian, ";
-
-        if (aspects2.length > 0) {
-            str += `terdapat ruang untuk perbaikan pada aspek ${aspects2.join(", ")} agar lebih maksimal. `;
-        }
-        if (aspects1.length > 0) {
-            str += `Perhatian khusus sangat diperlukan untuk memperbaiki aspek ${aspects1.join(", ")} yang masih kurang. `;
-        }
-        paragraphs.push(str);
-    }
-
-    if(paragraphs.length === 0) return "";
-    
-    return paragraphs.join("\n\n");
+const rData = window.RUBRIC_DATA[kategori];
+if(!rData) return "";
+let aspects4 = [];
+let aspects3 = [];
+let aspects2 = [];
+let aspects1 = [];
+rData.forEach((aspect, idx) => {
+const key = `aspect_${idx}`;
+if(rubricData[key]) {
+const val = parseInt(rubricData[key]);
+if(val === 4) aspects4.push(aspect.t);
+else if(val === 3) aspects3.push(aspect.t);
+else if(val === 2) aspects2.push(aspect.t);
+else if(val === 1) aspects1.push(aspect.t);
 }
-
-function openScoreModal(d) { 
-    document.getElementById('score-doc-id').value = d.id; 
-    document.getElementById('score-participant-name').innerText = d.name; 
-    document.getElementById('score-participant-cat').innerText = d.kategori; 
-    
-    const notesField = document.getElementById('score-notes');
-    notesField.value = d.notes; 
-    
-    notesField.dataset.manualEdit = "false"; 
-    
-    notesField.addEventListener('input', () => { notesField.dataset.manualEdit = "true"; });
-
-    const currentScore = parseInt(d.score || 0);
-    document.getElementById('calculated-score').innerText = currentScore;
-
-    const prevRubric = d.rubric ? JSON.parse(d.rubric) : {}; 
-    const mySlot = currentJuriPosisi || 'juri1'; 
-    const prevRubricMySlot = prevRubric[mySlot] || {}; 
-    const container = document.getElementById('rubric-container'); 
-    container.innerHTML = '';
-    
-    const rData = window.RUBRIC_DATA[d.kategori];
-    if(rData) { 
-        rData.forEach((aspect, idx) => { 
-            const savedVal = prevRubricMySlot[`aspect_${idx}`];
-            let html = `<div class="aspect-container">
-                <p class="aspect-header">${idx+1}. ${aspect.t}</p>
-                <div class="rubric-grid">`;
-            
-            const labels = ["KURANG", "CUKUP", "BAIK", "SANGAT BAIK"];
-            aspect.i.forEach((indicator, i) => { 
-                const val = i + 1;
-                const splitInd = indicator.split(':');
-                const labelTitle = splitInd[0].replace(/\(\d\)/, '').trim(); 
-                const labelDesc = splitInd.slice(1).join(':').trim();
-                
-                const isSelected = savedVal == val ? 'selected' : ''; 
-                
-                html += `<div class="rubric-full-card ${isSelected}" 
-                        onclick="selectRubricCard(this, '${idx}', '${val}', '${d.kategori}')"
-                        data-val="${val}" data-name="aspect_${idx}">
-                        <div class="rubric-card-header">
-                            <span class="rubric-level-badge">${labels[i]}</span>
-                            <span class="rubric-score-badge">${val}</span>
-                        </div>
-                        <p class="rubric-card-text">${labelDesc}</p>
-                    </div>`;
-            });
-            html += `</div></div>`; 
-            container.innerHTML += html; 
-        });
-    } 
-    document.getElementById('score-modal').classList.remove('hidden'); 
+});
+let paragraphs = [];
+// Kalimat Pembuka & Kekuatan
+if (aspects4.length > 0 || aspects3.length > 0) {
+let str = "Secara umum, peserta menunjukkan potensi yang baik. ";
+if (aspects4.length > 0) {
+str += `Kekuatan utama sangat menonjol pada aspek ${aspects4.join(", ")} yang sudah sangat optimal. `;
 }
-
+if (aspects3.length > 0) {
+str += `Kemampuan pada aspek ${aspects3.join(", ")} juga sudah tergolong baik dan konsisten. `;
+}
+paragraphs.push(str);
+}
+// Kalimat Perbaikan
+if (aspects2.length > 0 || aspects1.length > 0) {
+let str = "";
+if (paragraphs.length === 0) str = "Peserta perlu banyak melakukan evaluasi. ";
+else str = "Meskipun demikian, ";
+if (aspects2.length > 0) {
+str += `terdapat ruang untuk perbaikan pada aspek ${aspects2.join(", ")} agar lebih maksimal. `;
+}
+if (aspects1.length > 0) {
+str += `Perhatian khusus sangat diperlukan untuk memperbaiki aspek ${aspects1.join(", ")} yang masih kurang. `;
+}
+paragraphs.push(str);
+}
+if(paragraphs.length === 0) return "";
+return paragraphs.join("\n\n");
+}
+function openScoreModal(d) {
+document.getElementById('score-doc-id').value = d.id;
+document.getElementById('score-participant-name').innerText = d.name;
+document.getElementById('score-participant-cat').innerText = d.kategori;
+const notesField = document.getElementById('score-notes');
+notesField.value = d.notes;
+notesField.dataset.manualEdit = "false";
+notesField.addEventListener('input', () => { notesField.dataset.manualEdit = "true"; });
+const currentScore = parseInt(d.score || 0);
+document.getElementById('calculated-score').innerText = currentScore;
+const prevRubric = d.rubric ? JSON.parse(d.rubric) : {};
+const mySlot = currentJuriPosisi || 'juri1';
+const prevRubricMySlot = prevRubric[mySlot] || {};
+const container = document.getElementById('rubric-container');
+container.innerHTML = '';
+const rData = window.RUBRIC_DATA[d.kategori];
+if(rData) {
+rData.forEach((aspect, idx) => {
+const savedVal = prevRubricMySlot[`aspect_${idx}`];
+let html = `<div class="aspect-container">
+<p class="aspect-header">${idx+1}. ${aspect.t}</p>
+<div class="rubric-grid">`;
+const labels = ["KURANG", "CUKUP", "BAIK", "SANGAT BAIK"];
+aspect.i.forEach((indicator, i) => {
+const val = i + 1;
+const splitInd = indicator.split(':');
+const labelTitle = splitInd[0].replace(/\(\d\)/, '').trim();
+const labelDesc = splitInd.slice(1).join(':').trim();
+const isSelected = savedVal == val ? 'selected' : '';
+html += `<div class="rubric-full-card ${isSelected}"
+onclick="selectRubricCard(this, '${idx}', '${val}', '${d.kategori}')"
+data-val="${val}" data-name="aspect_${idx}">
+<div class="rubric-card-header">
+<span class="rubric-level-badge">${labels[i]}</span>
+<span class="rubric-score-badge">${val}</span>
+</div>
+<p class="rubric-card-text">${labelDesc}</p>
+</div>`;
+});
+html += `</div></div>`;
+container.innerHTML += html;
+});
+}
+document.getElementById('score-modal').classList.remove('hidden');
+}
 window.selectRubricCard = (card, aspectIdx, val, kategori) => {
-    const parentGrid = card.parentElement;
-    parentGrid.querySelectorAll('.rubric-full-card').forEach(c => c.classList.remove('selected'));
-    card.classList.add('selected');
-    
-    let total = 0; 
-    let count = 0;
-    let currentSelections = {};
-    
-    document.getElementById('rubric-container').querySelectorAll('.rubric-full-card.selected').forEach(activeCard => {
-        total += parseInt(activeCard.dataset.val);
-        count++;
-        currentSelections[activeCard.dataset.name] = activeCard.dataset.val;
-    });
-    
-    const rData = window.RUBRIC_DATA[kategori];
-    const max = rData.length * 4; 
-    document.getElementById('calculated-score').innerText = count === rData.length ? Math.round((total/max)*100) : 0; 
-    
-    const notesField = document.getElementById('score-notes');
-    // ALWAYS regenerate unless manually edited to blank which is rare, 
-    // prioritizes adaptiveness over manual edits if conflicts arise, but respects edit flag if robust.
-    // Given user request "deskripsi mengikuti berubah", we force update if it's not manually flagged.
-    if(notesField.dataset.manualEdit !== "true" || notesField.value.trim() === "") {
-        notesField.value = window.generateAutoScoreNotes(kategori, currentSelections);
-    }
-};
-
-async function resetScore(docId) {
-    if(!confirm("Yakin ingin menghapus nilai peserta ini? (Tindakan tidak bisa dibatalkan)")) return;
-    try {
-        const mySlot = currentJuriPosisi || 'juri1'; 
-        const docSnap = await getDoc(doc(db, "submissions", docId));
-        if(!docSnap.exists()) return;
-        
-        const currentData = docSnap.data();
-        let penilaian = currentData.penilaian || {};
-        let rubricDetails = currentData.rubricDetails || {};
-        
-        penilaian[mySlot] = 0;
-        if(rubricDetails[mySlot]) delete rubricDetails[mySlot];
-        
-        // Recalculate global total
-        const totalNilai = (penilaian.juri1||0) + (penilaian.juri2||0) + (penilaian.juri3||0);
-        
-        // OPTIMISTIC UPDATE
-        const localIndex = submissionData.findIndex(s => s.id === docId);
-        if(localIndex !== -1) {
-            submissionData[localIndex].penilaian = penilaian;
-            submissionData[localIndex].totalNilai = totalNilai;
-            submissionData[localIndex].rubricDetails = rubricDetails;
-            submissionData[localIndex].catatan = "";
-            renderJuriTable(submissionData);
-        }
-
-        await updateDoc(doc(db, "submissions", docId), { 
-            penilaian: penilaian, 
-            totalNilai: totalNilai, 
-            rubricDetails: rubricDetails,
-            catatan: "" 
-        });
-        
-        document.getElementById('score-modal').classList.add('hidden');
-        showToast("Nilai berhasil direset ke 0.", 'success');
-    } catch(e) {
-        showToast("Gagal reset: " + e.message, 'error');
-    }
+const parentGrid = card.parentElement;
+parentGrid.querySelectorAll('.rubric-full-card').forEach(c => c.classList.remove('selected'));
+card.classList.add('selected');
+let total = 0;
+let count = 0;
+let currentSelections = {};
+document.getElementById('rubric-container').querySelectorAll('.rubric-full-card.selected').forEach(activeCard => {
+total += parseInt(activeCard.dataset.val);
+count++;
+currentSelections[activeCard.dataset.name] = activeCard.dataset.val;
+});
+const rData = window.RUBRIC_DATA[kategori];
+const max = rData.length * 4;
+document.getElementById('calculated-score').innerText = count === rData.length ? Math.round((total/max)*100) : 0;
+const notesField = document.getElementById('score-notes');
+// ALWAYS regenerate unless manually edited to blank which is rare,
+// prioritizes adaptiveness over manual edits if conflicts arise, but respects edit flag if robust.
+// Given user request "deskripsi mengikuti berubah", we force update if it's not manually flagged.
+if(notesField.dataset.manualEdit !== "true" || notesField.value.trim() === "") {
+notesField.value = window.generateAutoScoreNotes(kategori, currentSelections);
 }
-
-document.getElementById('save-score-btn').addEventListener('click', async () => { 
-    try { 
-        const scoreBtn = document.getElementById('save-score-btn');
-        const originalText = scoreBtn.innerText;
-        scoreBtn.innerText = "Menyimpan...";
-        scoreBtn.disabled = true;
-
-        const score = parseInt(document.getElementById('calculated-score').innerText); 
-        if(score === 0) { showToast("Lengkapi penilaian!", 'warning'); scoreBtn.innerText = originalText; scoreBtn.disabled = false; return; } 
-        
-        const docId = document.getElementById('score-doc-id').value; 
-        const mySlot = currentJuriPosisi || 'juri1'; 
-        const docSnap = await getDoc(doc(db, "submissions", docId)); 
-        const currentData = docSnap.exists() ? docSnap.data() : {};
-        
-        let penilaian = currentData.penilaian || { juri1:0, juri2:0, juri3:0 }; 
-        penilaian[mySlot] = score; 
-        
-        let rubricDetails = currentData.rubricDetails || {}; 
-        rubricDetails[mySlot] = {}; 
-        
-        document.querySelectorAll('.rubric-full-card.selected').forEach(card => {
-            rubricDetails[mySlot][card.dataset.name] = card.dataset.val;
-        });
-        
-        const totalNilai = (penilaian.juri1||0) + (penilaian.juri2||0) + (penilaian.juri3||0);
-        
-        // OPTIMISTIC UPDATE: Update local data immediately for UI responsiveness
-        const localIndex = submissionData.findIndex(s => s.id === docId);
-        if(localIndex !== -1) {
-            submissionData[localIndex].penilaian = penilaian;
-            submissionData[localIndex].totalNilai = totalNilai;
-            submissionData[localIndex].rubricDetails = rubricDetails;
-            submissionData[localIndex].catatan = document.getElementById('score-notes').value;
-            renderJuriTable(submissionData); // Force re-render instantly
-        }
-
-        await updateDoc(doc(db, "submissions", docId), { penilaian: penilaian, totalNilai: totalNilai, catatan: document.getElementById('score-notes').value, rubricDetails: rubricDetails });
-        
-        document.getElementById('score-modal').classList.add('hidden'); 
-        showToast("Nilai disimpan.", 'success'); 
-        scoreBtn.innerText = originalText; 
-        scoreBtn.disabled = false;
-    } catch(e) { 
-        showToast(e.message, 'error'); 
-        document.getElementById('save-score-btn').innerText = "Simpan Penilaian";
-        document.getElementById('save-score-btn').disabled = false;
-    } 
+};
+async function resetScore(docId) {
+if(!confirm("Yakin ingin menghapus nilai peserta ini? (Tindakan tidak bisa dibatalkan)")) return;
+try {
+const mySlot = currentJuriPosisi || 'juri1';
+const docSnap = await getDoc(doc(db, "submissions", docId));
+if(!docSnap.exists()) return;
+const currentData = docSnap.data();
+let penilaian = currentData.penilaian || {};
+let rubricDetails = currentData.rubricDetails || {};
+penilaian[mySlot] = 0;
+if(rubricDetails[mySlot]) delete rubricDetails[mySlot];
+// Recalculate global total
+const totalNilai = (penilaian.juri1||0) + (penilaian.juri2||0) + (penilaian.juri3||0);
+// OPTIMISTIC UPDATE
+const localIndex = submissionData.findIndex(s => s.id === docId);
+if(localIndex !== -1) {
+submissionData[localIndex].penilaian = penilaian;
+submissionData[localIndex].totalNilai = totalNilai;
+submissionData[localIndex].rubricDetails = rubricDetails;
+submissionData[localIndex].catatan = "";
+renderJuriTable(submissionData);
+}
+await updateDoc(doc(db, "submissions", docId), {
+penilaian: penilaian,
+totalNilai: totalNilai,
+rubricDetails: rubricDetails,
+catatan: ""
+});
+document.getElementById('score-modal').classList.add('hidden');
+showToast("Nilai berhasil direset ke 0.", 'success');
+} catch(e) {
+showToast("Gagal reset: " + e.message, 'error');
+}
+}
+document.getElementById('save-score-btn').addEventListener('click', async () => {
+try {
+const scoreBtn = document.getElementById('save-score-btn');
+const originalText = scoreBtn.innerText;
+scoreBtn.innerText = "Menyimpan...";
+scoreBtn.disabled = true;
+const score = parseInt(document.getElementById('calculated-score').innerText);
+if(score === 0) { showToast("Lengkapi penilaian!", 'warning'); scoreBtn.innerText = originalText; scoreBtn.disabled = false; return; }
+const docId = document.getElementById('score-doc-id').value;
+const mySlot = currentJuriPosisi || 'juri1';
+const docSnap = await getDoc(doc(db, "submissions", docId));
+const currentData = docSnap.exists() ? docSnap.data() : {};
+let penilaian = currentData.penilaian || { juri1:0, juri2:0, juri3:0 };
+penilaian[mySlot] = score;
+let rubricDetails = currentData.rubricDetails || {};
+rubricDetails[mySlot] = {};
+document.querySelectorAll('.rubric-full-card.selected').forEach(card => {
+rubricDetails[mySlot][card.dataset.name] = card.dataset.val;
+});
+const totalNilai = (penilaian.juri1||0) + (penilaian.juri2||0) + (penilaian.juri3||0);
+// OPTIMISTIC UPDATE: Update local data immediately for UI responsiveness
+const localIndex = submissionData.findIndex(s => s.id === docId);
+if(localIndex !== -1) {
+submissionData[localIndex].penilaian = penilaian;
+submissionData[localIndex].totalNilai = totalNilai;
+submissionData[localIndex].rubricDetails = rubricDetails;
+submissionData[localIndex].catatan = document.getElementById('score-notes').value;
+renderJuriTable(submissionData); // Force re-render instantly
+}
+await updateDoc(doc(db, "submissions", docId), { penilaian: penilaian, totalNilai: totalNilai, catatan: document.getElementById('score-notes').value, rubricDetails: rubricDetails });
+document.getElementById('score-modal').classList.add('hidden');
+showToast("Nilai disimpan.", 'success');
+scoreBtn.innerText = originalText;
+scoreBtn.disabled = false;
+} catch(e) {
+showToast(e.message, 'error');
+document.getElementById('save-score-btn').innerText = "Simpan Penilaian";
+document.getElementById('save-score-btn').disabled = false;
+}
 });
 function showVideoOptions(url) { currentVideoUrl = url; document.getElementById('video-choice-modal').classList.remove('hidden'); }
 document.getElementById('btn-play-newtab').addEventListener('click', () => { window.open(currentVideoUrl, '_blank'); document.getElementById('video-choice-modal').classList.add('hidden'); });
@@ -797,63 +807,60 @@ function renderUserManagementTable(users) { const tbody = document.querySelector
 document.getElementById('create-user-form').addEventListener('submit', async (e) => { e.preventDefault(); const u = document.getElementById('new-username').value; const r = document.getElementById('new-role').value; const p = document.getElementById('new-juri-posisi').value; if(r === 'juri' && !p) { showToast("Pilih Posisi Juri!", 'error'); return; } try { await addDoc(collection(db, "users"), { username: u, email: u, role: r, posisi: r==='juri'?p:null }); showToast("User ditambahkan.", 'success'); e.target.reset(); } catch(err) { showToast(err.message, 'error'); } });
 document.querySelectorAll('.main-tab-btn').forEach(btn => { btn.addEventListener('click', (e) => { const target = e.currentTarget.dataset.tab; if(['juri','admin','superadmin'].includes(target) && !isLoggedIn) { window.showLoginModal(target); return; } switchTabVisuals(target); }); });
 function switchTabVisuals(tab) {
-    if (tab === 'juri' && currentRole !== 'juri' && currentRole !== 'superadmin') { showToast('Akses Ditolak!', 'error'); return; }
-    if (tab === 'admin' && currentRole !== 'admin' && currentRole !== 'superadmin') { showToast('Akses Ditolak!', 'error'); return; }
-    if (tab === 'superadmin' && currentRole !== 'superadmin') { showToast('Akses Ditolak!', 'error'); return; }
-    if (tab === 'form' && isLoggedIn && currentRole !== 'superadmin' && currentRole !== 'pendaftar') { showToast('Anda sudah login sebagai panitia. Logout untuk mendaftar.', 'warning'); return; }
-
-    document.querySelectorAll('.main-tab-btn').forEach(b => b.classList.remove('active'));
-    document.querySelector(`.main-tab-btn[data-tab="${tab}"]`)?.classList.add('active');
-    document.querySelectorAll('.main-content-div').forEach(d => d.classList.add('hidden'));
-    document.getElementById(`main-content-${tab}`).classList.remove('hidden');
-    if(tab === 'juri') { document.getElementById('juri-content-wrapper').classList.remove('hidden'); renderJuriTable(submissionData); }
-    if(tab === 'admin') { document.getElementById('admin-content-wrapper').classList.remove('hidden'); renderAdminTable(submissionData); }
-    if(tab === 'superadmin') { document.getElementById('superadmin-content-wrapper').classList.remove('hidden'); renderUserManagementTable(userData); }
-    if(tab === 'dashboard' && isLoggedIn) { initChart(submissionData); }
-    if(tab === 'form') { checkRegistrationWindow(); }
+if (tab === 'juri' && currentRole !== 'juri' && currentRole !== 'superadmin') { showToast('Akses Ditolak!', 'error'); return; }
+if (tab === 'admin' && currentRole !== 'admin' && currentRole !== 'superadmin') { showToast('Akses Ditolak!', 'error'); return; }
+if (tab === 'superadmin' && currentRole !== 'superadmin') { showToast('Akses Ditolak!', 'error'); return; }
+if (tab === 'form' && isLoggedIn && currentRole !== 'superadmin' && currentRole !== 'pendaftar') { showToast('Anda sudah login sebagai panitia. Logout untuk mendaftar.', 'warning'); return; }
+document.querySelectorAll('.main-tab-btn').forEach(b => b.classList.remove('active'));
+document.querySelector(`.main-tab-btn[data-tab="${tab}"]`)?.classList.add('active');
+document.querySelectorAll('.main-content-div').forEach(d => d.classList.add('hidden'));
+document.getElementById(`main-content-${tab}`).classList.remove('hidden');
+if(tab === 'juri') { document.getElementById('juri-content-wrapper').classList.remove('hidden'); renderJuriTable(submissionData); }
+if(tab === 'admin') { document.getElementById('admin-content-wrapper').classList.remove('hidden'); renderAdminTable(submissionData); }
+if(tab === 'superadmin') { document.getElementById('superadmin-content-wrapper').classList.remove('hidden'); renderUserManagementTable(userData); }
+if(tab === 'dashboard' && isLoggedIn) { initChart(submissionData); }
+if(tab === 'form') { checkRegistrationWindow(); }
 }
-function updateLoginUI() { 
-    const r = currentRole ? currentRole.toUpperCase() : 'PENDAFTAR'; 
-    // TAMPILKAN POSISI JURI DI HEADER UNTUK DEBUGGING
-    const posText = currentJuriPosisi ? `(Posisi: ${currentJuriPosisi.replace('juri','Juri ')})` : '';
-    document.getElementById('login-role-display').innerText = `${r} ${posText}`; 
-    
-    // Tampilkan selector impersonate untuk Super Admin di Tab Juri
-    const saSelector = document.getElementById('superadmin-juri-selector');
-    if(currentRole === 'superadmin') {
-        saSelector.classList.remove('hidden');
-        if(!currentJuriPosisi) currentJuriPosisi = 'juri1'; // Default view
-        document.getElementById('impersonate-juri').value = currentJuriPosisi;
-    } else {
-        saSelector.classList.add('hidden');
-    }
-    
-    const loginBtn = document.getElementById('login-btn-header');
-    const userInfo = document.getElementById('user-info-header');
-    if(isLoggedIn) { loginBtn.classList.add('hidden'); userInfo.classList.remove('hidden'); } else { loginBtn.classList.remove('hidden'); userInfo.classList.add('hidden'); }
-    const allTabs = ['home', 'form', 'dashboard', 'juri', 'admin', 'superadmin'];
-    let allowedTabs = [];
-    if (!isLoggedIn) { allowedTabs = ['home', 'form']; } else {
-        if (currentRole === 'juri') { allowedTabs = ['home', 'dashboard', 'juri']; } else if (currentRole === 'admin') { allowedTabs = ['home', 'dashboard', 'admin']; } else if (currentRole === 'superadmin') { allowedTabs = ['home', 'form', 'dashboard', 'juri', 'admin', 'superadmin']; }
-    }
-    allTabs.forEach(t => {
-        const btn = document.querySelector(`.main-tab-btn[data-tab="${t}"]`);
-        const opt = document.querySelector(`#main-tabs-mobile option[value="${t}"]`);
-        if(allowedTabs.includes(t)) { if(btn) btn.classList.remove('d-none'); if(opt) opt.classList.remove('d-none'); } else { if(btn) btn.classList.add('d-none'); if(opt) opt.classList.add('d-none'); }
-    });
-    const currentActiveBtn = document.querySelector('.main-tab-btn.active');
-    if (currentActiveBtn && currentActiveBtn.classList.contains('d-none')) { switchTabVisuals('home'); }
+function updateLoginUI() {
+const r = currentRole ? currentRole.toUpperCase() : 'PENDAFTAR';
+// TAMPILKAN POSISI JURI DI HEADER UNTUK DEBUGGING
+const posText = currentJuriPosisi ? `(Posisi: ${currentJuriPosisi.replace('juri','Juri ')})` : '';
+document.getElementById('login-role-display').innerText = `${r} ${posText}`;
+// Tampilkan selector impersonate untuk Super Admin di Tab Juri
+const saSelector = document.getElementById('superadmin-juri-selector');
+if(currentRole === 'superadmin') {
+saSelector.classList.remove('hidden');
+if(!currentJuriPosisi) currentJuriPosisi = 'juri1'; // Default view
+document.getElementById('impersonate-juri').value = currentJuriPosisi;
+} else {
+saSelector.classList.add('hidden');
+}
+const loginBtn = document.getElementById('login-btn-header');
+const userInfo = document.getElementById('user-info-header');
+if(isLoggedIn) { loginBtn.classList.add('hidden'); userInfo.classList.remove('hidden'); } else { loginBtn.classList.remove('hidden'); userInfo.classList.add('hidden'); }
+const allTabs = ['home', 'form', 'dashboard', 'juri', 'admin', 'superadmin'];
+let allowedTabs = [];
+if (!isLoggedIn) { allowedTabs = ['home', 'form']; } else {
+if (currentRole === 'juri') { allowedTabs = ['home', 'dashboard', 'juri']; } else if (currentRole === 'admin') { allowedTabs = ['home', 'dashboard', 'admin']; } else if (currentRole === 'superadmin') { allowedTabs = ['home', 'form', 'dashboard', 'juri', 'admin', 'superadmin']; }
+}
+allTabs.forEach(t => {
+const btn = document.querySelector(`.main-tab-btn[data-tab="${t}"]`);
+const opt = document.querySelector(`#main-tabs-mobile option[value="${t}"]`);
+if(allowedTabs.includes(t)) { if(btn) btn.classList.remove('d-none'); if(opt) opt.classList.remove('d-none'); } else { if(btn) btn.classList.add('d-none'); if(opt) opt.classList.add('d-none'); }
+});
+const currentActiveBtn = document.querySelector('.main-tab-btn.active');
+if (currentActiveBtn && currentActiveBtn.classList.contains('d-none')) { switchTabVisuals('home'); }
 }
 window.showLoginModal = (role) => { document.getElementById('login-modal').classList.remove('hidden'); document.getElementById('login-email').focus(); };
 window.hideLoginModal = () => { document.getElementById('login-modal').classList.add('hidden'); document.getElementById('login-error').classList.add('hidden'); };
-window.handleLogin = async () => { const email = document.getElementById('login-email').value.trim(); const p = document.getElementById('login-password').value.trim(); const btn = document.getElementById('login-btn-action'); const originalText = btn.innerHTML; btn.innerHTML = '...'; btn.disabled = true; try { await signInWithEmailAndPassword(auth, email, p); const q = query(collection(db, "users"), where("email", "==", email)); const querySnapshot = await getDocs(q); if (querySnapshot.empty) throw new Error("Akses ditolak."); let userData = null; querySnapshot.forEach((doc) => { userData = doc.data(); }); isLoggedIn = true; currentRole = userData.role; currentJuriPosisi = userData.posisi || null; localStorage.setItem('pgri_user_session', JSON.stringify({ role: currentRole, email: email, posisi: currentJuriPosisi })); hideLoginModal(); updateLoginUI(); 
+window.handleLogin = async () => { const email = document.getElementById('login-email').value.trim(); const p = document.getElementById('login-password').value.trim(); const btn = document.getElementById('login-btn-action'); const originalText = btn.innerHTML; btn.innerHTML = '...'; btn.disabled = true; try { await signInWithEmailAndPassword(auth, email, p); const q = query(collection(db, "users"), where("email", "==", email)); const querySnapshot = await getDocs(q); if (querySnapshot.empty) throw new Error("Akses ditolak."); let userData = null; querySnapshot.forEach((doc) => { userData = doc.data(); }); isLoggedIn = true; currentRole = userData.role; currentJuriPosisi = userData.posisi || null; localStorage.setItem('pgri_user_session', JSON.stringify({ role: currentRole, email: email, posisi: currentJuriPosisi })); hideLoginModal(); updateLoginUI();
 // AUTO REDIRECT LOGIC
 if(currentRole === 'juri') switchTabVisuals('juri');
 else if(currentRole === 'admin') switchTabVisuals('admin');
 else if(currentRole === 'superadmin') switchTabVisuals('superadmin');
 else switchTabVisuals('home');
 showToast(`Login: ${currentRole.toUpperCase()}`, 'success'); } catch (error) { document.getElementById('login-error').innerText = "Gagal Login."; document.getElementById('login-error').classList.remove('hidden'); } finally { btn.innerHTML = originalText; btn.disabled = false; } };
-document.getElementById('login-btn-header').addEventListener('click', () => window.showLoginModal()); 
+document.getElementById('login-btn-header').addEventListener('click', () => window.showLoginModal());
 document.getElementById('login-btn-action').addEventListener('click', window.handleLogin);
 document.getElementById('logout-btn').addEventListener('click', async () => { await signOut(auth); localStorage.removeItem('pgri_user_session'); location.reload(); });
 document.getElementById('form-pendaftaran').addEventListener('submit', async (e) => { e.preventDefault(); if(!isRegistrationOpen) { showToast("Tutup", 'error'); return; } const btn = document.getElementById('submit-form-btn'); btn.innerText = "..."; btn.disabled = true; try { const data = { kategori: currentKategori, nama: document.getElementById('nama-lengkap').value, tempatLahir: document.getElementById('tempat-lahir').value, tglLahir: document.getElementById('tanggal-lahir').value, nik: document.getElementById('nik').value, status: document.getElementById('status-kepegawaian').value, nip: document.getElementById('nip').value, nuptk: document.getElementById('nuptk').value, pangkatGol: document.getElementById('pangkat-gol').value, jabatan: document.getElementById('jabatan-fungsional').value, jenjang: document.getElementById('jenjang').value, sekolah: document.getElementById('nama-satuan-pendidikan').value, alamatSekolah: document.getElementById('alamat-satuan-pendidikan').value, kecSekolah: document.getElementById('kecamatan-satuan-pendidikan').value, alamatRumah: document.getElementById('alamat-tempat-tinggal').value, kecRumah: document.getElementById('kecamatan-tempat-tinggal').value, kabKotaRumah: document.getElementById('kabupaten-kota-tempat-tinggal').value, wa: document.getElementById('nomor-whatsapp').value, email: document.getElementById('email-personal').value, deskripsi: document.getElementById('deskripsi').value, videoUrl: document.getElementById('tautan-video').value, timestamp: serverTimestamp(), penilaian: { juri1: 0, juri2: 0, juri3: 0 }, totalNilai: 0 }; await addDoc(collection(db, "submissions"), data); clearDraft(); document.getElementById('success-modal').classList.remove('hidden'); } catch (error) { showToast("Gagal", 'error'); } finally { btn.innerText = "Kirim"; btn.disabled = false; } });
@@ -866,4 +873,604 @@ document.getElementById('btn-pilih-kategori').addEventListener('click', ()=>{ if
 window.closeVideoModal = (ok) => { document.getElementById('video-warning-modal').classList.add('hidden'); if(!ok) location.reload(); };
 document.getElementById('btn-kembali').addEventListener('click', () => { document.getElementById('view-pendaftar-form').classList.add('hidden'); document.getElementById('view-pendaftar-select').classList.remove('hidden'); document.getElementById('kategori-select').value = ""; currentKategori = ""; localStorage.removeItem('pgri_draft_kategori'); });
 document.getElementById('toggle-password').addEventListener('click', () => { const passwordInput = document.getElementById('login-password'); const iconEye = document.getElementById('icon-eye'); const iconEyeOff = document.getElementById('icon-eye-off'); if (passwordInput.type === 'password') { passwordInput.type = 'text'; iconEye.classList.add('hidden'); iconEyeOff.classList.remove('hidden'); } else { passwordInput.type = 'password'; iconEye.classList.remove('hidden'); iconEyeOff.classList.add('hidden'); } });
-</script></body></html>
+</script>
+<script>
+(function(){
+function ensureHidden(){
+if(!document.getElementById('kategori-terpilih')){
+let hid=document.createElement('input');
+hid.type='hidden'; hid.id='kategori-terpilih'; hid.name='kategori';
+let form=document.getElementById('form-pendaftaran');
+if(form) form.prepend(hid);
+}
+}
+function applyCat(txt,val){
+ensureHidden();
+let hid=document.getElementById('kategori-terpilih');
+hid.value=val||txt;
+document.getElementById('form-title').textContent='Formulir: '+txt;
+document.getElementById('form-subtitle').textContent='Mengajukan untuk kategori '+txt+'.';
+}
+document.addEventListener('DOMContentLoaded',()=>{
+ensureHidden();
+let sel=document.getElementById('kategori-select');
+let next=document.getElementById('btn-pilih-kategori');
+let hero=document.getElementById('btn-hero-daftar');
+let vSel=document.getElementById('view-pendaftar-select');
+let vForm=document.getElementById('view-pendaftar-form');
+if(sel){
+sel.addEventListener('change',()=>{
+let opt=sel.options[sel.selectedIndex];
+if(opt.value) applyCat(opt.text,opt.value);
+});
+}
+if(next){
+next.addEventListener('click',()=>{
+let opt=sel.options[sel.selectedIndex];
+if(!opt.value){ alert('Pilih kategori'); return; }
+applyCat(opt.text,opt.value);
+vSel.classList.add('hidden');
+vForm.classList.remove('hidden');
+window.scrollTo({top:0,behavior:'smooth'});
+});
+}
+if(hero){
+hero.addEventListener('click',()=>{
+vSel.classList.remove('hidden');
+vForm.classList.add('hidden');
+window.scrollTo({top:0,behavior:'smooth'});
+});
+}
+let back=document.getElementById('btn-kembali');
+if(back){
+back.addEventListener('click',()=>{
+vSel.classList.remove('hidden');
+vForm.classList.add('hidden');
+});
+}
+});
+})();
+</script>
+<!-- VALIDATION & UX PATCH: strict per-field validation, placeholders, modal confirmation, pdf download -->
+
+<script>
+/**
+ * SISTEM VALIDASI KETAT & LOGIKA PENDAFTARAN PGRI AWARD 2025
+ * Fitur: Real-time validation, Disabled Buttons, PDF Receipt, Firestore Integration
+ */
+document.addEventListener('DOMContentLoaded', function() {
+
+    // --- KONFIGURASI FIELD & VALIDASI ---
+    const steps = {
+        1: ['nama-lengkap', 'tempat-lahir', 'tanggal-lahir', 'nik'],
+        2: ['status-kepegawaian', 'nip'], // NUPTK, Pangkat, Jabatan opsional di kode asli, sesuaikan jika wajib
+        3: ['jenjang', 'nama-satuan-pendidikan', 'alamat-satuan-pendidikan', 'kecamatan-satuan-pendidikan'],
+        4: ['alamat-tempat-tinggal', 'kecamatan-tempat-tinggal', 'kabupaten-kota-tempat-tinggal'],
+        5: ['nomor-whatsapp', 'email-personal'],
+        6: ['deskripsi', 'tautan-video', 'persetujuan']
+    };
+
+    const rules = {
+        'nama-lengkap': val => val.length >= 3,
+        'tempat-lahir': val => val.length > 0,
+        'tanggal-lahir': val => { if(!val) return false; return new Date(val) <= new Date(); },
+        'nik': val => /^\d{16}$/.test(val), // Wajib 16 angka
+        'status-kepegawaian': val => val !== '',
+        'nip': val => val.length > 0, // Isi '-' jika tidak ada
+        'jenjang': val => val !== '',
+        'nama-satuan-pendidikan': val => val.length > 5,
+        'alamat-satuan-pendidikan': val => val.length > 5,
+        'kecamatan-satuan-pendidikan': val => val !== '',
+        'alamat-tempat-tinggal': val => val.length > 5,
+        'kecamatan-tempat-tinggal': val => val.length > 3,
+        'kabupaten-kota-tempat-tinggal': val => val.length > 3,
+        'nomor-whatsapp': val => /^(\+62|62|08)\d{8,}$/.test(val.replace(/\s|-/g, '')), // Format WA Indo
+        'email-personal': val => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(val),
+        'deskripsi': val => val.length >= 20, // Min 20 karakter
+        'tautan-video': val => /drive\.google\.com|youtu\.be|youtube\.com/.test(val), // Wajib drive/youtube
+        'persetujuan': (val, el) => el.checked === true
+    };
+
+    const messages = {
+        'nama-lengkap': 'Nama lengkap wajib diisi (min 3 huruf).',
+        'tempat-lahir': 'Tempat lahir wajib diisi.',
+        'tanggal-lahir': 'Tanggal lahir tidak valid.',
+        'nik': 'NIK harus tepat 16 digit angka.',
+        'status-kepegawaian': 'Silakan pilih status kepegawaian.',
+        'nip': 'Isi NIP atau ketik tanda strip (-) jika Non ASN.',
+        'jenjang': 'Pilih jenjang sekolah.',
+        'nama-satuan-pendidikan': 'Nama sekolah wajib diisi lengkap.',
+        'alamat-satuan-pendidikan': 'Alamat sekolah wajib diisi.',
+        'kecamatan-satuan-pendidikan': 'Pilih kecamatan tugas.',
+        'alamat-tempat-tinggal': 'Alamat rumah wajib diisi.',
+        'kecamatan-tempat-tinggal': 'Kecamatan wajib diisi.',
+        'kabupaten-kota-tempat-tinggal': 'Kabupaten/Kota wajib diisi.',
+        'nomor-whatsapp': 'Nomor WA tidak valid (awali 08.. atau 62..).',
+        'email-personal': 'Format email salah (contoh: nama@mail.com).',
+        'deskripsi': 'Deskripsi inovasi terlalu pendek (min 20 karakter).',
+        'tautan-video': 'Link harus berupa Google Drive atau YouTube.',
+        'persetujuan': 'Anda wajib menyetujui pernyataan keaslian karya.'
+    };
+
+    // --- VARIABEL GLOBAL ---
+    let currentStep = 1;
+    const btnNext = document.getElementById('btn-next');
+    const btnPrev = document.getElementById('btn-prev');
+    const btnSubmit = document.getElementById('submit-form-btn');
+
+    // Matikan tombol saat load awal
+    if(btnNext) btnNext.disabled = true;
+    if(btnSubmit) btnSubmit.disabled = true;
+
+    // --- FUNGSI VALIDASI INTI ---
+    function validateField(id) {
+        const el = document.getElementById(id);
+        if (!el) return true; // Skip jika elemen tidak ada
+
+        const val = el.type === 'checkbox' ? el.checked : el.value.trim();
+        const isValid = rules[id] ? rules[id](val, el) : true; // Default true jika tidak ada rule
+
+        const errorMsgEl = el.nextElementSibling;
+
+        if (!isValid) {
+            el.classList.add('input-error');
+            // Jika belum ada pesan error di HTML, buat baru
+            if (!errorMsgEl || !errorMsgEl.classList.contains('error-msg')) {
+                const msg = document.createElement('p');
+                msg.className = 'error-msg';
+                msg.innerText = messages[id] || 'Isian ini wajib diisi dengan benar.';
+                el.parentNode.insertBefore(msg, el.nextSibling);
+            } else {
+                errorMsgEl.innerText = messages[id]; // Update text
+                errorMsgEl.style.display = 'block';
+            }
+        } else {
+            el.classList.remove('input-error');
+            if (errorMsgEl && errorMsgEl.classList.contains('error-msg')) {
+                errorMsgEl.style.display = 'none';
+            }
+        }
+        return isValid;
+    }
+
+    function checkStepValidity(step) {
+        const fields = steps[step];
+        let allValid = true;
+
+        fields.forEach(id => {
+            const el = document.getElementById(id);
+            if(!el) { allValid = false; return; }
+            // Cek validitas tanpa memunculkan error merah (hanya cek logic)
+            const val = el.type === 'checkbox' ? el.checked : el.value.trim();
+            const isValid = rules[id] ? rules[id](val === true ? true : val, el) : true;
+            if (!isValid) allValid = false;
+        });
+
+        return allValid;
+    }
+
+    
+    /* ======= tambahan validasi: fieldNames & getStepErrors ======= */
+    const fieldNames = {
+        "nama-lengkap": "Nama Lengkap",
+        "tempat-lahir": "Tempat Lahir",
+        "tanggal-lahir": "Tanggal Lahir",
+        "nik": "NIK (16 digit)",
+        "status-kepegawaian": "Status Kepegawaian",
+        "nip": "NIP (atau '-' bagi Non ASN)",
+        "jenjang": "Jenjang",
+        "nama-satuan-pendidikan": "Nama Satuan Pendidikan",
+        "alamat-satuan-pendidikan": "Alamat Satuan Pendidikan",
+        "kecamatan-satuan-pendidikan": "Kecamatan Sekolah",
+        "alamat-tempat-tinggal": "Alamat Tempat Tinggal",
+        "kecamatan-tempat-tinggal": "Kecamatan Tempat Tinggal",
+        "kabupaten-kota-tempat-tinggal": "Kabupaten/Kota Tempat Tinggal",
+        "nomor-whatsapp": "Nomor WhatsApp",
+        "email-personal": "Email Personal",
+        "deskripsi": "Deskripsi Inovasi",
+        "tautan-video": "Tautan Video",
+        "persetujuan": "Persetujuan Keaslian Karya"
+    };
+
+    function getStepErrors(step) {
+        const fields = steps[step] || [];
+        const errors = [];
+        fields.forEach(id => {
+            const el = document.getElementById(id);
+            if(!el) {
+                errors.push(fieldNames[id] || id + " (tidak ditemukan)");
+                return;
+            }
+            const val = el.type === "checkbox" ? el.checked : el.value.trim();
+            const isValid = rules[id] ? rules[id](val, el) : true;
+            if (!isValid) errors.push(fieldNames[id] || id);
+        });
+        return errors;
+    }
+
+    // Jika elemen step-warning belum ada, buatkan dinamis (per step)
+    function ensureStepWarning() {
+        let warningEl = document.getElementById("step-warning");
+        if (!warningEl) {
+            warningEl = document.createElement("p");
+            warningEl.id = "step-warning";
+            warningEl.className = "text-red-600 text-sm font-semibold mb-4 hidden";
+            // Letakkan sebelum tombol Next jika ada, atau di body bawah form
+            const container = document.getElementById(`form-step-${currentStep}`);
+            if (container) {
+                // find next button inside container
+                const btnArea = container.querySelector(".btn-area") || container;
+                btnArea.insertBefore(warningEl, btnArea.firstChild);
+            } else {
+                document.body.appendChild(warningEl);
+            }
+        }
+        return warningEl;
+    }
+
+
+    function updateButtonState() {
+        const errors = getStepErrors(currentStep);
+        const warningEl = ensureStepWarning();
+
+        if (errors.length === 0) {
+            // Semua oke → tombol aktif
+            if (currentStep < 6) {
+                if(btnNext) btnNext.disabled = false;
+            } else {
+                if(btnSubmit) btnSubmit.disabled = false;
+            }
+
+            if (warningEl) {
+                warningEl.classList.add("hidden");
+                warningEl.innerHTML = "";
+            }
+        } else {
+            // Ada error → tombol mati
+            if (currentStep < 6) {
+                if(btnNext) btnNext.disabled = true;
+            } else {
+                if(btnSubmit) btnSubmit.disabled = true;
+            }
+
+            if (warningEl) {
+                warningEl.innerHTML = "Silakan lengkapi: <br>• " + errors.join("<br>• ");
+                warningEl.classList.remove("hidden");
+            }
+        }
+
+        // Step terakhir → tombol Next hilang / tampilkan Submit
+        if (currentStep < 6) {
+            if(btnNext) btnNext.classList.remove('hidden');
+            if(btnSubmit) btnSubmit.classList.add('hidden');
+        } else {
+            if(btnNext) btnNext.classList.add('hidden');
+            if(btnSubmit) btnSubmit.classList.remove('hidden');
+        }
+    }
+
+
+    // --- EVENT LISTENERS ---
+
+    // Pasang listener di semua input untuk validasi real-time
+    Object.values(steps).flat().forEach(id => {
+        const el = document.getElementById(id);
+        if (el) {
+            // Saat user mengetik/mengubah -> Validasi field tsb -> Cek tombol
+            ['input', 'change', 'blur'].forEach(evtType => {
+                el.addEventListener(evtType, function() {
+                    validateField(id); // Tampilkan error merah jika salah
+                    updateButtonState(); // Hidup/Mati tombol
+                });
+            });
+        }
+    });
+
+    // Tombol Next
+    if(btnNext) btnNext.addEventListener('click', function() {
+        if (!checkStepValidity(currentStep)) {
+            // Validasi ulang semua field di step ini untuk memunculkan pesan error merah
+            steps[currentStep].forEach(id => validateField(id));
+            alert("Harap lengkapi isian dengan benar sebelum melanjutkan.");
+            return;
+        }
+
+        // Pindah Step
+        const currentForm = document.getElementById(`form-step-${currentStep}`);
+        if(currentForm) currentForm.classList.add('hidden');
+        const stepperCurrent = document.getElementById(`stepper-step-${currentStep}`);
+        if(stepperCurrent){
+            stepperCurrent.classList.remove('active');
+            stepperCurrent.classList.add('completed');
+        }
+
+        currentStep++;
+
+        const nextForm = document.getElementById(`form-step-${currentStep}`);
+        if(nextForm) nextForm.classList.remove('hidden');
+        const stepperNext = document.getElementById(`stepper-step-${currentStep}`);
+        if(stepperNext) stepperNext.classList.add('active');
+
+        // Atur tombol Prev
+        if (currentStep > 1 && btnPrev) btnPrev.classList.remove('hidden');
+
+        updateButtonState();
+        window.scrollTo(0, 0);
+    });
+
+    // Tombol Prev
+    if(btnPrev) btnPrev.addEventListener('click', function() {
+        const currentForm = document.getElementById(`form-step-${currentStep}`);
+        if(currentForm) currentForm.classList.add('hidden');
+        const stepperCurrent = document.getElementById(`stepper-step-${currentStep}`);
+        if(stepperCurrent) stepperCurrent.classList.remove('active');
+
+        currentStep--;
+
+        const prevForm = document.getElementById(`form-step-${currentStep}`);
+        if(prevForm) prevForm.classList.remove('hidden');
+        const stepperPrev = document.getElementById(`stepper-step-${currentStep}`);
+        if(stepperPrev) {
+            stepperPrev.classList.remove('completed');
+            stepperPrev.classList.add('active');
+        }
+
+        if (currentStep === 1) btnPrev.classList.add('hidden');
+
+        updateButtonState();
+    });
+
+    // --- LOGIKA SUBMIT & DATABASE & PDF ---
+
+    // Buat Modal Konfirmasi secara dinamis jika belum ada
+    if(!document.getElementById('confirm-modal')) {
+        const modalHTML = `
+        <div id="confirm-modal" class="hidden fixed inset-0 bg-gray-900 bg-opacity-70 flex items-center justify-center z-[100] p-4 backdrop-blur-sm">
+            <div class="bg-white rounded-xl shadow-2xl max-w-md w-full p-6 transform transition-all scale-100">
+                <div class="text-center mb-6">
+                    <div class="mx-auto flex items-center justify-center h-12 w-12 rounded-full bg-indigo-100 mb-4">
+                        <svg class="h-6 w-6 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                    </div>
+                    <h3 class="text-xl font-bold text-gray-900">Konfirmasi Pendaftaran</h3>
+                    <p class="text-sm text-gray-500 mt-2">Pastikan data Anda sudah benar. Data yang dikirim tidak dapat diubah.</p>
+                </div>
+                <div class="bg-gray-50 rounded-lg p-4 mb-6 text-sm space-y-2 border border-gray-200">
+                    <div class="flex justify-between"><span>Nama:</span> <span class="font-bold text-gray-800" id="conf-nama">-</span></div>
+                    <div class="flex justify-between"><span>Kategori:</span> <span class="font-bold text-indigo-600" id="conf-kategori">-</span></div>
+                    <div class="flex justify-between"><span>Sekolah:</span> <span class="font-bold text-gray-800" id="conf-sekolah">-</span></div>
+                </div>
+                <div class="flex gap-3">
+                    <button id="btn-cancel-conf" class="flex-1 px-4 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 font-medium">Cek Lagi</button>
+                    <button id="btn-final-submit" class="flex-1 px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 font-bold shadow-lg">Ya, Kirim Data</button>
+                </div>
+            </div>
+        </div>`;
+        document.body.insertAdjacentHTML('beforeend', modalHTML);
+    }
+
+    // Klik Tombol Kirim di Form
+    if(btnSubmit) btnSubmit.addEventListener('click', function(e) {
+        e.preventDefault();
+        if (!checkStepValidity(6)) {
+             steps[6].forEach(id => validateField(id));
+             return;
+        }
+
+        // Isi data modal
+        const namaEl = document.getElementById('nama-lengkap');
+        const sekolahEl = document.getElementById('nama-satuan-pendidikan');
+        document.getElementById('conf-nama').innerText = namaEl ? namaEl.value : '-';
+        document.getElementById('conf-kategori').innerText = localStorage.getItem('pgri_draft_kategori') || (document.getElementById('kategori-select') ? document.getElementById('kategori-select').value : 'Umum');
+        document.getElementById('conf-sekolah').innerText = sekolahEl ? sekolahEl.value : '-';
+
+        // Tampilkan Modal
+        document.getElementById('confirm-modal').classList.remove('hidden');
+    });
+
+    // Klik Batal di Modal
+    document.body.addEventListener('click', function(ev){
+        if(ev.target && ev.target.id === 'btn-cancel-conf'){
+            document.getElementById('confirm-modal').classList.add('hidden');
+        }
+    });
+
+    // KLIK FINAL SUBMIT (SIMPAN KE DATABASE & DOWNLOAD PDF)
+    document.body.addEventListener('click', async function(ev){
+        if(!(ev.target && ev.target.id === 'btn-final-submit')) return;
+        const finalBtn = ev.target;
+        finalBtn.innerText = "Mengirim...";
+        finalBtn.disabled = true;
+
+        // Kumpulkan Data
+        const formData = {
+            kategori: localStorage.getItem('pgri_draft_kategori') || (document.getElementById('kategori-select') ? document.getElementById('kategori-select').value : ''),
+            nama: document.getElementById('nama-lengkap') ? document.getElementById('nama-lengkap').value : '',
+            tempatLahir: document.getElementById('tempat-lahir') ? document.getElementById('tempat-lahir').value : '',
+            tglLahir: document.getElementById('tanggal-lahir') ? document.getElementById('tanggal-lahir').value : '',
+            nik: document.getElementById('nik') ? document.getElementById('nik').value : '',
+            status: document.getElementById('status-kepegawaian') ? document.getElementById('status-kepegawaian').value : '',
+            nip: document.getElementById('nip') ? document.getElementById('nip').value : '',
+            nuptk: document.getElementById('nuptk') ? document.getElementById('nuptk').value : '',
+            pangkatGol: document.getElementById('pangkat-gol') ? document.getElementById('pangkat-gol').value : '',
+            jabatan: document.getElementById('jabatan-fungsional') ? document.getElementById('jabatan-fungsional').value : '',
+            jenjang: document.getElementById('jenjang') ? document.getElementById('jenjang').value : '',
+            sekolah: document.getElementById('nama-satuan-pendidikan') ? document.getElementById('nama-satuan-pendidikan').value : '',
+            alamatSekolah: document.getElementById('alamat-satuan-pendidikan') ? document.getElementById('alamat-satuan-pendidikan').value : '',
+            kecSekolah: document.getElementById('kecamatan-satuan-pendidikan') ? document.getElementById('kecamatan-satuan-pendidikan').value : '',
+            alamatRumah: document.getElementById('alamat-tempat-tinggal') ? document.getElementById('alamat-tempat-tinggal').value : '',
+            kecRumah: document.getElementById('kecamatan-tempat-tinggal') ? document.getElementById('kecamatan-tempat-tinggal').value : '',
+            kabKotaRumah: document.getElementById('kabupaten-kota-tempat-tinggal') ? document.getElementById('kabupaten-kota-tempat-tinggal').value : '',
+            wa: document.getElementById('nomor-whatsapp') ? document.getElementById('nomor-whatsapp').value : '',
+            email: document.getElementById('email-personal') ? document.getElementById('email-personal').value : '',
+            deskripsi: document.getElementById('deskripsi') ? document.getElementById('deskripsi').value : '',
+            videoUrl: document.getElementById('tautan-video') ? document.getElementById('tautan-video').value : '',
+            timestamp: (window.firebase && window.firebase.firestore) ? window.firebase.firestore.FieldValue.serverTimestamp() : Date.now(),
+            penilaian: { juri1: 0, juri2: 0, juri3: 0 },
+            totalNilai: 0
+        };
+
+        try {
+            // 1. Simpan ke Firestore jika tersedia
+            if(window._PGRI_FIRESTORE && typeof window._PGRI_FIRESTORE.collection === 'function'){
+                await window._PGRI_FIRESTORE.collection("submissions").add(formData);
+            } else {
+                console.warn('Firestore tidak tersedia, melewatkan simpan ke server (mode dev).');
+            }
+
+            // 2. Generate PDF Bukti
+            generateReceiptPDF(formData);
+
+            // 3. UI Sukses
+            document.getElementById('confirm-modal').classList.add('hidden');
+
+            // Tampilkan Modal Sukses jika ada
+            const successModal = document.getElementById('success-modal');
+            if(successModal){
+                successModal.classList.remove('hidden');
+                const h3 = successModal.querySelector('h3');
+                const p = successModal.querySelector('p');
+                if(h3) h3.innerText = "Pendaftaran Berhasil!";
+                if(p) p.innerText = "Data tersimpan & Bukti Pendaftaran telah diunduh.";
+            } else {
+                // fallback toast
+                showToast('Pendaftaran berhasil & Bukti diunduh.', 'success');
+            }
+
+            // Bersihkan Form
+            localStorage.removeItem('pgri_draft_kategori');
+            const form = document.getElementById('form-pendaftaran');
+            if(form) form.reset();
+
+        } catch (error) {
+            console.error("Error submit:", error);
+            alert("Terjadi kesalahan koneksi: " + (error && error.message ? error.message : error));
+            finalBtn.innerText = "Coba Lagi";
+            finalBtn.disabled = false;
+        }
+    });
+
+    // Fungsi Generate PDF (Menggunakan jsPDF yang sudah di-load di head)
+    
+function generateReceiptPDF(data) {
+        // Format waktu pendaftaran
+        const now = new Date();
+        const pad = (n) => (n < 10 ? "0" + n : n);
+
+        // Waktu tampil di PDF → DD/MM/YYYY HH:MM:SS
+        const waktuDaftarDisplay = 
+            pad(now.getDate()) + "/" +
+            pad(now.getMonth() + 1) + "/" +
+            now.getFullYear() + " " +
+            pad(now.getHours()) + ":" +
+            pad(now.getMinutes()) + ":" +
+            pad(now.getSeconds());
+
+        // Waktu untuk filename → YYYYMMDD HHMMSS
+        const waktuDaftarFilename =
+            now.getFullYear() +
+            pad(now.getMonth() + 1) +
+            pad(now.getDate()) + " " +
+            pad(now.getHours()) +
+            pad(now.getMinutes()) +
+            pad(now.getSeconds());
+
+        // Nama file aman (tanpa spasi & karakter aneh)
+        const safeName = (data.nama || "Peserta")
+            .trim()
+            .replace(/\s+/g, "_")
+            .replace(/[^a-zA-Z0-9_]/g, "");
+
+        try {
+            const doc = (window.jspdf && window.jspdf.jsPDF) ? new window.jspdf.jsPDF() : (window.jspdf ? new window.jspdf.jsPDF() : new (window.jspdf && window.jspdf.jsPDF ? window.jspdf.jsPDF : window.jspdf)());
+            // Header
+            doc.setFontSize(18);
+            doc.setTextColor(79, 70, 229); // Indigo
+            try { doc.setFont("helvetica", "bold"); } catch(e){}
+            doc.text("BUKTI PENDAFTARAN", 105, 20, null, null, "center");
+            doc.setFontSize(12);
+            doc.setTextColor(100);
+            doc.text("PGRI PANDEGLANG AWARD 2025", 105, 28, null, null, "center");
+            doc.line(20, 32, 190, 32);
+
+            // Content
+            doc.setTextColor(0);
+            try { doc.setFont("helvetica", "normal"); } catch(e){}
+            doc.setFontSize(11);
+
+            let y = 45;
+            const addRow = (label, value) => {
+                try { doc.setFont("helvetica", "bold"); } catch(e){}
+                doc.text(label, 20, y);
+                try { doc.setFont("helvetica", "normal"); } catch(e){}
+                doc.text(": " + String(value || '-'), 70, y);
+                y += 8;
+                if(y > 270){ doc.addPage(); y = 20; }
+            };
+
+            addRow("Nomor Registrasi", "PGRI-" + Date.now().toString().slice(-6));
+            addRow("Waktu Pendaftaran", waktuDaftarDisplay);
+            addRow("Kategori Lomba", data.kategori);
+            y += 4; // Spacer
+            addRow("Nama Lengkap", data.nama);
+            addRow("NIP / NIK", (data.nip || '-') + " / " + (data.nik || '-'));
+            addRow("Unit Kerja", data.sekolah);
+            addRow("Kecamatan", data.kecSekolah);
+            addRow("No. WhatsApp", data.wa);
+            y += 4;
+
+            try { doc.setFont("helvetica", "bold"); } catch(e){}
+            doc.text("Judul/Deskripsi Inovasi:", 20, y);
+            y += 6;
+            try { doc.setFont("helvetica", "normal"); } catch(e){}
+            doc.setFontSize(10);
+            const splitDesc = doc.splitTextToSize(data.deskripsi || '-', 170);
+            doc.text(splitDesc, 20, y);
+
+            y += (splitDesc.length * 5) + 10;
+
+            // Footer box
+            doc.setDrawColor(79, 70, 229);
+            doc.setFillColor(240, 245, 255);
+            if(typeof doc.roundedRect === 'function'){
+                doc.roundedRect(20, y, 170, 25, 3, 3, 'FD');
+            } else {
+                doc.rect(20, y, 170, 25);
+            }
+            doc.setFontSize(9);
+            doc.setTextColor(50);
+            doc.text("PENTING:", 25, y + 6);
+            doc.text("1. Simpan bukti pendaftaran ini.", 25, y + 11);
+            doc.text("2. Pastikan link video Google Drive Anda disetel ke 'Anyone with the link'.", 25, y + 16);
+            doc.text("3. Pengumuman seleksi akan diinfokan melalui WhatsApp/Website.", 25, y + 21);
+
+            const filename = `Bukti Pendaftaran_PGRI Award 2025_${safeName}_${waktuDaftarFilename}.pdf`;
+            try {
+                doc.save(filename);
+            } catch(err){
+                // fallback
+                window.open(doc.output('bloburl'));
+            }
+        } catch(err){
+            console.error('generateReceiptPDF error', err);
+            showToast('Gagal membuat PDF otomatis. Silakan coba manual.', 'error');
+        }
+    }
+
+    // Simple toast helper
+    function showToast(message, type='success', timeout=4000){
+        const container = document.getElementById('toast-container') || document.createElement('div');
+        if(!container.id) { container.id = 'toast-container'; document.body.appendChild(container); }
+        const t = document.createElement('div');
+        t.className = 'toast show ' + (type==='error' ? 'toast-error' : type==='warning' ? 'toast-warning' : 'toast-success');
+        t.innerText = message;
+        container.appendChild(t);
+        setTimeout(()=>{ t.classList.remove('show'); try{ t.remove(); }catch(e){} }, timeout);
+    }
+
+    // Inisialisasi awal: coba update tombol state
+    setTimeout(updateButtonState, 300);
+
+});
+</script>
+
+</body></html>
